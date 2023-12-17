@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "261791967363",
+    "firebase_url": "https://cmpet-65cfd-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "cmpet-65cfd",
+    "storage_bucket": "cmpet-65cfd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261791967363:android:0b9cef62d97c37945bd3b6",
+        "android_client_info": {
+          "package_name": "com.cmpets.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "261791967363-1bold2rgo2b50etl77luoo7ia69lgjp3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGv3b7wHMAotwZNw6gj2j4Xna3YRgc0Sw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "261791967363-1bold2rgo2b50etl77luoo7ia69lgjp3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
