@@ -84,42 +84,28 @@ Future<List<PetFact>> fetchData() async {
     final dynamic responseData = json.decode(response.body);
 
     if (responseData is List<dynamic>) {
-      // If the response is a list, you need to handle it accordingly
       final List<PetFact> facts = [];
 
       for (var item in responseData) {
-        print('Item: $item');
-        print('Item type: ${item.runtimeType}');
-        print('Content: ${item['content']}');
-        print('Content type: ${item['content'].runtimeType}');
-
-        // Parse HTML content
         final htmlContent = item['content']['rendered'];
         final document = htmlParser.parse(htmlContent);
-        final htmlExContent = item['excerpt']['rendered'];
-        final document_2 = htmlParser.parse(htmlExContent);
-        final factElement = document_2.querySelector('p'); // Change this based on the HTML structure
-        final imgElement = document.querySelector('img'); // Change this based on the HTML structure
 
-        // Extract text and image information
-        final fact = factElement?.text ?? '';
+        // Select the table rows
+        final tableRows = document.querySelectorAll('tr');
 
-        // Extract only the src attribute from the img tag
-        final imgSrc = imgElement?.attributes['src'] ?? '';
+        for (var row in tableRows) {
+          final cells = row.children;
 
-        print("factsc id $fact");
-        print("imgsc id $imgSrc");
+          // Ensure the row has three cells
+          if (cells.length == 3) {
+            // Extract fact number, fact text, and image source
+            final factText = cells[1].text.trim();
+            final imgSrc = cells[2].querySelector('img')?.attributes['src'] ?? '';
 
-        // Split the fact into individual facts at '?' and '!'
-        final List<String> individualFacts = fact.split(RegExp(r'[?!]'));
-
-        // Create a PetFact object for each individual fact
-        for (var individualFact in individualFacts) {
-          print('Individual Fact: $individualFact');
-          facts.add(PetFact(fact: individualFact.trim(), img: imgSrc));
+            // Create a PetFact object
+            facts.add(PetFact(fact: '$factText', img: imgSrc));
+          }
         }
-
-
       }
 
       print("fats is $facts");

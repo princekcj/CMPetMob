@@ -387,9 +387,13 @@ class _FoodOverviewAdobeExpressOneScreenState
         onPressed: () {
           // Check if the current route is not already the search route
 
-          if (ModalRoute.of(context)!.settings.name !=
-              AppRoutes.barcodeScreen) {
-            Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
+          if (ModalRoute.of(context)!.settings.name != AppRoutes.barcodeScreen) {
+            Navigator.pushReplacement(
+              context,
+              AppRoutes.generateRoute(
+                RouteSettings(name: AppRoutes.barcodeScreen),
+              ),
+            );
           }
         },
       ),

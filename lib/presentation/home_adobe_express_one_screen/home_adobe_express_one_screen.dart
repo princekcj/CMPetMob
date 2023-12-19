@@ -247,8 +247,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                     return FutureBuilder<String>(
                       future: _getYouTubeThumbnailUrl(displayUrl),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
@@ -258,13 +257,18 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                               final Uri ytURL = Uri.parse(displayUrl);
                               _launch(ytURL);
                             },
-                            child: Image.network(snapshot.data!),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0), // Set the border radius
+                              child: Image.network(snapshot.data!),
+                            ),
                           );
-                        }
-                        else {
+                        } else {
                           return Container(
                             height: 200,
-                            color: Colors.grey, // Placeholder color
+                            decoration: BoxDecoration(
+                              color: Colors.grey, // Placeholder color
+                              borderRadius: BorderRadius.circular(8.0), // Set the border radius
+                            ),
                             child: Center(
                               child: CircularProgressIndicator(),
                             ),
@@ -275,7 +279,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                   } else if (item == 'Leaderboard'){
                     // Inside your build method
                     // Display the leaderboard
-                    // Display the leaderboard tab
                     return InkWell(
                       onTap: () {
                         // Toggle the leaderboard expansion state
@@ -290,7 +293,10 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                       },
                       child: Container(
                         height: 200,
-                        color: Color(0xFF008C8C), // Customize the background color
+                        decoration: BoxDecoration(
+                          color: Color(0xFF008C8C), // Customize the background color
+                          borderRadius: BorderRadius.circular(8.0), // Set the border radius
+                        ),
                         child: Center(
                           child: Text(
                             'Leaderboard',
@@ -449,7 +455,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                                     'body': Style(
                                       color: Colors.black,
                                       // Change the text color as needed
-                                      fontSize: FontSize(18),
+                                      fontSize: FontSize(14),
                                     ),
                                   },
                                 ),
@@ -494,10 +500,15 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
         onPressed: () {
           // Check if the current route is not already the search route
 
-          if (ModalRoute.of(context)!.settings.name !=
-              AppRoutes.barcodeScreen) {
-            Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
+          if (ModalRoute.of(context)!.settings.name != AppRoutes.barcodeScreen) {
+            Navigator.pushReplacement(
+              context,
+              AppRoutes.generateRoute(
+                RouteSettings(name: AppRoutes.barcodeScreen),
+              ),
+            );
           }
+
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

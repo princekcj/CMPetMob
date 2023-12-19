@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
       title: 'cmpets',
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.initialLoginAdobeExpressOneContainerScreen,
+      onGenerateRoute: AppRoutes.generateRoute,
       routes: AppRoutes.routes,
     );
   }

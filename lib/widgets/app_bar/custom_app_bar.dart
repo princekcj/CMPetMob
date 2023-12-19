@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cmpets/core/app_export.dart';
 
-import '../../presentation/barcode_screen/barcode_screen.dart';
-
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final List<Widget>? actions;
@@ -30,8 +28,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: Image.asset(ImageConstant.homebutton),
             onPressed: () {
               // Check if the current route is not already the home route
-              if (ModalRoute.of(context)!.settings.name != AppRoutes.homeAdobeExpressOneScreen) {
-                Navigator.pushReplacementNamed(context, AppRoutes.homeAdobeExpressOneScreen);
+              if (ModalRoute.of(context)!.settings.name !=
+                  AppRoutes.homeAdobeExpressOneScreen) {
+                Navigator.pushReplacement(
+                  context,
+                  AppRoutes.generateRoute(
+                    RouteSettings(name: AppRoutes.homeAdobeExpressOneScreen),
+                  ),
+                );
               }
             },
             color: Colors.black,
@@ -43,7 +47,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {
               // Check if the current route is not already the myPets route
               if (ModalRoute.of(context)!.settings.name != AppRoutes.myPetsScreen) {
-                Navigator.pushReplacementNamed(context, AppRoutes.myPetsScreen);
+                Navigator.pushReplacement(
+                  context,
+                  AppRoutes.generateRoute(
+                    RouteSettings(name: AppRoutes.myPetsScreen),
+                  ),
+                );
               }
             },
             color: Colors.white,

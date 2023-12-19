@@ -45,6 +45,86 @@ class AppRoutes {
 
   static const String appNavigationScreen = '/app_navigation_screen';
 
+
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+
+    Widget page = Scaffold(
+      body: Center(
+        child: Text('No route defined for ${settings.name}'),
+      ),
+    );
+
+    String? currentRoute = settings.name;
+
+    switch (settings.name) {
+      case foodOverviewAdobeExpressOneScreen:
+        page = isAuthenticated()
+            ? FoodOverviewAdobeExpressOneScreen(searchResults: {})
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case homeAdobeExpressOneScreen:
+          page = isAuthenticated()
+              ? HomeAdobeExpressOneScreen()
+              : InitialLoginAdobeExpressOneContainerScreen();
+          break;
+      case searchScreen:
+        page = isAuthenticated()
+            ? SearchScreen()
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case barcodeScreen:
+        page = isAuthenticated()
+            ? BarcodeScanScreen()
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case productScreen:
+        page = isAuthenticated()
+            ? IngredientPage(pageTitle: '', ingredientName: '')
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case ingredientScreen:
+        page = isAuthenticated()
+            ? ProductListPage(productIngredients: [])
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case myPetInfoScreen:
+        page = isAuthenticated()
+            ? MyPetInfoScreen()
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case myPetsScreen:
+          page = isAuthenticated()
+              ? MyPetsScreen()
+              : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case initialLoginAdobeExpressOneContainerScreen:
+        page = isAuthenticated()
+            ? HomeAdobeExpressOneScreen()
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case myAccountAdobeExpress1OneScreen:
+        page = isAuthenticated()
+            ? MyAccountAdobeExpress1OneScreen()
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
+      case registrationAdobeExpressOneScreen:
+        page = RegistrationAdobeExpressOneScreen();
+        break;
+      case appNavigationScreen:
+        page = AppNavigationScreen();
+        break;
+      default:
+    }
+
+    return PageRouteBuilder(
+      settings: settings,
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+    );
+  }
+
+
   static Map<String, WidgetBuilder> routes = {
     foodOverviewAdobeExpressOneScreen: (context) => isAuthenticated()
         ? FoodOverviewAdobeExpressOneScreen(searchResults: {},)
