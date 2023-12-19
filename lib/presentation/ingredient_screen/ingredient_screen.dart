@@ -233,7 +233,7 @@ class _IngredientPageState extends State<IngredientPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // While waiting for data, you can show a loading indicator
               return Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(color: Color(0xFF008C8C)),
               );
             } else if (snapshot.hasError) {
               // If there's an error, display an no data message

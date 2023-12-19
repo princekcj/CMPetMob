@@ -238,7 +238,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Save'),
+                  child: Text('Save', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF008C8C),
                   ),
@@ -757,7 +757,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF008C8C),
                         ),
-                        child: Text("Save"),
+                        child: Text("Save", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
@@ -1092,7 +1092,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                   showAddAllergyDialog(); // Show the AlertDialog to add allergies
                 }
               : null,
-          child: Text('Add Allergy'),
+          child: Text('Add Allergy', style: TextStyle(color: Colors.white)),
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF008C8C),
           ),

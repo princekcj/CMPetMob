@@ -51,6 +51,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         visualDensity: VisualDensity.standard,
         fontFamily: 'CenturyGothic',
+        textTheme: TextTheme(
+          labelLarge: TextStyle(color: Colors.white), // Default text color
+          labelSmall: TextStyle(color: Colors.white), // Default text color
+          labelMedium: TextStyle(color: Colors.white), // Default text color
+          bodySmall: TextStyle(color: Colors.black), // Default text color
+          bodyMedium: TextStyle(color: Colors.black), // Default text color
+        ),
       ),
       title: 'cmpets',
       debugShowCheckedModeBanner: false,

@@ -225,7 +225,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
           if (!_nativeAdIsLoaded) Container(
             height: 200,
             child: Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Color(0xFF008C8C)),
             ),
           ),
           Center(
@@ -236,8 +236,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                 ElevatedButton(
                   onPressed: isLoading ? null : _scanBarcode,
                   child: isLoading
-                      ? CircularProgressIndicator(strokeWidth: 2.0) // Show progress bar when loading
-                      : Text('SCAN BARCODE'),
+                      ? CircularProgressIndicator(color: Color(0xFF008C8C), strokeWidth: 2.0) // Show progress bar when loading
+                      : Text('SCAN BARCODE', style: TextStyle(color: Colors.white) ,),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF008C8C),
                       shape: RoundedRectangleBorder(
@@ -287,7 +287,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                       ),
                     );
                   },
-                  child: Text('SEARCH INGREDIENT'),
+                  child: Text('SEARCH INGREDIENT', style: TextStyle(color: Colors.white)),
                 ),
                 SizedBox(height: 60),
               ],

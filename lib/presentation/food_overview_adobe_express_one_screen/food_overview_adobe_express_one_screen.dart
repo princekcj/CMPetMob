@@ -294,7 +294,7 @@ class _FoodOverviewAdobeExpressOneScreenState
         // Assuming you've defined jsonData as a Future<List<Map<String, String>>>
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(color: Color(0xFF008C8C)));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {

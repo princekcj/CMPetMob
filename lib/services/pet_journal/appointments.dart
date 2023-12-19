@@ -45,7 +45,7 @@ Widget buildAppointmentsSection(BuildContext context, List<Appointment> existing
         onPressed: () {
           showAddAppointmentDialog(context, petId ?? ''); // Show a dialog to add appointments
         },
-        child: Text('Add Appointment'),
+        child: Text('Add Appointment', style: TextStyle(color: Colors.white)),
         style: ElevatedButton.styleFrom(
           backgroundColor: Color(0xFF008C8C),
         ),

@@ -203,6 +203,50 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   @override
   Widget build(BuildContext context) {
     analytics_utils.logScreenUsageEvent('Home');
+
+    // Wait for ads to load before rendering the ListView.builder
+    if (!_nativeAdIsLoaded) {
+      return Scaffold(
+        appBar: CustomTopAppBar( Enabled:false ,),
+        body: Center(
+          child: CircularProgressIndicator(color: Color(0xFF008C8C)),
+        ),
+        extendBody: true,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xFF008C8C), // Set the background color to blue
+          child: Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: ColorConstant.fromHex('#a3ccff'), width: 2.0),
+            borderRadius:
+            BorderRadius.circular(28.0), // Adjust the border radius as needed
+          ),
+          onPressed: () {
+            // Check if the current route is not already the search route
+
+            if (ModalRoute.of(context)!.settings.name != AppRoutes.barcodeScreen) {
+              Navigator.pushReplacement(
+                context,
+                AppRoutes.generateRoute(
+                  RouteSettings(name: AppRoutes.barcodeScreen),
+                ),
+              );
+            }
+
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: CustomAppBar(
+          height: 100,
+          actions: [
+            // Additional widgets, if any
+          ],
+          onButtonPressed: (index) {
+            // Handle button press based on index
+          },
+        ),
+      );
+    }
+
     return Scaffold(
       endDrawer: CustomDrawer(),
       appBar: CustomTopAppBar(
@@ -239,7 +283,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                           color: Colors.grey, // Placeholder color
                           child: Center(
                               child:
-                                  CircularProgressIndicator()), // Loading indicator
+                                  CircularProgressIndicator(color: Color(0xFF008C8C))), // Loading indicator
                         );
                   } else if (item == 'YouTube Recent Video') {
                     String displayUrl = 'https://www.youtube.com/shorts/0hOWcur29Hc';
@@ -248,7 +292,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                       future: _getYouTubeThumbnailUrl(displayUrl),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(color: Color(0xFF008C8C)));
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else if (snapshot.hasData) {
@@ -270,7 +314,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                               borderRadius: BorderRadius.circular(8.0), // Set the border radius
                             ),
                             child: Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(color: Color(0xFF008C8C)),
                             ),
                           );
                         }
@@ -282,14 +326,8 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                     return InkWell(
                       onTap: () {
                         // Toggle the leaderboard expansion state
-                        setState(() {
-                          isLeaderboardExpanded = !isLeaderboardExpanded;
-                        });
-
                         // Show the leaderboard in a popup
-                        if (isLeaderboardExpanded) {
                           _showLeaderboardPopup();
-                        }
                       },
                       child: Container(
                         height: 200,
@@ -361,7 +399,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                     } else {
                       return Container(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(color: Color(0xFF008C8C)),
                         ),
                       );
                     }

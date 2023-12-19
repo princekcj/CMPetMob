@@ -94,7 +94,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator(color: Color(0xFF008C8C)));
                   }
 
                   if (snapshot.hasError) {
