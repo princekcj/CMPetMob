@@ -44,9 +44,7 @@ Future<void> updateScanCount(User? user) async {
       DocumentSnapshot<Map<String, dynamic>> snapshot = await userDoc.get();
 
       // Check if the email field exists, and set it if it doesn't
-      if (!snapshot.data()!.containsKey('email')) {
         await userDoc.set({'email': user.email}, SetOptions(merge: true));
-      }
 
       // Update the 'scan_count' field by incrementing it by 1
       await userDoc.update({'scan_count': FieldValue.increment(1)});

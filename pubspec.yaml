@@ -41,6 +41,7 @@ dependencies:
   youtube_explode_dart: ^1.12.4
   flutter_html: ^3.0.0-beta.2
   google_fonts: ^4.0.4
+  firestore_cache: ^2.10.0
 dev_dependencies:
   envied_generator: ^0.5.1
   flutter_test:

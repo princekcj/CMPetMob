@@ -125,7 +125,7 @@ class CustomDrawer extends StatelessWidget {
                 ListTile(
                   title: Text('Help Centre', style: TextStyle(fontSize: 10, color: Colors.white)),
                   onTap: () {
-                    final Uri helpCenterURL = Uri.parse('https://www.help.cmpet.co.uk');
+                    final Uri helpCenterURL = Uri.parse('https://help.cmpet.co.uk');
                     _launchInBrowser(helpCenterURL);
                     // Handle 'test 1' selection
                   },
