@@ -124,11 +124,25 @@ class PetUtils {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     try {
-      final petsSnapshot = await _firestore
-          .collection('users')
-          .doc(userId)
-          .collection('pets')
-          .get();
+      final cacheDocRef = FirebaseFirestore.instance.doc('users/$userId');
+      final query = FirebaseFirestore.instance.collection('pets');
+      const cacheField = 'updatedAt';
+
+
+      var petsSnapshot = await FirestoreCache.getDocuments(
+        query: query,
+        cacheDocRef: cacheDocRef, firestoreCacheField: cacheField,
+      );
+
+      // If cache is not available or stale, fetch from the server
+      if (!petsSnapshot.docs.isNotEmpty) {
+        petsSnapshot = await _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('pets')
+            .get();
+
+      }
 
       for (final petDocument in petsSnapshot.docs) {
         final petData = petDocument.data();
