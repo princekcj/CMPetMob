@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cmpets/core/app_export.dart';
@@ -282,6 +283,7 @@ class _FoodOverviewAdobeExpressOneScreenState
   Widget build(BuildContext context) {
     analytics_utils.logScreenUsageEvent('Search_ingredient');
     return Scaffold(
+      resizeToAvoidBottomInset: false, // fluter 2.x
       endDrawer: CustomDrawer(),
       appBar: CustomTopAppBar(
         Enabled: true,
@@ -508,18 +510,18 @@ class _FoodOverviewAdobeExpressOneScreenState
                 width: 2,
               ),
             ),
-            child: ClipOval(
-              child:
-                  images['left'] != null && images['left']!.startsWith('https')
-                      ? Image.network(
-                          images['left']!, // Use the left image URL from JSON
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset(
-                          images['left']!, // Use the left image path from JSON
-                          fit: BoxFit.cover,
-                        ),
-            ),
+              child: ClipOval(
+                child: images['left'] != null && images['left']!.startsWith('https')
+                    ? CachedNetworkImage(
+                  imageUrl: images['left']!, // Use the left image URL from JSON
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  fit: BoxFit.cover,
+                )
+                    : Image.asset(
+                  images['left']!, // Use the left image path from JSON
+                  fit: BoxFit.cover,
+                ),
+              ),
           ),
           Text('Click for more info',
               style: TextStyle(

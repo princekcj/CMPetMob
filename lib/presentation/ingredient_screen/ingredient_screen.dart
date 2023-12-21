@@ -220,6 +220,7 @@ class _IngredientPageState extends State<IngredientPage> {
   Widget build(BuildContext context) {
     analytics_utils.logScreenUsageEvent('Scan_ingredient');
     return Scaffold(
+        resizeToAvoidBottomInset: false, // fluter 2.x
         endDrawer: CustomDrawer(),
         appBar: top_bar.CustomTopAppBar(
           Enabled: true,

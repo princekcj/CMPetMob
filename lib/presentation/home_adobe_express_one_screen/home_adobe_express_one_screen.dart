@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -39,6 +40,9 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   late YoutubeExplode _ytExplode;
   bool isLeaderboardExpanded = false;
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  final Duration maxCacheDuration = Duration(hours: 4);
+  /// Keep track of load time so we don't show an expired ad.
+  DateTime? _appOpenLoadTime;
 
 
   // Create a list to store AdWidgets
@@ -101,69 +105,77 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     } else {
       throw UnsupportedError("Unsupported platform");
     }
+    // Load cached ad if within maxCacheDuration and count matches
+    if (_nativeAd != null &&
+        _appOpenLoadTime != null &&
+        DateTime.now().subtract(maxCacheDuration).isBefore(_appOpenLoadTime!)) {
+      print('Using cached ad.');
+      AdWidget adWidget = AdWidget(ad: _nativeAd!);
+      setState(() {
+        adWidgets.add(adWidget);
+      });
+      // Check if all ad widgets (including cached ones) are loaded
+      if (adWidgets.length == totalAdCount) {
+        setState(() {
+          _nativeAdIsLoaded = true;
+        });
+      }
+    } else {
+      // Create the ad objects and load ads.
+      for (int i = 0; i < carouselsData.length; i++) {
+        List<dynamic> items = carouselsData[i]['items'];
 
-    // Create the ad objects and load ads.
-    for (int i = 0; i < carouselsData.length; i++) {
-      List<dynamic> items = carouselsData[i]['items'];
-      print(carouselsData.length);
-      print("real is $carouselsData");
-      print(items.length);
+        for (int j = 0; j < items.length; j++) {
+          if (items[j] == 'Ad') {
+            totalAdCount++;
 
-      for (int j = 0; j < items.length; j++) {
-        if (items[j] == 'Ad') {
-          totalAdCount++;
+            NativeAd nativeAd = NativeAd(
+              adUnitId: adUnitId,
+              request: AdRequest(),
+              listener: NativeAdListener(
+                onAdLoaded: (Ad ad) {
+                  print('$NativeAd loaded.');
+                  loadedAdCount++;
 
-          // Create a new NativeAd for each 'Ad' item
-          NativeAd nativeAd = new NativeAd(
-            adUnitId: adUnitId,
-            request: AdRequest(),
-            listener: NativeAdListener(
-              onAdLoaded: (Ad ad) {
-                print('$NativeAd loaded.');
-                loadedAdCount++;
+                  if (loadedAdCount == totalAdCount) {
+                    setState(() {
+                      _nativeAdIsLoaded = true;
+                      _appOpenLoadTime = DateTime.now();
+                    });
+                  }
+                },
+                onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                  print('$NativeAd failedToLoad: $error');
+                  ad.dispose();
 
-                // Check if all ads have been loaded
-                if (loadedAdCount == totalAdCount) {
-                  setState(() {
-                    _nativeAdIsLoaded = true;
-                  });
-                }
-              },
-              onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                print('$NativeAd failedToLoad: $error');
-                ad.dispose();
-
-                // Check if all ads have been loaded (including failures)
-                if (loadedAdCount == totalAdCount) {
-                  setState(() {
-                    _nativeAdIsLoaded = true;
-                  });
-                }
-              },
-              onAdOpened: (Ad ad) => print('$NativeAd onAdOpened.'),
-              onAdClosed: (Ad ad) => print('$NativeAd onAdClosed.'),
-            ),
-            nativeTemplateStyle: NativeTemplateStyle(
-              templateType: TemplateType.medium,
-              mainBackgroundColor: Colors.white12,
-              callToActionTextStyle: NativeTemplateTextStyle(
-                size: 16.0,
+                  if (loadedAdCount == totalAdCount) {
+                    setState(() {
+                      _nativeAdIsLoaded = true;
+                    });
+                  }
+                },
+                onAdOpened: (Ad ad) => print('$NativeAd onAdOpened.'),
+                onAdClosed: (Ad ad) => print('$NativeAd onAdClosed.'),
               ),
-              primaryTextStyle: NativeTemplateTextStyle(
-                textColor: Colors.black38,
-                backgroundColor: Colors.white70,
+              nativeTemplateStyle: NativeTemplateStyle(
+                templateType: TemplateType.medium,
+                mainBackgroundColor: Colors.white12,
+                callToActionTextStyle: NativeTemplateTextStyle(
+                  size: 16.0,
+                ),
+                primaryTextStyle: NativeTemplateTextStyle(
+                  textColor: Colors.black38,
+                  backgroundColor: Colors.white70,
+                ),
               ),
-            ),
-          )..load();
+            )
+              ..load();
 
-          // Create an AdWidget for each 'Ad' item
-          AdWidget adWidget = AdWidget(ad: nativeAd);
-
-          // Add the AdWidget to the list
-          setState(() {
-            adWidgets.add(adWidget);
-            print(adWidgets.length);
-          });
+            AdWidget adWidget = AdWidget(ad: nativeAd);
+            setState(() {
+              adWidgets.add(adWidget);
+            });
+          }
         }
       }
     }
@@ -207,6 +219,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     // Wait for ads to load before rendering the ListView.builder
     if (!_nativeAdIsLoaded) {
       return Scaffold(
+        resizeToAvoidBottomInset: false, // fluter 2.x
         appBar: CustomTopAppBar( Enabled:false ,),
         body: Center(
           child: CircularProgressIndicator(color: Color(0xFF008C8C)),
@@ -248,6 +261,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false, // fluter 2.x
       endDrawer: CustomDrawer(),
       appBar: CustomTopAppBar(
         Enabled: false,
@@ -303,7 +317,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0), // Set the border radius
-                              child: Image.network(snapshot.data!),
+                              child: CachedNetworkImage(imageUrl: snapshot.data!),
                             ),
                           );
                         } else {
@@ -355,7 +369,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                           height: 200,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(post!.contentSrc),
+                              image: CachedNetworkImageProvider(post!.contentSrc),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -462,7 +476,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                         height: 200,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(Fact.img),
+                            image: CachedNetworkImageProvider(Fact.img),
                             fit: BoxFit.cover,
                           ),
                           borderRadius: BorderRadius.circular(8),

@@ -601,6 +601,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     analytics_utils.logScreenUsageEvent('MyPetsScreen');
 
     return Scaffold(
+      resizeToAvoidBottomInset: false, // fluter 2.x
       appBar: top_bar.CustomTopAppBar(
         Enabled: true,
         onTapArrowLeft: (context) {

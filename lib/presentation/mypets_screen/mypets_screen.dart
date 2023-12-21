@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -40,26 +41,6 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
     }
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // Precache images using the image cache
-    final petImagePaths = [
-      ImageConstant.cat,
-      ImageConstant.snake,
-      ImageConstant.parrot,
-      ImageConstant.charles,
-      ImageConstant.guinea,
-      ImageConstant.dragon,
-      ImageConstant.hamster,
-    ];
-
-    for (final imagePath in petImagePaths) {
-      _imageCache.evict(_getImageProvider(imagePath));
-      precacheImage(_getImageProvider(imagePath), context);
-    }
-  }
 
 
   // Fetch the current user when the screen initializes
@@ -75,7 +56,8 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
   Widget build(BuildContext context) {
     analytics_utils.logScreenUsageEvent('MyPetsScreen');
     return Scaffold(
-        endDrawer: CustomDrawer(),
+      resizeToAvoidBottomInset: false, // fluter 2.x
+      endDrawer: CustomDrawer(),
         appBar: top_bar.CustomTopAppBar(
           Enabled: false,
           onTapArrowLeft: (context) {
@@ -248,7 +230,9 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
             ),
             child: ClipOval(
               child: _petImage.startsWith("https")
-                  ? Image(image: NetworkImage(_petImage))
+                  ? CachedNetworkImage(
+                  imageUrl: _petImage,
+                  )
                   : Image.asset(
                 _petImage, // Replace with your image asset path
                 fit: BoxFit.cover,

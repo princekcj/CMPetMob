@@ -10,27 +10,15 @@ class PetUtils {
       List<Map<String, dynamic>> animalList,
       List<String> ingredients,
       ) async {
-    // Attempt to fetch data from cache
-    final cacheDocRef = FirebaseFirestore.instance.doc('users/$userId');
-    final query = FirebaseFirestore.instance.collection('pets');
-    const cacheField = 'updatedAt';
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
-    var petsSnapshot = await FirestoreCache.getDocuments(
-      query: query,
-      cacheDocRef: cacheDocRef, firestoreCacheField: cacheField,
-    );
-
-    // If cache is not available or stale, fetch from the server
-    if (!petsSnapshot.docs.isNotEmpty) {
-      final _firestore = FirebaseFirestore.instance;
-      petsSnapshot = await _firestore
-          .collection('users')
-          .doc(userId)
-          .collection('pets')
-          .get();
-
-    }
+    // Fetch pet documents from Firestore
+    final petsSnapshot = await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('pets')
+        .where('type', isEqualTo: petType) // Filter by pet type
+        .get();
 
     // Create a new list to store the updated pets
     List<Map<String, dynamic>> updatedAnimalList = List.from(animalList);
@@ -80,28 +68,14 @@ class PetUtils {
 
 
   static Future<List<String>?> getPetTypesForUser(String userId) async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
     try {
-      // Attempt to fetch data from cache
-      final cacheDocRef = FirebaseFirestore.instance.doc('users/$userId');
-      final query = FirebaseFirestore.instance.collection('pets');
-      const cacheField = 'updatedAt';
-
-
-      var petsSnapshot = await FirestoreCache.getDocuments(
-        query: query,
-        cacheDocRef: cacheDocRef, firestoreCacheField: cacheField,
-      );
-
-      // If cache is not available or stale, fetch from the server
-      if (!petsSnapshot.docs.isNotEmpty) {
-        final _firestore = FirebaseFirestore.instance;
-         petsSnapshot = await _firestore
-            .collection('users')
-            .doc(userId)
-            .collection('pets')
-            .get();
-
-      }
+      final petsSnapshot = await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('pets')
+          .get();
 
       final petTypes = petsSnapshot.docs
           .map((doc) => doc.data()['type'].toString())
@@ -114,6 +88,7 @@ class PetUtils {
       return null;
     }
   }
+
 
 
   static Future<List<Map<String, String>>> updateJsonResultsWithFirestoreImages(

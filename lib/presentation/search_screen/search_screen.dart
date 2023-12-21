@@ -50,7 +50,8 @@ class _SearchAdobeExpressOneScreenState
     analytics_utils.logScreenUsageEvent('Search');
 
     return Scaffold(
-        endDrawer: CustomDrawer(),
+      resizeToAvoidBottomInset: false, // fluter 2.x
+      endDrawer: CustomDrawer(),
         appBar: top_bar.CustomTopAppBar(
           Enabled: false,
           onTapArrowLeft: (context) {

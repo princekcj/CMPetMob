@@ -69,7 +69,8 @@ class _MyAccountAdobeExpress1OneScreenState
   Widget build(BuildContext context) {
     analytics_utils.logScreenUsageEvent('Search_ingredient');
     return Scaffold(
-        endDrawer: CustomDrawer(),
+      resizeToAvoidBottomInset: false, // fluter 2.x
+      endDrawer: CustomDrawer(),
         appBar: CustomTopAppBar(
           Enabled: false,
           onTapArrowLeft: (context) {

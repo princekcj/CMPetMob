@@ -210,6 +210,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
     analytics_utils.logScreenUsageEvent('Barcode');
 
     return Scaffold(
+      resizeToAvoidBottomInset: false, // fluter 2.x
       endDrawer: CustomDrawer(),
       appBar: top_bar.CustomTopAppBar(
         Enabled: false,
