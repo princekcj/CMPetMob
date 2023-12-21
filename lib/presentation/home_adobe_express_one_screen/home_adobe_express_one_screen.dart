@@ -105,80 +105,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     } else {
       throw UnsupportedError("Unsupported platform");
     }
-    // Load cached ad if within maxCacheDuration and count matches
-    if (_nativeAd != null &&
-        _appOpenLoadTime != null &&
-        DateTime.now().subtract(maxCacheDuration).isBefore(_appOpenLoadTime!)) {
-      print('Using cached ad.');
-      AdWidget adWidget = AdWidget(ad: _nativeAd!);
-      setState(() {
-        adWidgets.add(adWidget);
-      });
-      // Check if all ad widgets (including cached ones) are loaded
-      if (adWidgets.length == totalAdCount) {
-        setState(() {
-          _nativeAdIsLoaded = true;
-        });
-      }
-    } else {
-      // Create the ad objects and load ads.
-      for (int i = 0; i < carouselsData.length; i++) {
-        List<dynamic> items = carouselsData[i]['items'];
-
-        for (int j = 0; j < items.length; j++) {
-          if (items[j] == 'Ad') {
-            totalAdCount++;
-
-            NativeAd nativeAd = NativeAd(
-              adUnitId: adUnitId,
-              request: AdRequest(),
-              listener: NativeAdListener(
-                onAdLoaded: (Ad ad) {
-                  print('$NativeAd loaded.');
-                  loadedAdCount++;
-
-                  if (loadedAdCount == totalAdCount) {
-                    setState(() {
-                      _nativeAdIsLoaded = true;
-                      _appOpenLoadTime = DateTime.now();
-                    });
-                  }
-                },
-                onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                  print('$NativeAd failedToLoad: $error');
-                  ad.dispose();
-
-                  if (loadedAdCount == totalAdCount) {
-                    setState(() {
-                      _nativeAdIsLoaded = true;
-                    });
-                  }
-                },
-                onAdOpened: (Ad ad) => print('$NativeAd onAdOpened.'),
-                onAdClosed: (Ad ad) => print('$NativeAd onAdClosed.'),
-              ),
-              nativeTemplateStyle: NativeTemplateStyle(
-                templateType: TemplateType.medium,
-                mainBackgroundColor: Colors.white12,
-                callToActionTextStyle: NativeTemplateTextStyle(
-                  size: 16.0,
-                ),
-                primaryTextStyle: NativeTemplateTextStyle(
-                  textColor: Colors.black38,
-                  backgroundColor: Colors.white70,
-                ),
-              ),
-            )
-              ..load();
-
-            AdWidget adWidget = AdWidget(ad: nativeAd);
-            setState(() {
-              adWidgets.add(adWidget);
-            });
-          }
-        }
-      }
-    }
   }
 
 
@@ -217,48 +143,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     analytics_utils.logScreenUsageEvent('Home');
 
     // Wait for ads to load before rendering the ListView.builder
-    if (!_nativeAdIsLoaded) {
-      return Scaffold(
-        resizeToAvoidBottomInset: false, // fluter 2.x
-        appBar: CustomTopAppBar( Enabled:false ,),
-        body: Center(
-          child: CircularProgressIndicator(color: Color(0xFF008C8C)),
-        ),
-        extendBody: true,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xFF008C8C), // Set the background color to blue
-          child: Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: ColorConstant.fromHex('#a3ccff'), width: 2.0),
-            borderRadius:
-            BorderRadius.circular(28.0), // Adjust the border radius as needed
-          ),
-          onPressed: () {
-            // Check if the current route is not already the search route
-
-            if (ModalRoute.of(context)!.settings.name != AppRoutes.barcodeScreen) {
-              Navigator.pushReplacement(
-                context,
-                AppRoutes.generateRoute(
-                  RouteSettings(name: AppRoutes.barcodeScreen),
-                ),
-              );
-            }
-
-          },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomAppBar(
-          height: 100,
-          actions: [
-            // Additional widgets, if any
-          ],
-          onButtonPressed: (index) {
-            // Handle button press based on index
-          },
-        ),
-      );
-    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false, // fluter 2.x
@@ -285,21 +169,41 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                   viewportFraction: 0.8,
                 ),
                 items: carouselsData[index]['items'].map<Widget>((item) {
-                  if (item == 'Ad' && _nativeAdIsLoaded) {
-                    // Find the AdWidget corresponding to this 'Ad' item
-                    AdWidget? adWidget =
-                        adWidgets.isNotEmpty ? adWidgets.removeAt(0) : null;
+                  if (item == 'Ad' ) {
+                    return FutureBuilder<void>(
+                      future: initAds(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Container(
+                            height: 200,
+                            color: Colors.grey, // Placeholder color
+                            child: Center(
+                              child: CircularProgressIndicator(color: Color(0xFF008C8C)), // Loading indicator
+                            ),
+                          );
+                        } else if (snapshot.connectionState == ConnectionState.done) {
+                          // Find the AdWidget corresponding to this 'Ad' item
+                          AdWidget? adWidget = adWidgets.isNotEmpty ? adWidgets.removeAt(0) : null;
 
-                    // Display the AdMob banner ad if available, otherwise show a placeholder
-                    return adWidget ??
-                        Container(
-                          height: 200,
-                          color: Colors.grey, // Placeholder color
-                          child: Center(
-                              child:
-                                  CircularProgressIndicator(color: Color(0xFF008C8C))), // Loading indicator
-                        );
-                  } else if (item == 'YouTube Recent Video') {
+                          // Display the AdMob banner ad if available, otherwise show a placeholder
+                          return adWidget ??
+                              Container(
+                                height: 200,
+                                color: Colors.white, // Placeholder color
+                              );
+                        } else {
+                          return Container(
+                            height: 200,
+                            color: Colors.grey, // Placeholder color
+                            child: Center(
+                              child: CircularProgressIndicator(color: Color(0xFF008C8C)), // Loading indicator
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  }
+                  else if (item == 'YouTube Recent Video') {
                     String displayUrl = 'https://www.youtube.com/shorts/0hOWcur29Hc';
                     // Display YouTube video thumbnail
                     return FutureBuilder<String>(
@@ -575,6 +479,73 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
       ),
     );
   }
+
+  Future<void> initAds() async {
+    // Load cached ad if within maxCacheDuration and count matches
+    if (_nativeAd != null &&
+        _appOpenLoadTime != null &&
+        DateTime.now().subtract(maxCacheDuration).isBefore(_appOpenLoadTime!)) {
+      print('Using cached ad.');
+      AdWidget adWidget = AdWidget(ad: _nativeAd!);
+      adWidgets.add(adWidget);
+      // Check if all ad widgets (including cached ones) are loaded
+      if (adWidgets.length == totalAdCount) {
+        _nativeAdIsLoaded = true;
+      }
+    } else {
+      // Create the ad objects and load ads.
+      for (int i = 0; i < carouselsData.length; i++) {
+        List<dynamic> items = carouselsData[i]['items'];
+
+        for (int j = 0; j < items.length; j++) {
+          if (items[j] == 'Ad') {
+            totalAdCount++;
+
+            NativeAd nativeAd = NativeAd(
+              adUnitId: adUnitId,
+              request: AdRequest(),
+              listener: NativeAdListener(
+                onAdLoaded: (Ad ad) {
+                  print('$NativeAd loaded.');
+                  loadedAdCount++;
+
+                  if (loadedAdCount == totalAdCount) {
+                    _nativeAdIsLoaded = true;
+                    _appOpenLoadTime = DateTime.now();
+                  }
+                },
+                onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                  print('$NativeAd failedToLoad: $error');
+                  ad.dispose();
+
+                  if (loadedAdCount == totalAdCount) {
+                    _nativeAdIsLoaded = true;
+                  }
+                },
+                onAdOpened: (Ad ad) => print('$NativeAd onAdOpened.'),
+                onAdClosed: (Ad ad) => print('$NativeAd onAdClosed.'),
+              ),
+              nativeTemplateStyle: NativeTemplateStyle(
+                templateType: TemplateType.medium,
+                mainBackgroundColor: Colors.white12,
+                callToActionTextStyle: NativeTemplateTextStyle(
+                  size: 16.0,
+                ),
+                primaryTextStyle: NativeTemplateTextStyle(
+                  textColor: Colors.black38,
+                  backgroundColor: Colors.white70,
+                ),
+              ),
+            )..load();
+
+            AdWidget adWidget = AdWidget(ad: nativeAd);
+            adWidgets.add(adWidget);
+          }
+        }
+      }
+    }
+  }
+
 
   Future<InitializationStatus> _initGoogleMobileAds() {
     // TODO: Initialize Google Mobile Ads SDK

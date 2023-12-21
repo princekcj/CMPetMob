@@ -111,7 +111,7 @@ class _InitialLoginAdobeExpressOneContainerScreenState
                         _emailController.text,
                         _passwordController.text,
                       );
-                      Navigator.pushReplacementNamed(context, AppRoutes.homeAdobeExpressOneScreen);
+                      Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
                     } catch (e) {
                       print('Sign-in error: $e');
                       // Extract the error message without the code
@@ -177,7 +177,7 @@ class _InitialLoginAdobeExpressOneContainerScreenState
                           onTap: () async {
                             UserCredential? userCredential = await signInWithFacebook();
                             if (userCredential != null) {
-                              Navigator.pushReplacementNamed(context, AppRoutes.homeAdobeExpressOneScreen);
+                              Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
                             }
                           },
                           child: Image.asset(
@@ -199,7 +199,7 @@ class _InitialLoginAdobeExpressOneContainerScreenState
                         onTap: () async {
                           UserCredential? userCredential = await signInWithGoogle();
                           if (userCredential != null) {
-                            Navigator.pushReplacementNamed(context, AppRoutes.homeAdobeExpressOneScreen);
+                            Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
                           }
                         },
                         child: Image.asset(

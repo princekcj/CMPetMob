@@ -203,7 +203,7 @@ class _RegistrationAdobeExpressOneScreenState
                           selectedOption ?? '',
                           selectedExpOption ?? '',
                         );
-                        Navigator.pushReplacementNamed(context, AppRoutes.homeAdobeExpressOneScreen);
+                        Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
                       } catch (e) {
                         print('Registration error: $e');
                       }
