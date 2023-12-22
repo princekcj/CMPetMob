@@ -194,10 +194,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                         } else {
                           return Container(
                             height: 200,
-                            color: Colors.grey, // Placeholder color
-                            child: Center(
-                              child: CircularProgressIndicator(color: Color(0xFF008C8C)), // Loading indicator
-                            ),
+                            color: Colors.white, // Placeholder color
                           );
                         }
                       },
