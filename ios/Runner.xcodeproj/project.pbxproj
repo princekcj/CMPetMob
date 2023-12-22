@@ -697,6 +697,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+
+		diff --git a/ios/Runner.xcodeproj/project.pbxproj b/ios/Runner.xcodeproj/project.pbxproj
+        index 16710ed..2ea1638 100644
+        --- a/ios/Runner.xcodeproj/project.pbxproj
+        +++ b/ios/Runner.xcodeproj/project.pbxproj
+        @@ -157,6 +156,7 @@
+                                        TargetAttributes = {
+                                                97C146ED1CF9000F007C117D = {
+                                                        CreatedOnToolsVersion = 7.3.1;
+        +                                               DevelopmentTeam = BCG58GM5FG;
+                                                };
+                                        };
+                                };
+        @@ -437,6 +438,7 @@
+                                buildSettings = {
+                                        ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+                                        CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+        +                               DEVELOPMENT_TEAM = BCG58GM5FG;
+                                        ENABLE_BITCODE = NO;
+                                        FRAMEWORK_SEARCH_PATHS = (
+                                                "$(inherited)",
+        @@ -460,6 +462,7 @@
+                                buildSettings = {
+                                        ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+                                        CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+        +                               DEVELOPMENT_TEAM = BCG58GM5FG;
+                                        ENABLE_BITCODE = NO;
+                                        FRAMEWORK_SEARCH_PATHS = (
+                                                "$(inherited)",
 /* End XCConfigurationList section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
