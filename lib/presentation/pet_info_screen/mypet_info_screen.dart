@@ -337,7 +337,9 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                         width: 2,
                       ),
                     ),
-                    child: pw.Image(pw.MemoryImage(imageData), fit: pw.BoxFit.cover),
+                    child: pw.ClipOval(
+                      child: pw.Image(pw.MemoryImage(imageData), fit: pw.BoxFit.cover),
+                    ),
                   ),
                 ],
               ),
