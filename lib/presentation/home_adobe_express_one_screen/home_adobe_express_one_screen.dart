@@ -176,7 +176,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Container(
                             height: 200,
-                            color: Colors.grey, // Placeholder color
+                            color: Colors.white, // Placeholder color
                             child: Center(
                               child: CircularProgressIndicator(color: Color(0xFF008C8C)), // Loading indicator
                             ),

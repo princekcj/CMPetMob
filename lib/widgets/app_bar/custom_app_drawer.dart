@@ -132,11 +132,11 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text(
-                    'Email Us: contact@cmpet.co.uk',
+                    'Email Us: support@cmpet.co.uk',
                     style: TextStyle(fontSize: 10, color: Colors.white),
                   ),
                   onTap: () {
-                    _launchEmail('contact@cmpet.co.uk');
+                    _launchEmail('support@cmpet.co.uk');
                   },
                 ),
               ],
