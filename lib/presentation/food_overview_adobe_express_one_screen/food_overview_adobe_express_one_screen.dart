@@ -370,7 +370,7 @@ class _FoodOverviewAdobeExpressOneScreenState
                       ],
                     ),
                   ),
-                  SizedBox(height: 130.0,)
+                  SizedBox(height: 160.0,)
                 ],
               ),
             );

@@ -159,7 +159,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
             SizedBox(height: 35),
           ],
         ),
-      floatingActionButton: Container(height: 100.0, width:100.0, child: FittedBox(child: FloatingActionButton(
+      floatingActionButton: Container(height: 80.0, width:80.0, child: FittedBox(child: FloatingActionButton(
         backgroundColor: Color(0xFF008C8C), // Set the background color to blue
         child: Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
         shape: RoundedRectangleBorder(
