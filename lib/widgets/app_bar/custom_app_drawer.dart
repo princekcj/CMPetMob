@@ -73,11 +73,15 @@ class CustomDrawer extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
               onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeAdobeExpressOneScreen()),
-                      (route) => false, // This makes sure to remove all previous routes
-                );              },
+                if (ModalRoute.of(context)!.settings.name != AppRoutes.homeAdobeExpressOneScreen) {
+                  Navigator.pushReplacement(
+                    context,
+                    AppRoutes.generateRoute(
+                      RouteSettings(name: AppRoutes.homeAdobeExpressOneScreen),
+                    ),
+                  );
+                }
+                },
             ),
             ListTile(
               title: Text(
@@ -85,11 +89,14 @@ class CustomDrawer extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
               onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchScreen()),
-                      (route) => false, // This makes sure to remove all previous routes
-                );                // Handle Search tap
+                if (ModalRoute.of(context)!.settings.name != AppRoutes.searchScreen) {
+                  Navigator.pushReplacement(
+                    context,
+                    AppRoutes.generateRoute(
+                      RouteSettings(name: AppRoutes.searchScreen),
+                    ),
+                  );
+                }              // Handle Search tap
               },
             ),
             ListTile(
@@ -98,11 +105,14 @@ class CustomDrawer extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
               onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyPetsScreen()),
-                      (route) => false, // This makes sure to remove all previous routes
-                );                // Handle Pet Profiles tap
+                if (ModalRoute.of(context)!.settings.name != AppRoutes.myPetsScreen) {
+                  Navigator.pushReplacement(
+                    context,
+                    AppRoutes.generateRoute(
+                      RouteSettings(name: AppRoutes.myPetsScreen),
+                    ),
+                  );
+                }                // Handle Pet Profiles tap
               },
             ),
             ListTile(
@@ -111,11 +121,14 @@ class CustomDrawer extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
               onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyAccountAdobeExpress1OneScreen()),
-                      (route) => false, // This makes sure to remove all previous routes
-                );                // Handle My Account tap
+                if (ModalRoute.of(context)!.settings.name != AppRoutes.myAccountAdobeExpress1OneScreen) {
+                  Navigator.pushReplacement(
+                    context,
+                    AppRoutes.generateRoute(
+                      RouteSettings(name: AppRoutes.myAccountAdobeExpress1OneScreen),
+                    ),
+                  );
+                }                // Handle My Account tap
               },
             ),
             // Use an ExpansionTile for 'Help' to display options
