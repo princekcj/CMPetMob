@@ -156,7 +156,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 35),
+            SizedBox(height: 65),
           ],
         ),
       floatingActionButton: Container(height: 80.0, width:80.0, child: FittedBox(child: FloatingActionButton(
