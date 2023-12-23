@@ -190,12 +190,13 @@ class _SearchAdobeExpressOneScreenState
           ),
         ),
       extendBody: true,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Container(height: 100.0, width:100.0, child: FittedBox(child: FloatingActionButton(
         backgroundColor: Color(0xFF008C8C), // Set the background color to blue
         child: Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
         shape: RoundedRectangleBorder(
           side: BorderSide(color: ColorConstant.fromHex('#a3ccff'), width: 2.0),
-          borderRadius: BorderRadius.circular(30.0), // Adjust the border radius as needed
+          borderRadius:
+          BorderRadius.circular(28.0), // Adjust the border radius as needed
         ),
         onPressed: () {
           // Check if the current route is not already the search route
@@ -208,8 +209,9 @@ class _SearchAdobeExpressOneScreenState
               ),
             );
           }
+
         },
-      ),
+      ),),),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: CustomAppBar(
         height: 100,
