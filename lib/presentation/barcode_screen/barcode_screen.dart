@@ -281,12 +281,14 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                         borderRadius: BorderRadius.circular(20.0), // Adjust the value as needed
                       )),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SearchScreen(),
-                      ),
-                    );
+                    if (ModalRoute.of(context)!.settings.name != AppRoutes.searchScreen) {
+                      Navigator.pushReplacement(
+                        context,
+                        AppRoutes.generateRoute(
+                          RouteSettings(name: AppRoutes.searchScreen),
+                        ),
+                      );
+                    }
                   },
                   child: Text('SEARCH INGREDIENT', style: TextStyle(color: Colors.white)),
                 ),
