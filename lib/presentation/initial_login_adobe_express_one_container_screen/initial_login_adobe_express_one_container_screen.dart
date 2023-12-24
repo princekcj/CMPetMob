@@ -198,6 +198,7 @@ class _InitialLoginAdobeExpressOneContainerScreenState
                       child: GestureDetector(
                         onTap: () async {
                           UserCredential? userCredential = await signInWithGoogle();
+                          print("user cred for g is $userCredential");
                           if (userCredential != null) {
                             Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
                           }

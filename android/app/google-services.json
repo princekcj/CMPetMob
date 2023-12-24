@@ -15,7 +15,23 @@
       },
       "oauth_client": [
         {
-          "client_id": "261791967363-1bold2rgo2b50etl77luoo7ia69lgjp3.apps.googleusercontent.com",
+          "client_id": "261791967363-jr1et351m60g99qce57cf1jb09k318r0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cmpets.app",
+            "certificate_hash": "52afe747354e5dac1cc93635bb60262f13ba8f67"
+          }
+        },
+        {
+          "client_id": "261791967363-lssbg408oe4cpfsuihtlrf8i4hndj7n8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cmpets.app",
+            "certificate_hash": "c272913acf2da5ff5702fce11550058183e3a824"
+          }
+        },
+        {
+          "client_id": "261791967363-osr139fi1bihvfogns9mfj2rtgu7orqc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -30,6 +46,13 @@
             {
               "client_id": "261791967363-1bold2rgo2b50etl77luoo7ia69lgjp3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "261791967363-tk06au2j0rt33l1lqr77nc7nade3ur8p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cmpets.cmpets"
+              }
             }
           ]
         }
