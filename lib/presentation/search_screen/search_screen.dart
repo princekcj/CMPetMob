@@ -162,13 +162,30 @@ class _SearchAdobeExpressOneScreenState
                         analytics_utils.logSearchEvent();
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => FoodOverviewAdobeExpressOneScreen(
-                              pageTitle: searchResultsObject[index]['name'],
-                              searchResults: searchResultsObject[index],
+                          PageRouteBuilder(
+                            settings: RouteSettings(
+                              name: AppRoutes.foodOverviewAdobeExpressOneScreen,
                             ),
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              return FoodOverviewAdobeExpressOneScreen(
+                                pageTitle: searchResultsObject[index]['name'],
+                                searchResults: searchResultsObject[index],
+                              );
+                            },
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.easeInOut;
+                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+                              return SlideTransition(position: offsetAnimation, child: child);
+                            },
+                            transitionDuration: const Duration(milliseconds: 500),
+                            reverseTransitionDuration: const Duration(milliseconds: 500),
                           ),
                         );
+
+
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 8.0), // Adjust the horizontal spacing as needed
