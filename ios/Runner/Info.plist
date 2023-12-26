@@ -66,16 +66,16 @@
       <dict>
       <key>CFBundleURLSchemes</key>
       <array>
-        <string>670761801613116</string>
+        <string>1040318360607145</string>
       </array>
       </dict>
     </array>
     <key>FacebookAppID</key>
-    <string>670761801613116</string>
+    <string>1040318360607145</string>
     <key>FacebookClientToken</key>
-    <string>c4a5d4064a353b3b6131c055f9f4001f</string>
+    <string>c92fd3a5785478da78178695dc731fdf</string>
     <key>FacebookDisplayName</key>
-    <string>CMPet?</string>
+    <string>CMPet? - Test1</string>
     <key>LSApplicationQueriesSchemes</key>
     <array>
       <string>fbapi</string>

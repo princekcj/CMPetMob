@@ -6,11 +6,14 @@ Future<UserCredential?> signInWithFacebook() async {
   try {
     final LoginResult loginResult = await FacebookAuth.instance.login();
 
+    print(loginResult.status);
+    print(loginResult.accessToken!.token);
+
     if (loginResult.status == LoginStatus.success) {
       final AuthCredential credential = FacebookAuthProvider.credential(
         loginResult.accessToken!.token,
       );
-
+      print(credential);
       return await FirebaseAuth.instance.signInWithCredential(credential);
     }
   } catch (error) {
