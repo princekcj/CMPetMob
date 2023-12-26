@@ -130,7 +130,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     {
       'label': 'Carousel 3',
       'items': [
-        'YouTube Recent Video',
+        'Pet Fact',
         'Pet Fact',
         'Pet Fact',
         'Ad',

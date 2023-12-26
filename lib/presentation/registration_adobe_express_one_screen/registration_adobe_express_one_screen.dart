@@ -193,7 +193,7 @@ class _RegistrationAdobeExpressOneScreenState
                 SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () async {
-                    if (passwordController.text == confirmpasswordController.text) {
+                    if (passwordController.text == confirmpasswordController.text || passwordController.text.length < 8) {
                       try {
                         await authService.register(
                           emailController.text,
@@ -213,7 +213,7 @@ class _RegistrationAdobeExpressOneScreenState
                         builder: (context) {
                           return AlertDialog(
                             title: Text('Password Mismatch'),
-                            content: Text('The entered passwords do not match.'),
+                            content: Text('The entered passwords do not match and/or less than 8 characters.'),
                             actions: [
                               TextButton(
                                 onPressed: () {

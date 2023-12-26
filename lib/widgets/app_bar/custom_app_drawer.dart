@@ -138,7 +138,7 @@ class CustomDrawer extends StatelessWidget {
                 ListTile(
                   title: Text('Help Centre', style: TextStyle(fontSize: 10, color: Colors.white)),
                   onTap: () {
-                    final Uri helpCenterURL = Uri.parse('https://help.cmpet.co.uk');
+                    final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk/index.php/2023/12/25/help-centre/');
                     _launchInBrowser(helpCenterURL);
                     // Handle 'test 1' selection
                   },
@@ -150,6 +150,14 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     _launchEmail('support@cmpet.co.uk');
+                  },
+                ),
+                ListTile(
+                  title: Text('Website', style: TextStyle(fontSize: 10, color: Colors.white)),
+                  onTap: () {
+                    final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk');
+                    _launchInBrowser(helpCenterURL);
+                    // Handle 'test 1' selection
                   },
                 ),
               ],
