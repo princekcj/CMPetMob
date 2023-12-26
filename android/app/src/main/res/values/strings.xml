@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">cmpets</string>
+    <string name="app_name">CMPet?</string>
     <string name="facebook_app_id">670761801613116</string>
     <string name="facebook_client_token">c4a5d4064a353b3b6131c055f9f4001f</string>
 </resources>
