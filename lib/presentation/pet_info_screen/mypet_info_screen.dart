@@ -127,6 +127,10 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     allergies = widget.allergies ?? [];
     String im = widget.image ?? '';
 
+    setState(() {
+      appointments = widget.appointments!;
+    });
+
     if (widget.image != null) {
       if (widget.image!.startsWith('https')) {
         setState(() {
@@ -725,7 +729,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                       "Allergies", buildAllergiesSection(), context),
                 ),
                 SizedBox(
-                  height: 130, // Adjust the height as needed
+                  height: 150, // Adjust the height as needed
                   child: buildInfoContainer(
                     "Appointments",
                     buildAppointmentsSection(context, appointments,

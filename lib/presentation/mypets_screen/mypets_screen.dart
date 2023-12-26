@@ -101,7 +101,10 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                     Timestamp? dateOfBirthTimestamp = doc['dateOfBirth'] as Timestamp?;
                     DateTime? dateOfBirth = dateOfBirthTimestamp != null ? dateOfBirthTimestamp.toDate() : null; // Adjusting for 'dateOfBirth'
                     String moreInfo = doc['moreInfo'];
-                    List<Appointment> appointments = List<Appointment>.from(doc['appointments']); // Adjusting for 'allergies'
+                    // Convert 'appointments' from Firestore to a list of Appointment objects
+                    List<Appointment> appointments = (doc['appointments'] as List<dynamic>)
+                        .map((appointmentData) => Appointment.fromJson(appointmentData))
+                        .toList();
 
 
                     return GestureDetector(

@@ -180,8 +180,8 @@ class _SearchAdobeExpressOneScreenState
                               var offsetAnimation = animation.drive(tween);
                               return SlideTransition(position: offsetAnimation, child: child);
                             },
-                            transitionDuration: const Duration(milliseconds: 500),
-                            reverseTransitionDuration: const Duration(milliseconds: 500),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
                           ),
                         );
 

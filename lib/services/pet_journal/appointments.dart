@@ -16,6 +16,23 @@ class Appointment {
     required this.date,
     this.description = '',
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'date': date.toIso8601String(),
+      'description': description,
+    };
+  }
+
+  factory Appointment.fromJson(Map<String, dynamic> json) {
+    return Appointment(
+      type: json['type'],
+      date: DateTime.parse(json['date']),
+      description: json['description'],
+    );
+  }
+
 }
 
 PetService _petService = PetService();
@@ -27,6 +44,7 @@ void removeAppointment(int index) {
 
 Widget buildAppointmentsSection(BuildContext context, List<Appointment> existingAppointments, bool isEnabled, String? petId) {
   appointments = existingAppointments; // Initialize with existing appointments
+  print("apts in widget is $appointments");
   final nextAppointment = findNextAppointment(appointments);
   return Column(
     children: [
@@ -168,7 +186,10 @@ void showAddAppointmentDialog(BuildContext context, String? petId) {
 }
 
 void addAppointment(Appointment appointment, String? idOfPet) {
-  info_screen.MyPetInfoScreen().appointments?.add(appointment);
+  appointments.add(appointment);
+  print(idOfPet);
+  print(appointment.date);
+
   if (idOfPet != null) {
     _petService.updatePetAppt(idOfPet, appointments);
   }

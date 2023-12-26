@@ -44,10 +44,9 @@ class PetService {
   }
 
   Future<void> updatePetAppt(
-      String petId, // Provide the unique identifier for the pet (document ID)
+      String petId,
       List<Appointment> appointments,
       ) async {
-    // Update pet data in Firestore
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
     final petRef = _firestore
@@ -56,11 +55,19 @@ class PetService {
         .collection('pets')
         .doc(petId);
 
+    print("appts is $appointments and ref of pet is $petRef");
+
+    final List<Map<String, dynamic>> appointmentsJson =
+    appointments.map((appointment) => appointment.toJson()).toList();
+    print(appointmentsJson);
+
     await petRef.update({
-      'appointments': appointments,
+      'appointments': FieldValue.arrayUnion(appointmentsJson),
     });
+
     print('Event Saved');
   }
+
 
   Future<void> updatePet(
       String petId, // Provide the unique identifier for the pet (document ID)
