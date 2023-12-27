@@ -1,7 +1,8 @@
 
 // AppDelegate.swift
 import UIKit
-import FacebookCore
+import FBSDKCoreKit
+import FBSDKLoginKit
 import flutter_local_notifications
 
 
