@@ -1,43 +1,32 @@
-
-// AppDelegate.swift
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
+import Flutter
 import flutter_local_notifications
 
-
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    func application(
+class AppDelegate: FlutterAppDelegate, UNUserNotificationCenterDelegate {
+
+    override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
 
-            FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
-                GeneratedPluginRegistrant.register(with: registry)
-            }
+        GeneratedPluginRegistrant.register(with: self)
 
-            if #available(iOS 10.0, *) {
-              UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
-            }
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self
+        }
 
-            GeneratedPluginRegistrant.register(with: self)
-
-
-        ApplicationDelegate.shared.application(
-            application,
-            didFinishLaunchingWithOptions: launchOptions
-        )
-
-        return true
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
-    func application(
+    override func application(
         _ app: UIApplication,
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey : Any] = [:]
     ) -> Bool {
-        ApplicationDelegate.shared.application(
+        return ApplicationDelegate.shared.application(
             app,
             open: url,
             sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
