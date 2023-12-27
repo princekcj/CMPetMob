@@ -14,6 +14,7 @@ import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/app_bar/custom_app_drawer.dart';
 import '../ingredient_screen/ingredient_screen.dart';
 import '../product_ingredients_screen/product_ingredients_screen.dart';
+import '../product_text_search/product_text_search.dart';
 import '../search_screen/search_screen.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -188,6 +189,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
           // Handle the error gracefully, e.g., log it
         }
         // You can also show an error message to the user if needed.
+
+        _showProductSearchConfirmation();
       }
     } else {
       setState(() {
@@ -377,6 +380,41 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
   Future<InitializationStatus> _initGoogleMobileAds() {
     // TODO: Initialize Google Mobile Ads SDK
     return MobileAds.instance.initialize();
+  }
+
+  Future<void> _showProductSearchConfirmation() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Would you like to use the product search instead?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Handle 'No' action if needed
+              },
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+
+
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => productSearchScreen(),
+                ),
+              );
+                // Handle 'Yes' action if needed
+                // For example, you can call the product search method here
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
 }
