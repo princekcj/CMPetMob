@@ -69,7 +69,7 @@ Future<List<String>> searchByNameProductSearch(String productName) async {
 
 
   final String apiUrl =
-      "https://world.openfoodfacts.org/api/v0/search?search_terms=$productName";
+      "https://world.openfoodfacts.org/cgi/search.pl?json=true&action=process&tagtype_0=brands&tag_contains_0=contains&tag_0=$productName";
 
   final response = await http.get(
     Uri.parse(apiUrl),
@@ -82,9 +82,7 @@ Future<List<String>> searchByNameProductSearch(String productName) async {
     final decodedData = json.decode(response.body);
 
     // Extract the 'ingredients_hierarchy' list
-    print(decodedData);
     final ingredientsHierarchy = decodedData['products'][0]['ingredients_hierarchy'];
-    print(ingredientsHierarchy);
 
     if (ingredientsHierarchy.isNotEmpty) {
       // Create a list to store ingredients without errors
@@ -128,7 +126,7 @@ Future<List<String>> ProductSearch(String productName) async {
   };
 
   final String apiUrl =
-      "https://world.openfoodfacts.org/api/v0/search?search_terms=$productName";
+      "https://world.openfoodfacts.org/cgi/search.pl?json=true&action=process&tagtype_0=brands&tag_contains_0=contains&tag_0=$productName&fields=product_name";
 
   final response = await http.get(
     Uri.parse(apiUrl),

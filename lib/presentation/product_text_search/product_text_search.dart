@@ -75,15 +75,11 @@ class _SearchAdobeExpressOneScreenState
                     backgroundColor: Color(0xFF008C8C),
                   ),
                   onPressed: () async {
-                    final ingredients_list = await searchByNameProductSearch(searchController.text);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductListPage(
-                          productIngredients: ingredients_list,
-                        ),
-                      ),
-                    );
+                    final products_list = await ProductSearch(searchController.text);
+                    setState(() {
+                      searchResults = products_list;
+                    });
+
                   },
                   child: Text(
                     'Search',

@@ -5,7 +5,7 @@ import Flutter
 import flutter_local_notifications
 
 @UIApplicationMain
-class AppDelegate: FlutterAppDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: FlutterAppDelegate {
 
     override func application(
         _ application: UIApplication,
@@ -34,3 +34,5 @@ class AppDelegate: FlutterAppDelegate, UNUserNotificationCenterDelegate {
         )
     }
 }
+
+
