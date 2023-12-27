@@ -67,8 +67,9 @@ Future<List<String>> searchByNameProductSearch(String productName) async {
     'User-Agent': 'NameOfYourApp - Android - Version 1.0 - www.yourappwebsite.com', // Replace with your app name and version
   };
 
+
   final String apiUrl =
-      "https://world.openfoodfacts.org/api/v0/product/$productName.json?fields=ingredients_text";
+      "https://world.openfoodfacts.org/api/v0/search?search_terms=$productName";
 
   final response = await http.get(
     Uri.parse(apiUrl),
@@ -82,7 +83,8 @@ Future<List<String>> searchByNameProductSearch(String productName) async {
 
     // Extract the 'ingredients_hierarchy' list
     print(decodedData);
-    final ingredientsHierarchy = decodedData['product']['ingredients_hierarchy'];
+    final ingredientsHierarchy = decodedData['products'][0]['ingredients_hierarchy'];
+    print(ingredientsHierarchy);
 
     if (ingredientsHierarchy.isNotEmpty) {
       // Create a list to store ingredients without errors
@@ -126,7 +128,7 @@ Future<List<String>> ProductSearch(String productName) async {
   };
 
   final String apiUrl =
-      "https://world.openfoodfacts.org/api/v0/search?fields=product_name&search_terms=$productName&json=1";
+      "https://world.openfoodfacts.org/api/v0/search?search_terms=$productName";
 
   final response = await http.get(
     Uri.parse(apiUrl),
