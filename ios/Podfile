@@ -34,7 +34,7 @@ ENV['COCOAPODS_DISABLE_STATS'] = 'true'
    flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
  end
 
- target 'MyApp' do
+ target 'Runner' do
    pod 'FBSDKLoginKit', '~> 16.3'
  end
 
