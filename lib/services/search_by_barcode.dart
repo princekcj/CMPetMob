@@ -126,7 +126,7 @@ Future<List<String>> ProductSearch(String productName) async {
   };
 
   final String apiUrl =
-      "https://world.openfoodfacts.org/cgi/search.pl?json=true&action=process&tagtype_0=brands&tag_contains_0=contains&tag_0=$productName&fields=product_name";
+      "https://world.openfoodfacts.org/cgi/search.pl?json=true&action=process&tagtype_0=brands&tag_contains_0=contains&tag_0=$productName&fields=product_name&page_size=20";
 
   final response = await http.get(
     Uri.parse(apiUrl),
