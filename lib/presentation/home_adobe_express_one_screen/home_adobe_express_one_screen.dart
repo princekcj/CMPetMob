@@ -51,12 +51,13 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   int loadedAdCount = 0;
   int totalAdCount = 0;
   List<WordPressPost> possibleBlogUrls = [];
+  List<InstagramPost> possibleInstagramUrls = [];
+
 
   void toggleMenu() {
     setState(() {
       isMenuOpen = !isMenuOpen;
     });
-    print(" iss wrking or $isMenuOpen");
   }
 
   List<PetFact> possiblePetFacts = [
@@ -68,6 +69,11 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   @override
   void initState() {
     super.initState();
+    getLatestInstagramPosts().then((value) {
+      setState(() {
+        possibleInstagramUrls = value;
+      });
+    });
     // Fetch leaderboard data
     fetchLeaderboard().then((data) {
       print("leader data is $data");
@@ -112,10 +118,10 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     {
       'label': 'Carousel 1',
       'items': [
-        'Feedback Link',
+        'Instagram',
         'Leaderboard',
         'Ad',
-        'Feedback Link',
+        'Instagram',
       ],
     },
     {
@@ -419,7 +425,29 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                         ),
                       ),
                     );
-                  }  else {
+                  }else if (item == 'Instagram') {
+                    InstagramPost? IPost = getRandomInstaPost(possibleInstagramUrls);
+                    return IPost != null
+                        ? InkWell(
+                      onTap: () {
+                        // Handle the tap event
+                      },
+                      child: Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: CachedNetworkImageProvider(IPost.mediaUrl),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    )
+                        : Center(
+                      // Show a loading indicator if IPost is null
+                      child: CircularProgressIndicator(color: Color(0xFF008C8C)),
+                    );
+                  } else {
                     // Display other items
                     return Container(
                       padding: EdgeInsets.all(8),
@@ -637,6 +665,14 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
 
   // Function to pick a random post
   WordPressPost? getRandomPost(List<WordPressPost> posts) {
+    if (posts.isNotEmpty) {
+      final Random random = Random();
+      return posts[random.nextInt(posts.length)];
+    }
+    return null;
+  }
+
+  InstagramPost? getRandomInstaPost(List<InstagramPost> posts) {
     if (posts.isNotEmpty) {
       final Random random = Random();
       return posts[random.nextInt(posts.length)];

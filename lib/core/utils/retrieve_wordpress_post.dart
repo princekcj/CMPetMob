@@ -2,7 +2,13 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as htmlParser;
+import 'package:flutter_insta/flutter_insta.dart';
 
+class InstagramPost {
+  final String mediaUrl;
+
+  InstagramPost({required this.mediaUrl});
+}
 
 class WordPressPost {
   final String title;
@@ -41,13 +47,9 @@ Future<List<WordPressPost>> getLatestPosts() async {
     // Extract the title, link, and content src for each post.
     List<WordPressPost> posts = [];
     for (var post in data) {
-      int id = post['id'];
       String title = post['title']['rendered'];
-      print("thw wordpress post title is $title");
       String link = post['link'];
-      print("thw wordpress calls link is $link");
       String contentSrc = extractContentSrc(post['content']['rendered']);
-      print("thw wordpress calls src is $contentSrc");
 
       posts.add(WordPressPost(title: title, link: link, contentSrc: contentSrc));
     }
@@ -111,6 +113,29 @@ Future<List<PetFact>> fetchData() async {
   } else {
     throw Exception('Failed to load pet facts');
   }
+}
+
+Future<List<InstagramPost>> getLatestInstagramPosts() async {
+  FlutterInsta flutterInsta = new FlutterInsta();
+  await flutterInsta.getProfileData("canmypetltd"); //instagram username
+
+    final List<String>? data = flutterInsta.feedImagesUrl;
+    print("feed data is $data");
+    if (data!.isNotEmpty) {
+      final List<dynamic> postsData = data;
+
+      List<InstagramPost> posts = [];
+
+      for (var postData in postsData) {
+        String mediaUrl = postData;
+
+        posts.add(InstagramPost(mediaUrl: mediaUrl));
+      }
+
+      return posts;
+    } else {
+      throw Exception('Invalid response format');
+    }
 }
 
 
