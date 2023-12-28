@@ -33,19 +33,22 @@ Future<List<WordPressPost>> getLatestPosts() async {
   // Make the request to the WordPress REST API.
   final response = await http.get(Uri.parse('$wordpressUrl$postsRoute&per_page=$numberOfPosts'));
 
-  print(response.body);
-
   if (response.statusCode == 200) {
     // Parse the response body.
     final List<dynamic> data = json.decode(response.body);
+    print("thw wordpress calls data is $data");
 
     // Extract the title, link, and content src for each post.
     List<WordPressPost> posts = [];
     for (var post in data) {
       int id = post['id'];
       String title = post['title']['rendered'];
+      print("thw wordpress post title is $title");
       String link = post['link'];
+      print("thw wordpress calls link is $link");
       String contentSrc = extractContentSrc(post['content']['rendered']);
+      print("thw wordpress calls src is $contentSrc");
+
       posts.add(WordPressPost(title: title, link: link, contentSrc: contentSrc));
     }
 
@@ -58,28 +61,22 @@ Future<List<WordPressPost>> getLatestPosts() async {
 }
 
 String extractContentSrc(String content) {
-  // Replace this with your logic to extract the 'src' value from the 'content'.
-  // This is just a simple example; you might need to use regular expressions or other methods based on your actual data structure.
   const startTag = 'src="';
   const endTag = '"';
   int startIndex = content.indexOf(startTag);
-  int endIndex = content.indexOf(endTag, startIndex + startTag.length);
-  return content.substring(startIndex + startTag.length, endIndex);
-}
 
+  if (startIndex != -1) {
+    int endIndex = content.indexOf(endTag, startIndex + startTag.length);
+    return content.substring(startIndex + startTag.length, endIndex);
+  } else {
+    // Return a default value when 'src' is not found or is an empty string
+    return 'No Content';
+  }
+}
 Future<List<PetFact>> fetchData() async {
   final response = await http.get(Uri.parse('https://cmpet.co.uk/?rest_route=/wp/v2/pages&slug=pet-facts'));
 
-  print("re1 is $response");
-
-  var status = response.statusCode;
-  var bofu = response.body;
-
-  print("re1 status is $status");
-  print("re1 body is $bofu");
-
   if (response.statusCode == 200) {
-    print("made re1 ");
 
     final dynamic responseData = json.decode(response.body);
 
@@ -107,8 +104,6 @@ Future<List<PetFact>> fetchData() async {
           }
         }
       }
-
-      print("fats is $facts");
       return facts;
     } else {
       throw Exception('Invalid response format');

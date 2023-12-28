@@ -261,6 +261,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                   } else if (item == 'Blog') {
                     if (possibleBlogUrls.isNotEmpty) {
                       WordPressPost? post = getRandomPost(possibleBlogUrls);
+
                       return InkWell(
                         onTap: () {
                           final Uri postURL = Uri.parse(post!.link);
@@ -595,7 +596,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                     columns: [
                       DataColumn(label: Text('Rank')),
                       DataColumn(label: Text('User')),
-                      DataColumn(label: Text('Scan Count')),
+                      DataColumn(label: Text('Scans')),
                     ],
                     columnSpacing: 8,
                     headingRowHeight: 40,
