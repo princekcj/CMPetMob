@@ -80,11 +80,12 @@ Future<List<String>> searchByNameProductSearch(String productName) async {
     // Parse the response data, which will contain product information.
     // You can use a JSON decoding library like 'dart:convert' to parse the data.
     final decodedData = json.decode(response.body);
+    print("before lis is $decodedData");
 
     // Extract the 'ingredients_hierarchy' list
     final ingredientsHierarchy = decodedData['products'][0]['ingredients_hierarchy'];
-
-    if (ingredientsHierarchy.isNotEmpty) {
+    print("lis is $ingredientsHierarchy");
+    if (ingredientsHierarchy != null) {
       // Create a list to store ingredients without errors
       final Set<String> ingredientsList = {};
 
@@ -140,6 +141,7 @@ Future<List<String>> ProductSearch(String productName) async {
 
     // Extract the list of products
     final List<dynamic> products = decodedData['products'];
+    print(products);
 
     if (products.isNotEmpty) {
       // Create a list to store product names
@@ -156,6 +158,7 @@ Future<List<String>> ProductSearch(String productName) async {
       }
 
       // Return the list of product names
+      print("prods are $productNames");
       return productNames;
     }
   }

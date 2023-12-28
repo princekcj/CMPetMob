@@ -100,14 +100,14 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
       isLoading = true;
     });
 
-    String barcodeResult = await FlutterBarcodeScanner.scanBarcode(
-      '#008c8c',
-      'Cancel',
-      true,
-      ScanMode.BARCODE,
-    );
+    //String barcodeResult = await FlutterBarcodeScanner.scanBarcode(
+      //'#008c8c',
+      //'Cancel',
+      //true,
+      //ScanMode.BARCODE,
+    //);
 
-    //String barcodeResult = '3017620429487';
+    String barcodeResult = '3017620429487';
 
     if (!mounted) return;
 
