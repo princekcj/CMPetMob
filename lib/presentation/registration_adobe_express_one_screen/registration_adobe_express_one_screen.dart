@@ -206,6 +206,23 @@ class _RegistrationAdobeExpressOneScreenState
                         Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
                       } catch (e) {
                         print('Registration error: $e');
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Password Error'),
+                              content: Text("$e"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       }
                     } else {
                       showDialog(
