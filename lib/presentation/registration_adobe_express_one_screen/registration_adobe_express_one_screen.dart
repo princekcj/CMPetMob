@@ -234,7 +234,7 @@ class _RegistrationAdobeExpressOneScreenState
               ElevatedButton(
                 onPressed: () async {
                   if (_agreeToTerms) {
-                    if (passwordController.text == confirmpasswordController.text && passwordController.text.length < 8) {
+                    if (passwordController.text == confirmpasswordController.text && passwordController.text.length >= 8) {
                       try {
                         await authService.register(
                           emailController.text,
