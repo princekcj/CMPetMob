@@ -289,8 +289,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
 
     // Convert _petImage to Uint8List
     Uint8List imageData;
-    if (_petImage is NetworkImage) {
-      final networkImage = _petImage as NetworkImage;
+    if (_petImage is CachedNetworkImageProvider) {
+      final networkImage = _petImage as CachedNetworkImageProvider;
       final HttpClientRequest request = await HttpClient().getUrl(Uri.parse(networkImage.url));
       final HttpClientResponse response = await request.close();
       final List<int> bytes = await consolidateHttpClientResponseBytes(response);
