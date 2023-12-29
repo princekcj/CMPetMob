@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -276,7 +277,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     }
 
     return appointments.map((appointment) {
-      return 'Title: ${appointment.type}, Date: ${appointment.date.day.toString()} ${appointment.date.month}';
+      return 'Title: ${appointment.type}, Date: ${DateFormat('dd-MM-yyyy').format(appointment.date)}';
     }).join('\n');
   }
 
@@ -384,7 +385,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                           pw.Text('Age: $age', style: regularStyle),
                           pw.SizedBox(height: 10),
                           pw.Text(
-                            'Date of Birth: ${selectedDate?.day != null ? selectedDate!.toLocal().toLocal().toString() : "Not specified"}',
+                            'Date of Birth: ${selectedDate != null ? DateFormat('dd-MM-yyyy').format(selectedDate!) : "Not specified"}',
                             style: regularStyle,
                           ),
                           pw.SizedBox(height: 10),
