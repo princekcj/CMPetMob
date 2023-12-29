@@ -199,12 +199,16 @@ class _RegistrationAdobeExpressOneScreenState
                   title: RichText(
                     text: TextSpan(
                       text: 'I agree to the ',
-                      style: DefaultTextStyle.of(context).style,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black
+                      ),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Terms and Conditions',
                           style: TextStyle(
                             color: Colors.blue,
+                            fontSize: 12,
                             decoration: TextDecoration.underline,
                           ),
                           // Add a gesture recognizer for the hyperlink
@@ -212,8 +216,8 @@ class _RegistrationAdobeExpressOneScreenState
                             ..onTap = () {
                               // Navigate to the Terms of Use screen or open the link
                               // You can implement the navigation or link opening logic here
-                              final Uri instagramURL = Uri.parse('https://www.instagram.com/canmypetltd');
-                              urlLauncherUtils.launchInBrowser(instagramURL);
+                              final Uri tcURL = Uri.parse('https://cmpet.co.uk/index.php/terms-of-use/');
+                              urlLauncherUtils.launchInBrowser(tcURL);
                             },
                         ),
                       ],

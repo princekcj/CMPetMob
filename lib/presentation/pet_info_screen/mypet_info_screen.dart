@@ -128,7 +128,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     String im = widget.image ?? '';
 
     setState(() {
-      appointments = widget.appointments!;
+      appointments = widget.appointments ?? [];
     });
 
     if (widget.image != null) {
