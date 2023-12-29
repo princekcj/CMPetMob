@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -134,7 +135,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     if (widget.image != null) {
       if (widget.image!.startsWith('https')) {
         setState(() {
-          _petImage = NetworkImage(widget.image ?? '');
+          _petImage = CachedNetworkImageProvider(widget.image ?? '');
         });
       }
     }
@@ -275,7 +276,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     }
 
     return appointments.map((appointment) {
-      return 'Title: ${appointment.type}, Date: ${appointment.date.toString()}';
+      return 'Title: ${appointment.type}, Date: ${appointment.date.day.toString()}';
     }).join('\n');
   }
 
@@ -383,7 +384,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                           pw.Text('Age: $age', style: regularStyle),
                           pw.SizedBox(height: 10),
                           pw.Text(
-                            'Date of Birth: ${selectedDate != null ? selectedDate!.toLocal().toLocal().toString() : "Not specified"}',
+                            'Date of Birth: ${selectedDate?.day != null ? selectedDate!.toLocal().toLocal().toString() : "Not specified"}',
                             style: regularStyle,
                           ),
                           pw.SizedBox(height: 10),
@@ -495,7 +496,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     if (imageUrl.isNotEmpty) {
       setState(() {
         _imagePath = imageUrl; // Update _imagePath with the uploaded image URL
-        _petImage = NetworkImage(imageUrl);
+        _petImage = CachedNetworkImageProvider( imageUrl,
+        );
       });
     }
   }
