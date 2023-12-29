@@ -276,7 +276,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     }
 
     return appointments.map((appointment) {
-      return 'Title: ${appointment.type}, Date: ${appointment.date.day.toString()}';
+      return 'Title: ${appointment.type}, Date: ${appointment.date.day.toString()} ${appointment.date.month}';
     }).join('\n');
   }
 
@@ -288,7 +288,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
 
     // Convert _petImage to Uint8List
     Uint8List imageData;
-    if (_petImage is CachedNetworkImageProvider) {
+    if (_petImage is NetworkImage) {
       final networkImage = _petImage as NetworkImage;
       final HttpClientRequest request = await HttpClient().getUrl(Uri.parse(networkImage.url));
       final HttpClientResponse response = await request.close();
