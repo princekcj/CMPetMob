@@ -5,15 +5,19 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../presentation/home_adobe_express_one_screen/home_adobe_express_one_screen.dart';
 import '../../presentation/my_account_adobe_express_1_one_screen/my_account_adobe_express_1_one_screen.dart';
 import '../../presentation/mypets_screen/mypets_screen.dart';
-import '../../presentation/search_screen/search_screen.dart';
+import '../../services/url_launchers.dart' as launch;
 import '../../routes/app_routes.dart';
+import '../../services/url_launchers.dart';
 
 class CustomDrawer extends StatelessWidget {
   final String? userName = FirebaseAuth.instance.currentUser?.displayName;
   final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
+
   @override
   Widget build(BuildContext context) {
+    UrlLauncherUtils urlLauncherUtils = UrlLauncherUtils();
+
     return Drawer(
       child: Container(
         color: Color(0xFF008C8C),
@@ -139,7 +143,8 @@ class CustomDrawer extends StatelessWidget {
                   title: Text('Help Centre', style: TextStyle(fontSize: 10, color: Colors.white)),
                   onTap: () {
                     final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk/index.php/2023/12/25/help-centre/');
-                    _launchInBrowser(helpCenterURL);
+                    urlLauncherUtils.launchInBrowser(helpCenterURL)
+                    ;
                     // Handle 'test 1' selection
                   },
                 ),
@@ -149,14 +154,14 @@ class CustomDrawer extends StatelessWidget {
                     style: TextStyle(fontSize: 10, color: Colors.white),
                   ),
                   onTap: () {
-                    _launchEmail('support@cmpet.co.uk');
-                  },
+                    urlLauncherUtils.launchEmail('support@cmpet.co.uk');
+                    },
                 ),
                 ListTile(
                   title: Text('Website', style: TextStyle(fontSize: 10, color: Colors.white)),
                   onTap: () {
                     final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk');
-                    _launchInBrowser(helpCenterURL);
+                    urlLauncherUtils.launchInBrowser(helpCenterURL);
                     // Handle 'test 1' selection
                   },
                 ),
@@ -174,7 +179,7 @@ class CustomDrawer extends StatelessWidget {
                   onPressed: () {
                     // Handle Facebook button press
                     final Uri fbURL = Uri.parse('https://www.facebook.com/people/Can-My-Pet/100064808752362');
-                    _launchInBrowser(fbURL);
+                    urlLauncherUtils.launchInBrowser(fbURL);
                   },
                   color: Colors.white,
                 ),
@@ -187,7 +192,7 @@ class CustomDrawer extends StatelessWidget {
                   onPressed: () {
                     // Handle Instagram button press
                     final Uri instagramURL = Uri.parse('https://www.instagram.com/canmypetltd');
-                    _launchInBrowser(instagramURL);
+                    urlLauncherUtils.launchInBrowser(instagramURL);
                   },
                   color: Colors.white,
                 ),
@@ -200,21 +205,3 @@ class CustomDrawer extends StatelessWidget {
   }
 }
 
-Future<void> _launchInBrowser(Uri url) async {
-  if (!await launchUrl(
-    url,
-    mode: LaunchMode.inAppBrowserView,
-  )) {
-    throw Exception('Could not launch $url');
-  }
-}
-void _launchEmail(String email) async {
-  final Uri _emailLaunchUri = Uri(scheme: 'mailto', path: email);
-
-  if (await launchUrl(_emailLaunchUri)) {
-    await launchUrl(_emailLaunchUri);
-  } else {
-    // Handle the case where the email application cannot be launched
-    print('Could not launch email application');
-  }
-}

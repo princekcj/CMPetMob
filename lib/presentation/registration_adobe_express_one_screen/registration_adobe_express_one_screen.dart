@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cmpets/core/app_export.dart';
 import 'package:cmpets/widgets/app_bar/topappbar.dart' as top_bar;
@@ -8,6 +9,7 @@ import '../../core/utils/analytics_utils.dart' as analytics_utils;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../auth/Auth_provider.dart';
 import '../../auth/google.dart';
+import '../../services/url_launchers.dart';
 
 class RegistrationAdobeExpressOneScreen extends StatefulWidget {
   const RegistrationAdobeExpressOneScreen({Key? key}) : super(key: key);
@@ -27,13 +29,15 @@ class _RegistrationAdobeExpressOneScreenState
   final TextEditingController forenameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
   final authService = ProviderContainer().read(authProvider);
-
+  bool _agreeToTerms = false;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     analytics_utils.logScreenUsageEvent('Registration');
+    UrlLauncherUtils urlLauncherUtils = UrlLauncherUtils();
+
     return SafeArea(
       child: Scaffold(
         appBar: top_bar.CustomTopAppBar(
@@ -190,9 +194,42 @@ class _RegistrationAdobeExpressOneScreenState
                     ),
                   ],
                 ),
+                // Checkbox for agreeing to terms
+                CheckboxListTile(
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'I agree to the ',
+                      style: DefaultTextStyle.of(context).style,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Terms and Conditions',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                          // Add a gesture recognizer for the hyperlink
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              // Navigate to the Terms of Use screen or open the link
+                              // You can implement the navigation or link opening logic here
+                              final Uri instagramURL = Uri.parse('https://www.instagram.com/canmypetltd');
+                              urlLauncherUtils.launchInBrowser(instagramURL);
+                            },
+                        ),
+                      ],
+                    ),
+                  ),
+                  value: _agreeToTerms,
+                  onChanged: (value) {
+                    setState(() {
+                      _agreeToTerms = value ?? false;
+                    });
+                  },
+                ),
                 SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: () async {
+              ElevatedButton(
+                onPressed: () async {
+                  if (_agreeToTerms) {
                     if (passwordController.text == confirmpasswordController.text && passwordController.text.length < 8) {
                       try {
                         await authService.register(
@@ -243,14 +280,34 @@ class _RegistrationAdobeExpressOneScreenState
                         },
                       );
                     }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.blue,
-                    side: BorderSide(color: Colors.grey),
-                  ),
-                  child: Text('Register'),
+                  } else {
+                    // Show a popup if the checkbox is not checked
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Terms and Conditions'),
+                          content: Text('Please agree to the Terms and Conditions before registering.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.blue,
+                  side: BorderSide(color: Colors.grey),
                 ),
+                child: Text('Register'),
+              ),
                 SizedBox(height: 15),
               ],
             ),
