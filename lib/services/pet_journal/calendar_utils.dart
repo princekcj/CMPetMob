@@ -164,7 +164,7 @@ class CalendarUtils {
     );
 
     await flutterLocalNotificationsPlugin.show(
-       0,
+      0,
       title,
       'Calendar Event Created',
       platformChannelSpecifics,
