@@ -100,40 +100,39 @@ class _SearchAdobeExpressOneScreenState
             ),
             SizedBox(height: 16), // Add some space between the search bar and the result list
             // Search Results List
-            Expanded(
-              child: ListView.builder(
-                itemCount: searchResults.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () async {
-                      analytics_utils.logSearchEvent();
-                      final ingredients_list = searchResults[index]['ingredients'];
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductListPage(
-                            productIngredients: ingredients_list,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0), // Adjust the horizontal spacing as needed
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(searchResults[index]['productName']),
+        // Search Results List
+        // Search Results List
+        Expanded(
+          child: ListView.separated(
+            itemCount: searchResults.length,
+            separatorBuilder: (context, index) => SizedBox(height: 8.0), // Add space between items
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () async {
+                  analytics_utils.logSearchEvent();
+                  final ingredients_list = searchResults[index]['ingredients'];
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductListPage(
+                        productIngredients: ingredients_list,
                       ),
                     ),
                   );
                 },
-              ),
-            ),
-            SizedBox(height: 100,)
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(searchResults[index]['productName']),
+                ),
+              );
+            },
+          ),
+        ),
           ],
         ),
       ),
