@@ -110,7 +110,33 @@ class CalendarUtils {
 
     var initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettingsIOs = DarwinInitializationSettings();
+    var initializationSettingsIOs = DarwinInitializationSettings(
+        notificationCategories: [
+          DarwinNotificationCategory(
+            'demoCategory',
+            actions: <DarwinNotificationAction>[
+              DarwinNotificationAction.plain('id_1', 'Action 1'),
+              DarwinNotificationAction.plain(
+                'id_2',
+                'Action 2',
+                options: <DarwinNotificationActionOption>{
+                  DarwinNotificationActionOption.destructive,
+                },
+              ),
+              DarwinNotificationAction.plain(
+                'id_3',
+                'Action 3',
+                options: <DarwinNotificationActionOption>{
+                  DarwinNotificationActionOption.foreground,
+                },
+              ),
+            ],
+            options: <DarwinNotificationCategoryOption>{
+              DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
+            },
+          )
+        ],
+    );
     var initSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
 
