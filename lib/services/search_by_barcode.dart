@@ -61,73 +61,14 @@ Future<List<String>> searchProductIngredientsByBarcode(String barcode) async {
   return [];
 }
 
-Future<List<String>> searchByNameProductSearch(String productName) async {
-  // Define a user agent to identify your application
-  final Map<String, String> headers = {
-    'User-Agent': 'NameOfYourApp - Android - Version 1.0 - www.yourappwebsite.com', // Replace with your app name and version
-  };
-
-
-  final String apiUrl =
-      "https://world.openfoodfacts.org/cgi/search.pl?json=true&action=process&tagtype_0=brands&tag_contains_0=contains&tag_0=$productName";
-
-  final response = await http.get(
-    Uri.parse(apiUrl),
-    headers: headers, // Set the user agent in the headers
-  );
-
-  if (response.statusCode == 200) {
-    // Parse the response data, which will contain product information.
-    // You can use a JSON decoding library like 'dart:convert' to parse the data.
-    final decodedData = json.decode(response.body);
-    print("before lis is $decodedData");
-
-    // Extract the 'ingredients_hierarchy' list
-    final ingredientsHierarchy = decodedData['products'][0]['ingredients_hierarchy'];
-    print("lis is $ingredientsHierarchy");
-    if (ingredientsHierarchy != null) {
-      // Create a list to store ingredients without errors
-      final Set<String> ingredientsList = {};
-
-      for (String ingredient in ingredientsHierarchy) {
-        try {
-          String cleanedIngredient = '';
-          // Remove 'fr:' prefix only if 'en:' is not present
-          if (!ingredient.contains('en:')) {
-            cleanedIngredient = ingredient.replaceAll('fr:', '');
-          } else if (!ingredient.contains('fr:')) {
-            cleanedIngredient = ingredient.replaceAll('en:', '');
-          }
-
-          // Replace '-' with spaces if they exist in the cleanedIngredient
-          cleanedIngredient = cleanedIngredient.replaceAll('-', ' ');
-
-          // Add the cleaned ingredient to the list
-          ingredientsList.add(cleanedIngredient);
-        } catch (e) {
-          // Handle the error (e.g., log it) and continue to the next ingredient
-          print('Error processing ingredient: $ingredient, Error: $e');
-        }
-      }
-
-
-      // Return the list of ingredients without errors
-      return ingredientsList.toList();
-    }
-  }
-
-  // Handle errors or no ingredients found by returning an empty list
-  return [];
-}
-
-Future<List<String>> ProductSearch(String productName) async {
+Future<List<Map<String, dynamic>>> searchProductsWithIngredients(String productName) async {
   // Define a user agent to identify your application
   final Map<String, String> headers = {
     'User-Agent': 'NameOfYourApp - Android - Version 1.0 - www.yourappwebsite.com', // Replace with your app name and version
   };
 
   final String apiUrl =
-      "https://world.openfoodfacts.org/cgi/search.pl?json=true&action=process&tagtype_0=brands&tag_contains_0=contains&tag_0=$productName&fields=product_name&page_size=20";
+      "https://world.openfoodfacts.org/cgi/search.pl?json=true&action=process&tagtype_0=brands&tag_contains_0=contains&tag_0=$productName&page_size=20";
 
   final response = await http.get(
     Uri.parse(apiUrl),
@@ -141,29 +82,59 @@ Future<List<String>> ProductSearch(String productName) async {
 
     // Extract the list of products
     final List<dynamic> products = decodedData['products'];
-    print(products);
 
     if (products.isNotEmpty) {
-      // Create a list to store product names
-      final List<String> productNames = [];
+      // Create a list to store product details (product name and ingredients)
+      final List<Map<String, dynamic>> productList = [];
 
       for (dynamic product in products) {
         try {
           String productName = product['product_name'];
-          productNames.add(productName);
+          List<String> ingredientsList = [];
+
+          // Extract the 'ingredients_hierarchy' list
+          final ingredientsHierarchy = product['ingredients_hierarchy'];
+
+          if (ingredientsHierarchy != null) {
+            for (String ingredient in ingredientsHierarchy) {
+              try {
+                String cleanedIngredient = '';
+
+                // Remove 'fr:' prefix only if 'en:' is not present
+                if (!ingredient.contains('en:')) {
+                  cleanedIngredient = ingredient.replaceAll('fr:', '');
+                } else if (!ingredient.contains('fr:')) {
+                  cleanedIngredient = ingredient.replaceAll('en:', '');
+                }
+
+                // Replace '-' with spaces if they exist in the cleanedIngredient
+                cleanedIngredient = cleanedIngredient.replaceAll('-', ' ');
+
+                // Add the cleaned ingredient to the list
+                ingredientsList.add(cleanedIngredient);
+              } catch (e) {
+                // Handle the error (e.g., log it) and continue to the next ingredient
+                print('Error processing ingredient: $ingredient, Error: $e');
+              }
+            }
+          }
+
+          // Add product details to the list
+          productList.add({
+            'productName': productName,
+            'ingredients': ingredientsList.isEmpty ? [productName] : ingredientsList,
+          });
         } catch (e) {
           // Handle the error (e.g., log it) and continue to the next product
           print('Error processing product: $product, Error: $e');
         }
       }
 
-      // Return the list of product names
-      print("prods are $productNames");
-      return productNames;
+      // Return the list of product details
+      return productList;
     }
   }
 
   // Handle errors or no products found by returning an empty list
   return [];
 }
-

@@ -26,7 +26,7 @@ class productSearchScreen extends StatefulWidget {
 class _SearchAdobeExpressOneScreenState
     extends State<productSearchScreen> {
 
-  List<String> searchResults = [];
+  List<Map<String, dynamic>> searchResults = [];
   TextEditingController searchController = TextEditingController();
 
 
@@ -75,7 +75,7 @@ class _SearchAdobeExpressOneScreenState
                     backgroundColor: Color(0xFF008C8C),
                   ),
                   onPressed: () async {
-                    final products_list = await ProductSearch(searchController.text);
+                    final products_list = await searchProductsWithIngredients(searchController.text);
                     setState(() {
                       searchResults = products_list;
                     });
@@ -90,7 +90,7 @@ class _SearchAdobeExpressOneScreenState
                 ),
               ),
               onChanged: (value) async {
-                final products_list = await ProductSearch(searchController.text);
+                final products_list = await searchProductsWithIngredients(searchController.text);
                 setState(() {
                   searchResults = products_list;
                 });
@@ -107,7 +107,7 @@ class _SearchAdobeExpressOneScreenState
                   return GestureDetector(
                     onTap: () async {
                       analytics_utils.logSearchEvent();
-                      final ingredients_list = await searchByNameProductSearch(searchResults[index]);
+                      final ingredients_list = searchResults[index]['ingredients'];
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -116,8 +116,6 @@ class _SearchAdobeExpressOneScreenState
                           ),
                         ),
                       );
-
-
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0), // Adjust the horizontal spacing as needed
@@ -128,13 +126,14 @@ class _SearchAdobeExpressOneScreenState
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         alignment: Alignment.center,
-                        child: Text(searchResults[index]),
+                        child: Text(searchResults[index]['productName']),
                       ),
                     ),
                   );
                 },
               ),
             ),
+            SizedBox(height: 100,)
           ],
         ),
       ),
