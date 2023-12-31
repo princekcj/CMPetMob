@@ -142,7 +142,7 @@ class CustomDrawer extends StatelessWidget {
                 ListTile(
                   title: Text('Help Centre', style: TextStyle(fontSize: 10, color: Colors.white)),
                   onTap: () {
-                    final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk/index.php/2023/12/25/help-centre/');
+                    final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk/index.php/help-centre/');
                     urlLauncherUtils.launchInBrowser(helpCenterURL)
                     ;
                     // Handle 'test 1' selection
@@ -192,7 +192,8 @@ class CustomDrawer extends StatelessWidget {
                   onPressed: () {
                     // Handle Instagram button press
                     final Uri instagramURL = Uri.parse('https://www.instagram.com/canmypetltd');
-                    urlLauncherUtils.launchInBrowser(instagramURL);
+
+                    _launchInBrowser(instagramURL);
                   },
                   color: Colors.white,
                 ),
