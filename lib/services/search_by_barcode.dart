@@ -62,9 +62,8 @@ Future<List<String>> searchProductIngredientsByBarcode(String barcode) async {
 }
 
 Future<List<Map<String, dynamic>>> searchProductsWithIngredients(String productName) async {
-  // Define a user agent to identify your application
   final Map<String, String> headers = {
-    'User-Agent': 'NameOfYourApp - Android - Version 1.0 - www.yourappwebsite.com', // Replace with your app name and version
+    'User-Agent': 'NameOfYourApp - Android - Version 1.0 - www.yourappwebsite.com',
   };
 
   final String apiUrl =
@@ -72,27 +71,27 @@ Future<List<Map<String, dynamic>>> searchProductsWithIngredients(String productN
 
   final response = await http.get(
     Uri.parse(apiUrl),
-    headers: headers, // Set the user agent in the headers
+    headers: headers,
   );
 
   if (response.statusCode == 200) {
-    // Parse the response data, which will contain product information.
-    // You can use a JSON decoding library like 'dart:convert' to parse the data.
     final decodedData = json.decode(response.body);
-
-    // Extract the list of products
     final List<dynamic> products = decodedData['products'];
 
     if (products.isNotEmpty) {
-      // Create a list to store product details (product name and ingredients)
       final List<Map<String, dynamic>> productList = [];
+      final Set<String> uniqueProductNames = Set<String>();
 
       for (dynamic product in products) {
         try {
           String productName = product['product_name'];
-          List<String> ingredientsList = [];
 
-          // Extract the 'ingredients_hierarchy' list
+          // Check for duplicate product names
+          if (uniqueProductNames.contains(productName)) {
+            continue; // Skip this product if the name is already in the set
+          }
+
+          List<String> ingredientsList = [];
           final ingredientsHierarchy = product['ingredients_hierarchy'];
 
           if (ingredientsHierarchy != null) {
@@ -100,41 +99,35 @@ Future<List<Map<String, dynamic>>> searchProductsWithIngredients(String productN
               try {
                 String cleanedIngredient = '';
 
-                // Remove 'fr:' prefix only if 'en:' is not present
                 if (!ingredient.contains('en:')) {
                   cleanedIngredient = ingredient.replaceAll('fr:', '');
                 } else if (!ingredient.contains('fr:')) {
                   cleanedIngredient = ingredient.replaceAll('en:', '');
                 }
 
-                // Replace '-' with spaces if they exist in the cleanedIngredient
                 cleanedIngredient = cleanedIngredient.replaceAll('-', ' ');
-
-                // Add the cleaned ingredient to the list
                 ingredientsList.add(cleanedIngredient);
               } catch (e) {
-                // Handle the error (e.g., log it) and continue to the next ingredient
                 print('Error processing ingredient: $ingredient, Error: $e');
               }
             }
           }
 
-          // Add product details to the list
+          // Add product details to the list and set
           productList.add({
             'productName': productName,
             'ingredients': ingredientsList.isEmpty ? [productName] : ingredientsList,
           });
+
+          uniqueProductNames.add(productName); // Add the product name to the set
         } catch (e) {
-          // Handle the error (e.g., log it) and continue to the next product
           print('Error processing product: $product, Error: $e');
         }
       }
 
-      // Return the list of product details
       return productList;
     }
   }
 
-  // Handle errors or no products found by returning an empty list
   return [];
 }
