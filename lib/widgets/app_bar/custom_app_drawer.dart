@@ -192,8 +192,7 @@ class CustomDrawer extends StatelessWidget {
                   onPressed: () {
                     // Handle Instagram button press
                     final Uri instagramURL = Uri.parse('https://www.instagram.com/canmypetltd');
-
-                    _launchInBrowser(instagramURL);
+                    urlLauncherUtils.launchInBrowser(instagramURL);
                   },
                   color: Colors.white,
                 ),
