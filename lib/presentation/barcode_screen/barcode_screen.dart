@@ -427,7 +427,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Would you like to use the product search instead?'),
+          title: Text('Would you like to search for the product manually?'),
           actions: <Widget>[
             TextButton(
               child: Text('No'),
