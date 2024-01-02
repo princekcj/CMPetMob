@@ -45,8 +45,13 @@ dependencies:
   flutter_insta: ^1.0.1
 dev_dependencies:
   envied_generator: ^0.5.1
+  flutter_launcher_icons: ^0.12.0
   flutter_test:
     sdk: flutter
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/LogoFINALCIRCLE.png"
 flutter:
   uses-material-design: true
   assets:
