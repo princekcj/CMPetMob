@@ -85,10 +85,14 @@
     <dict>
         <key>CFBundlePrimaryIcon</key>
         <dict>
+            <key>CFBundleIconName</key>
+            <string>AppIcon</string>
             <key>CFBundleIconFiles</key>
             <array>
-                <string>AppIcon</string>
+                <string>AppIcon.iconset</string>
             </array>
+            <key>UIPrerenderedIcon</key>
+            <false/>
         </dict>
     </dict>
 </dict>
