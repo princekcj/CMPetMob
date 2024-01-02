@@ -81,5 +81,15 @@
       <string>fbapi</string>
       <string>fb-messenger-share-api</string>
     </array>
+    <key>CFBundleIcons</key>
+    <dict>
+        <key>CFBundlePrimaryIcon</key>
+        <dict>
+            <key>CFBundleIconFiles</key>
+            <array>
+                <string>AppIcon</string>
+            </array>
+        </dict>
+    </dict>
 </dict>
 </plist>
