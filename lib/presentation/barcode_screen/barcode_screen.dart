@@ -101,21 +101,22 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
     });
 
     String barcodeResult = await FlutterBarcodeScanner.scanBarcode(
-      '#008c8c',
-      'Cancel',
-      true,
-      ScanMode.BARCODE,
+    '#008c8c',
+    'Cancel',
+    true,
+    ScanMode.BARCODE,
     );
 
-    //String barcodeResult = '3017620429487';
+    //String barcodeResult = '0085592141072';
 
     if (!mounted) return;
 
     List<String> productIngredients = [];
-
+    try {
     final barcodeData = await json.decode(barcodeResult);
 
     if (barcodeResult == '-1') {
+      print('made itt to - ');
       setState(() {
         isLoading = false;
         snackBarMessage = 'Cancelled Scan';
@@ -141,10 +142,11 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else if (barcodeResult.isNotEmpty && barcodeResult != '-1' ) {
+    } else if (barcodeResult.isNotEmpty && barcodeResult != '-1') {
       try {
         // Product found, proceed to fetch ingredients
-        productIngredients = await searchProductIngredientsByBarcode(barcodeResult);
+        productIngredients =
+        await searchProductIngredientsByBarcode(barcodeResult);
         for (String input in productIngredients) {
           capitalizeFirstLetter(input);
         }
@@ -157,17 +159,20 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductListPage(
-              productIngredients: _barcodeResult,
-            ),
+            builder: (context) =>
+                ProductListPage(
+                  productIngredients: _barcodeResult,
+                ),
           ),
         );
       } catch (e) {
         // Handle the exception
         setState(() {
+          snackBarMessage =
+          'Error finding product: Barcode $barcodeResultText has no available product data. Please try using the Our Ingredients Search';
+          barcodeResultText =
+              barcodeResult; // Clear previous barcode result text
           isLoading = false;
-          snackBarMessage = 'Error finding product: Barcode $barcodeResultText has no available product data. Please try using the Our Ingredients Search';
-          barcodeResultText = barcodeResult; // Clear previous barcode result text
         });
         // Show a red snackbar
         final snackBar = SnackBar(
@@ -193,9 +198,11 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
         _showProductSearchConfirmation();
       }
     } else {
+      print('made itt to else ');
+
       setState(() {
-        isLoading = false;
         snackBarMessage = 'Product not found';
+        isLoading = false;
       });
 
       // Show a red snackbar
@@ -205,6 +212,39 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  } catch (FormatException) {
+      // Handle the error gracefully, e.g., log it
+      // Handle the exception
+      setState(() {
+        isLoading = false;
+        snackBarMessage =
+        'Error finding product: Barcode $barcodeResultText has no available product data. Please try using the Our Ingredients Search';
+        barcodeResultText =
+            barcodeResult; // Clear previous barcode result text
+      });
+      // Show a red snackbar
+      final snackBar = SnackBar(
+        content: Text(snackBarMessage, style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      analytics_utils.logScanEvent(FirebaseAuth.instance.currentUser);
+
+
+      try {
+        if (!emailSent && emailAttemptCount < 1) {
+          emailAttemptCount++; // Increment the email attempt count
+          await sendNoBarcodeDataEmail(barcodeResultText);
+          emailSent = true; // Mark that the email has been sent
+        } // Send email
+      } catch (error) {
+        // Handle the error gracefully, e.g., log it
+      }
+
+      _showProductSearchConfirmation();
+
     }
   }
 
