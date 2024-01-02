@@ -81,19 +81,5 @@
       <string>fbapi</string>
       <string>fb-messenger-share-api</string>
     </array>
-    <key>CFBundleIcons</key>
-    <dict>
-        <key>CFBundlePrimaryIcon</key>
-        <dict>
-            <key>CFBundleIconName</key>
-            <string>AppIcon</string>
-            <key>CFBundleIconFiles</key>
-            <array>
-                <string>AppIcon.iconset</string>
-            </array>
-            <key>UIPrerenderedIcon</key>
-            <false/>
-        </dict>
-    </dict>
 </dict>
 </plist>
