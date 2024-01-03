@@ -29,7 +29,7 @@ class CalendarUtils {
       print('Calendar permissions are not granted.');
       return;
     }
-    if (Platform.isAndroid) {
+    try {
       final calendarCreateResult = await _deviceCalendarPlugin
           .retrieveCalendars();
       if (calendarCreateResult.data!.isEmpty) {
@@ -74,17 +74,15 @@ class CalendarUtils {
       } else {
         print('Failed to create calendar: ${calendarCreateResult.errors}');
       }
-    } else if (Platform.isIOS) {
+    } catch (e) {
       // Convert DateTime to TZDateTime
-      final location = getLocation('Europe/London'); // Replace with your time zone
-      final start = TZDateTime.from(eventDate, location);
-      final end = TZDateTime.from(eventDate.add(Duration(hours: 1)), location);
-
+      final start = eventDate;
+      final end = eventDate.add(Duration(hours: 1));
 
       CalendarUtils.addToCalendar(
         title,
         description,
-        location as String,
+        'UK',
         start,
         end,
       );
@@ -243,6 +241,7 @@ class CalendarUtils {
         print('Event added to calendar successfully');
         // You can add additional logic here if needed
       } else {
+        print(success);
         print('Failed to add event to calendar');
         // Handle the failure scenario
       }
