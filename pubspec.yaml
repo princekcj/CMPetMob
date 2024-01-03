@@ -44,6 +44,7 @@ dependencies:
   firestore_cache: ^2.10.0
   flutter_insta: ^1.0.1
   add_2_calendar: ^3.0.1
+  flutter_native_timezone: ^2.0.0
 dev_dependencies:
   envied_generator: ^0.5.1
   flutter_launcher_icons: ^0.12.0

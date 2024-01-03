@@ -579,10 +579,10 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
   Future<void> _updatePetInfo(String selectedAnimalType) async {
     if (_nameController.text.isNotEmpty) {
       // Format appointments as a list of strings
-      List<Appointment>? appointmentsData = widget.appointments?.toList();
+      List<Appointment> appointmentsData = widget.appointments?.toList() ?? [];
 
-      if (widget.appointments != null) {
-        appointmentsData?.addAll(widget.appointments!);
+      if (widget.appointments != null || widget.appointments != []) {
+        appointmentsData.addAll(widget.appointments!);
       } else {
         // Handle the case where widget.appointments is null
       }

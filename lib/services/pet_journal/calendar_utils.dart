@@ -1,13 +1,15 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:developer';
 import 'package:device_calendar/device_calendar.dart' as calendarapione;
-import 'package:timezone/timezone.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:add_2_calendar/add_2_calendar.dart' as calendarapitwo;
+import 'package:timezone/standalone.dart';
 
 
 class CalendarUtils {
@@ -21,11 +23,7 @@ class CalendarUtils {
       String description,
       ) async {
     // Request calendar permissions
-    final PermissionStatus permissionStatus = await Permission.calendarFullAccess.request();
-    // Convert DateTime to TZDateTime
-    final location = getLocation('Europe/London'); // Replace with your time zone
-    final start = TZDateTime.from(eventDate, location);
-    final end = TZDateTime.from(eventDate.add(Duration(hours: 1)), location);
+    final PermissionStatus permissionStatus = await Permission.calendarWriteOnly.request();
 
     if (permissionStatus != PermissionStatus.granted) {
       print('Calendar permissions are not granted.');
@@ -47,6 +45,10 @@ class CalendarUtils {
         if (calendarsResult.isSuccess && calendarsResult.data!.isNotEmpty) {
           final calendars = calendarsResult.data;
           final calendarId = calendars?.first.id;
+          // Convert DateTime to TZDateTime
+          final location = getLocation('Europe/London'); // Replace with your time zone
+          final start = TZDateTime.from(eventDate, location);
+          final end = TZDateTime.from(eventDate.add(Duration(hours: 1)), location);
 
           final eventInfo = calendarapione.Event(
             calendarId,
@@ -73,6 +75,12 @@ class CalendarUtils {
         print('Failed to create calendar: ${calendarCreateResult.errors}');
       }
     } else if (Platform.isIOS) {
+      // Convert DateTime to TZDateTime
+      final location = getLocation('Europe/London'); // Replace with your time zone
+      final start = TZDateTime.from(eventDate, location);
+      final end = TZDateTime.from(eventDate.add(Duration(hours: 1)), location);
+
+
       CalendarUtils.addToCalendar(
         title,
         description,

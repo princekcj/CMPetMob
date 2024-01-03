@@ -187,8 +187,6 @@ void showAddAppointmentDialog(BuildContext context, String? petId) {
 
 void addAppointment(Appointment appointment, String? idOfPet) {
   appointments.add(appointment);
-  print(idOfPet);
-  print(appointment.date);
 
   if (idOfPet != null) {
     _petService.updatePetAppt(idOfPet, appointments);
