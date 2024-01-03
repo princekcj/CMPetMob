@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cmpets/presentation/home_adobe_express_one_screen/home_adobe_express_one_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,6 +54,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ImageCachingUtils.precachePetImages(context);
     return MaterialApp(
+      home: PopScope(
+        canPop: false, // Disable the Android back button
+        onPopInvoked: (canPop) {
+          // Handle the pop event here
+        },
+        child: HomeAdobeExpressOneScreen(), // Replace with your actual home page widget
+      ),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         inputDecorationTheme: InputDecorationTheme(
