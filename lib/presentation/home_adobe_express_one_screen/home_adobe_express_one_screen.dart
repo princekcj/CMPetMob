@@ -118,10 +118,10 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     {
       'label': 'Carousel 1',
       'items': [
-        'Instagram',
+        'Pet Fact',
         'Leaderboard',
         'Ad',
-        'Instagram',
+        'Pet Fact',
       ],
     },
     {
