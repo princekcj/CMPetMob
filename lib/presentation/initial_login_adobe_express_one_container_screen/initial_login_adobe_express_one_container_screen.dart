@@ -26,6 +26,7 @@ class _InitialLoginAdobeExpressOneContainerScreenState
 
   @override
   Widget build(BuildContext context) {
+    final authService = ProviderContainer().read(authProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -105,7 +106,6 @@ class _InitialLoginAdobeExpressOneContainerScreenState
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    final authService = ProviderContainer().read(authProvider);
                     try {
                       await authService.signIn(
                         _emailController.text,
@@ -153,11 +153,17 @@ class _InitialLoginAdobeExpressOneContainerScreenState
                   ),
                 ),
                 SizedBox(width: 10),
-                Text(
-                  'Forgot password?',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 16,
+                // In your widget
+                GestureDetector(
+                  onTap: () {
+                    authService.showEmailResetDialog(context);
+                  },
+                  child: Text(
+                    'Forgot password?',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ],

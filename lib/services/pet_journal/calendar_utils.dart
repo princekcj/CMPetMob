@@ -2,13 +2,15 @@ import 'dart:collection';
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:developer';
-import 'package:device_calendar/device_calendar.dart';
+import 'package:device_calendar/device_calendar.dart' as calendarapione;
 import 'package:timezone/timezone.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:add_2_calendar/add_2_calendar.dart' as calendarapitwo;
+
 
 class CalendarUtils {
-  static final DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
+  static final calendarapione.DeviceCalendarPlugin _deviceCalendarPlugin = calendarapione.DeviceCalendarPlugin();
   static final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
 
@@ -19,53 +21,64 @@ class CalendarUtils {
       ) async {
     // Request calendar permissions
     final PermissionStatus permissionStatus = await Permission.calendarFullAccess.request();
+    // Convert DateTime to TZDateTime
+    final location = getLocation('Europe/London'); // Replace with your time zone
+    final start = TZDateTime.from(eventDate, location);
+    final end = TZDateTime.from(eventDate.add(Duration(hours: 1)), location);
 
     if (permissionStatus != PermissionStatus.granted) {
       print('Calendar permissions are not granted.');
       return;
     }
+    try {
+      final calendarCreateResult = await _deviceCalendarPlugin
+          .retrieveCalendars();
+      if (calendarCreateResult.data!.isEmpty) {
+        // Create a new calendar
+        final calendarCreateResult = await _deviceCalendarPlugin.createCalendar(
+            'Pet Appointments');
+      }
 
-    final calendarCreateResult = await _deviceCalendarPlugin.retrieveCalendars();
-    if (calendarCreateResult.data!.isEmpty) {
-      // Create a new calendar
-      final calendarCreateResult = await _deviceCalendarPlugin.createCalendar('Pet Appointments');
-    }
+      if (calendarCreateResult.isSuccess) {
+        // Retrieve the list of calendars to find the newly created one
+        final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
 
-    if (calendarCreateResult.isSuccess) {
-      // Retrieve the list of calendars to find the newly created one
-      final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
+        if (calendarsResult.isSuccess && calendarsResult.data!.isNotEmpty) {
+          final calendars = calendarsResult.data;
+          final calendarId = calendars?.first.id;
 
-      if (calendarsResult.isSuccess && calendarsResult.data!.isNotEmpty) {
-        final calendars = calendarsResult.data;
-        final calendarId = calendars?.first.id;
+          final eventInfo = calendarapione.Event(
+            calendarId,
+            title: title,
+            start: start,
+            end: end,
+            description: description,
+          );
 
-        // Convert DateTime to TZDateTime
-        final location = getLocation('Europe/London'); // Replace with your time zone
-        final start = TZDateTime.from(eventDate, location);
-        final end = TZDateTime.from(eventDate.add(Duration(hours: 1)), location);
+          final createResult = await _deviceCalendarPlugin.createOrUpdateEvent(
+              eventInfo);
+          if (createResult!.isSuccess) {
+            print('Event created successfully');
 
-        final eventInfo = Event(
-          calendarId,
-          title: title,
-          start: start,
-          end: end,
-          description: description,
-        );
-
-        final createResult = await _deviceCalendarPlugin.createOrUpdateEvent(eventInfo);
-        if (createResult!.isSuccess) {
-          print('Event created successfully');
-
-          // Send a push notification
-          _sendNotification(title, description);
+            // Send a push notification
+            _sendNotification(title, description);
+          } else {
+            print('Failed to create event: ${createResult.errors}');
+          }
         } else {
-          print('Failed to create event: ${createResult.errors}');
+          print('No calendars available or failed to retrieve calendars.');
         }
       } else {
-        print('No calendars available or failed to retrieve calendars.');
+        print('Failed to create calendar: ${calendarCreateResult.errors}');
       }
-    } else {
-      print('Failed to create calendar: ${calendarCreateResult.errors}');
+    } catch(e) {
+      CalendarUtils.addToCalendar(
+        title,
+        description,
+        location as String,
+        start,
+        end,
+      );
     }
   }
 
@@ -198,4 +211,33 @@ class CalendarUtils {
     );
 
   }
+
+  static void addToCalendar(String title, String description, String location, DateTime startDate, DateTime endDate) {
+    final calendarapitwo.Event event = calendarapitwo.Event(
+      title: title,
+      description: description,
+      location: location,
+      startDate: startDate,
+      endDate: endDate,
+      iosParams: calendarapitwo.IOSParams(
+        reminder: Duration(milliseconds: 30), // on iOS, you can set alarm notification after your event.
+        url: 'www.cmpet.co.uk', // on iOS, you can set url to your event.
+      ),
+      androidParams: calendarapitwo.AndroidParams(
+        emailInvites: [], // on Android, you can add invite emails to your event.
+      ),
+    );
+
+    // Add event to the calendar
+    calendarapitwo.Add2Calendar.addEvent2Cal(event).then((success) {
+      if (success) {
+        print('Event added to calendar successfully');
+        // You can add additional logic here if needed
+      } else {
+        print('Failed to add event to calendar');
+        // Handle the failure scenario
+      }
+    });
+  }
+
 }
