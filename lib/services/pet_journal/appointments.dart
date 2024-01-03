@@ -42,7 +42,7 @@ void removeAppointment(int index) {
   appointments.removeAt(index);
 }
 
-Widget buildAppointmentsSection(BuildContext context, List<Appointment> existingAppointments, bool isEnabled, String? petId) {
+Widget buildAppointmentsSection(BuildContext context, List<Appointment> existingAppointments, bool isEnabled, String? petId, void Function(List<Appointment>) onAppointmentsChanged) {
   appointments = existingAppointments; // Initialize with existing appointments
   print("apts in widget is $appointments");
   final nextAppointment = findNextAppointment(appointments);
@@ -61,7 +61,7 @@ Widget buildAppointmentsSection(BuildContext context, List<Appointment> existing
   ),
       ElevatedButton(
         onPressed: () {
-          showAddAppointmentDialog(context, petId ?? ''); // Show a dialog to add appointments
+          showAddAppointmentDialog(context, petId ?? '', onAppointmentsChanged); // Show a dialog to add appointments
         },
         child: Text('Add Appointment', style: TextStyle(color: Colors.white)),
         style: ElevatedButton.styleFrom(
@@ -72,7 +72,7 @@ Widget buildAppointmentsSection(BuildContext context, List<Appointment> existing
   );
 }
 
-void showAddAppointmentDialog(BuildContext context, String? petId) {
+void showAddAppointmentDialog(BuildContext context, String? petId, void Function(List<Appointment>) onAppointmentsChanged) {
   String selectedNewAppointmentType = selectedAppointmentType;
   DateTime selectedDate = DateTime.now();
   String description = '';
@@ -167,12 +167,15 @@ void showAddAppointmentDialog(BuildContext context, String? petId) {
                     description: description,
                   );
                   addAppointment(newAppointment, petId);
+                  onAppointmentsChanged(appointments);
+
                   // Create a calendar event for the appointment
                   CalendarUtils.createCalendarEvent(
                     selectedNewAppointmentType,
                     selectedDate,
                     description,
                   );
+                  // Call the callback function with the updated appointments
                   Navigator.of(context).pop(); // Close the dialog
                 },
                 child: Text('Add'),

@@ -29,6 +29,12 @@ class PetService {
     // Add pet data to Firestore
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
+    print("just before $appointments");
+
+    final List<Map<String, dynamic>> appointmentsJson =
+    appointments.map((appointment) => appointment.toJson()).toList();
+    print("just before $appointmentsJson");
+
     await _firestore.collection('users').doc(_auth.currentUser?.uid).collection('pets').add({
       'name': petName,
       'image': imageUrl,
@@ -37,7 +43,7 @@ class PetService {
       'allergies': allergies, // Adding the 'allergies' field as a list
       'feedingInstructions': feedingInstructions, // Adding 'feedingInstructions' field as a string
       'medications': medications, // Adding the 'medications' field as a list
-      'appointments' : appointments,
+      'appointments' : appointmentsJson,
       'dateOfBirth': dateOfBirth != null ? Timestamp.fromDate(dateOfBirth) : null, // Adding 'dateOfBirth' as a timestamp or null
       'moreInfo': moreInfo, // Adding 'moreInfo' as a string
     });
@@ -48,22 +54,24 @@ class PetService {
       List<Appointment> appointments,
       ) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
+    try {
+      final petRef = _firestore
+          .collection('users')
+          .doc(_auth.currentUser?.uid)
+          .collection('pets')
+          .doc(petId);
 
-    final petRef = _firestore
-        .collection('users')
-        .doc(_auth.currentUser?.uid)
-        .collection('pets')
-        .doc(petId);
+      print("appts is $appointments and ref of pet is $petRef");
 
-    print("appts is $appointments and ref of pet is $petRef");
+      final List<Map<String, dynamic>> appointmentsJson =
+      appointments.map((appointment) => appointment.toJson()).toList();
 
-    final List<Map<String, dynamic>> appointmentsJson =
-    appointments.map((appointment) => appointment.toJson()).toList();
-    print(appointmentsJson);
-
-    await petRef.update({
-      'appointments': FieldValue.arrayUnion(appointmentsJson),
-    });
+      await petRef.update({
+        'appointments': FieldValue.arrayUnion(appointmentsJson),
+      });
+    } catch (e) {
+      print('No Pet Created Yet: $e');
+    };
 
     print('Event Saved');
   }
@@ -83,24 +91,32 @@ class PetService {
       ) async {
     // Update pet data in Firestore
     final FirebaseAuth _auth = FirebaseAuth.instance;
+    try {
+      final petRef = _firestore
+          .collection('users')
+          .doc(_auth.currentUser?.uid)
+          .collection('pets')
+          .doc(petId);
 
-    final petRef = _firestore
-        .collection('users')
-        .doc(_auth.currentUser?.uid)
-        .collection('pets')
-        .doc(petId);
+      final List<Map<String, dynamic>> appointmentsJson =
+      appointments.map((appointment) => appointment.toJson()).toList();
 
-    await petRef.update({
-      'name': petName,
-      'image': imageUrl,
-      'weight': petWeight,
-      'allergies': allergies,
-      'feedingInstructions': feedingInstructions,
-      'medications': medications,
-      'appointments': appointments,
-      'dateOfBirth': dateOfBirth != null ? Timestamp.fromDate(dateOfBirth) : null,
-      'moreInfo': moreInfo,
-    });
+      await petRef.update({
+        'name': petName,
+        'image': imageUrl,
+        'weight': petWeight,
+        'allergies': allergies,
+        'feedingInstructions': feedingInstructions,
+        'medications': medications,
+        'appointments': appointmentsJson,
+        'dateOfBirth': dateOfBirth != null
+            ? Timestamp.fromDate(dateOfBirth)
+            : null,
+        'moreInfo': moreInfo,
+      });
+    } catch (e) {
+
+    }
   }
 
   Future<String> uploadImageToStorage(String imagePath) async {

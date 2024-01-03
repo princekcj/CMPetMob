@@ -581,8 +581,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
       // Format appointments as a list of strings
       List<Appointment> appointmentsData = widget.appointments?.toList() ?? [];
 
-      if (widget.appointments != null || widget.appointments != []) {
-        appointmentsData.addAll(widget.appointments!);
+      if (widget.appointments != null || widget.appointments != [] || widget.appointments!.isNotEmpty) {
+        appointmentsData = appointments.toList();
       } else {
         // Handle the case where widget.appointments is null
       }
@@ -735,8 +735,18 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                   height: 150, // Adjust the height as needed
                   child: buildInfoContainer(
                     "Appointments",
-                    buildAppointmentsSection(context, appointments,
-                        isEditing || widget.petName == null, widget.petId),
+                    buildAppointmentsSection(
+                      context,
+                      List.of(appointments), // Create a copy of the list
+                      isEditing || widget.petName == null,
+                      widget.petId,
+                          (List<Appointment> updatedAppointments) {
+                        // Update your existing appointments in the parent widget
+                        setState(() {
+                          appointments.addAll(updatedAppointments);
+                        });
+                      },
+                    ),
                     context,
                   ),
                 ),

@@ -109,6 +109,7 @@ class CalendarUtils {
     );
 
 
+
     print('User granted permission: ${settings.authorizationStatus}');
 
 
