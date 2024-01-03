@@ -27,12 +27,11 @@ class CalendarUtils {
     final start = TZDateTime.from(eventDate, location);
     final end = TZDateTime.from(eventDate.add(Duration(hours: 1)), location);
 
-    if (Platform.isAndroid) {
     if (permissionStatus != PermissionStatus.granted) {
       print('Calendar permissions are not granted.');
       return;
     }
-
+    if (Platform.isAndroid) {
       final calendarCreateResult = await _deviceCalendarPlugin
           .retrieveCalendars();
       if (calendarCreateResult.data!.isEmpty) {
