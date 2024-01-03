@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:developer';
 import 'package:device_calendar/device_calendar.dart' as calendarapione;
@@ -30,7 +31,7 @@ class CalendarUtils {
       print('Calendar permissions are not granted.');
       return;
     }
-    try {
+    if (Platform.isAndroid) {
       final calendarCreateResult = await _deviceCalendarPlugin
           .retrieveCalendars();
       if (calendarCreateResult.data!.isEmpty) {
@@ -71,7 +72,7 @@ class CalendarUtils {
       } else {
         print('Failed to create calendar: ${calendarCreateResult.errors}');
       }
-    } catch(e) {
+    } else if (Platform.isIOS) {
       CalendarUtils.addToCalendar(
         title,
         description,
