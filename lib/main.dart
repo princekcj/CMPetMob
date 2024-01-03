@@ -3,12 +3,14 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cmpets/presentation/home_adobe_express_one_screen/home_adobe_express_one_screen.dart';
+import 'package:cmpets/presentation/initial_login_adobe_express_one_container_screen/initial_login_adobe_express_one_container_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'auth/Auth_provider.dart';
 import 'core/utils/allAssetImg.dart';
 import 'firebase_options.dart';
 import 'package:cmpets/routes/app_routes.dart';
@@ -53,14 +55,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ImageCachingUtils.precachePetImages(context);
-    return MaterialApp(
-      home: PopScope(
+
+    bool userAuthenticated = isAuthenticated();
+    var homeWigdet;
+
+    if (userAuthenticated) {
+        homeWigdet = PopScope(
         canPop: false, // Disable the Android back button
         onPopInvoked: (canPop) {
           // Handle the pop event here
         },
         child: HomeAdobeExpressOneScreen(), // Replace with your actual home page widget
-      ),
+      );
+      // Perform actions for authenticated user
+    } else {
+       homeWigdet = PopScope(
+        canPop: false, // Disable the Android back button
+        onPopInvoked: (canPop) {
+          // Handle the pop event here
+        },
+        child: InitialLoginAdobeExpressOneContainerScreen(), // Replace with your actual home page widget
+      );
+      // Perform actions for non-authenticated user
+    }
+    return MaterialApp(
+      home: homeWigdet,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         inputDecorationTheme: InputDecorationTheme(
