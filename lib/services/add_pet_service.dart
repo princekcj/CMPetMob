@@ -108,7 +108,6 @@ class PetService {
         'allergies': allergies,
         'feedingInstructions': feedingInstructions,
         'medications': medications,
-        'appointments': appointmentsJson,
         'dateOfBirth': dateOfBirth != null
             ? Timestamp.fromDate(dateOfBirth)
             : null,
