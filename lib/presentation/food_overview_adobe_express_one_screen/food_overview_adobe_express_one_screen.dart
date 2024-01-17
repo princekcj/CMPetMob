@@ -10,6 +10,7 @@ import 'package:cmpets/widgets/app_bar/custom_app_bar.dart';
 import 'package:cmpets/widgets/app_bar/topappbar.dart' as top_bar;
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/utils/analytics_utils.dart' as analytics_utils;
+import '../../core/utils/cache_manager.dart';
 import '../../services/pets_utils.dart';
 import '../../widgets/app_bar/custom_app_drawer.dart';
 
@@ -514,7 +515,8 @@ class _FoodOverviewAdobeExpressOneScreenState
               child: ClipOval(
                 child: images['left'] != null && images['left']!.startsWith('https')
                     ? CachedNetworkImage(
-                  imageUrl: images['left']!, // Use the left image URL from JSON
+                  imageUrl: images['left']!,
+                  cacheManager: CustomCacheManager.instance, // Use the left image URL from JSON
                   placeholder: (context, url) => CircularProgressIndicator(),
                   fit: BoxFit.cover,
                 )

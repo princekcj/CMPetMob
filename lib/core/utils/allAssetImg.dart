@@ -19,7 +19,6 @@ class ImageCachingUtils {
 
   static void precachePetImages(BuildContext context) {
     for (final imagePath in petImagePaths) {
-      _imageCache.evict(_getImageProvider(imagePath));
       precacheImage(_getImageProvider(imagePath), context);
     }
   }

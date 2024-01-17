@@ -7,6 +7,7 @@ import 'package:cmpets/widgets/app_bar/topappbar.dart' as top_bar;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/utils/analytics_utils.dart' as analytics_utils;
+import '../../core/utils/cache_manager.dart';
 import '../../services/pet_journal/appointments.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/app_bar/custom_app_drawer.dart';
@@ -237,7 +238,8 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
               child: _petImage.startsWith("https")
                   ? CachedNetworkImage(
                   imageUrl: _petImage,
-                  )
+                cacheManager: CustomCacheManager.instance,
+              )
                   : Image.asset(
                 _petImage, // Replace with your image asset path
                 fit: BoxFit.cover,

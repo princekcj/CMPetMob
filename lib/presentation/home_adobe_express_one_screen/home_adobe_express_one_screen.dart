@@ -19,6 +19,7 @@ import 'package:pdf/pdf.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import '../../auth/Auth_provider.dart';
+import '../../core/utils/cache_manager.dart';
 import '../../core/utils/retrieve_wordpress_post.dart';
 import '../../services/leaderboard.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
@@ -224,7 +225,10 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0), // Set the border radius
-                              child: CachedNetworkImage(imageUrl: snapshot.data!),
+                              child: CachedNetworkImage(
+                                  imageUrl: snapshot.data!,
+                                cacheManager: CustomCacheManager.instance,
+                              ),
                             ),
                           );
                         } else {
@@ -277,7 +281,10 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                           height: 200,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: CachedNetworkImageProvider(post!.contentSrc),
+                              image: CachedNetworkImageProvider(
+                                  post!.contentSrc,
+                                cacheManager: CustomCacheManager.instance,
+                              ),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -384,7 +391,10 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                         height: 200,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: CachedNetworkImageProvider(Fact.img),
+                            image: CachedNetworkImageProvider(
+                                Fact.img,
+                              cacheManager: CustomCacheManager.instance,
+                            ),
                             fit: BoxFit.cover,
                           ),
                           borderRadius: BorderRadius.circular(8),
@@ -436,7 +446,10 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                         height: 200,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: CachedNetworkImageProvider(IPost.mediaUrl),
+                            image: CachedNetworkImageProvider(
+                              IPost.mediaUrl,
+                              cacheManager: CustomCacheManager.instance,
+                          ),
                             fit: BoxFit.cover,
                           ),
                           borderRadius: BorderRadius.circular(8),
