@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cmpets/presentation/barcode_screen/barcode_screen.dart';
 import 'package:cmpets/presentation/home_adobe_express_one_screen/home_adobe_express_one_screen.dart';
 import 'package:cmpets/presentation/initial_login_adobe_express_one_container_screen/initial_login_adobe_express_one_container_screen.dart';
+import 'package:cmpets/presentation/search_screen/search_screen.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -76,7 +78,7 @@ class MyApp extends StatelessWidget {
         onPopInvoked: (canPop) {
           // Handle the pop event here
         },
-        child: HomeAdobeExpressOneScreen(), // Replace with your actual home page widget
+        child: BarcodeScanScreen(), // Replace with your actual home page widget
       );
       // Perform actions for authenticated user
     } else {
