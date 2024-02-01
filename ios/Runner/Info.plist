@@ -70,14 +70,14 @@
       <dict>
       <key>CFBundleURLSchemes</key>
       <array>
-        <string>1040318360607145</string>
+        <string>767513698556496</string>
       </array>
       </dict>
     </array>
     <key>FacebookAppID</key>
-    <string>1040318360607145</string>
+    <string>767513698556496</string>
     <key>FacebookClientToken</key>
-    <string>c92fd3a5785478da78178695dc731fdf</string>
+    <string>e342d9722f2aa0a48a3bbb21c54092dd</string>
     <key>FacebookDisplayName</key>
     <string>CMPet? - Test1</string>
     <key>LSApplicationQueriesSchemes</key>

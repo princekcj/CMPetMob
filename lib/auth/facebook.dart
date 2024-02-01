@@ -4,7 +4,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 Future<UserCredential?> signInWithFacebook() async {
   try {
-    final LoginResult loginResult = await FacebookAuth.instance.login();
+    final LoginResult loginResult = await FacebookAuth.instance.login(permissions: ["public_profile", "email"]);
 
     print(loginResult.status);
     print(loginResult.accessToken!.token);

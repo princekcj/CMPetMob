@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CMPet? - Test1</string>
-    <string name="facebook_app_id">3300078686953331</string>
-    <string name="facebook_client_token">7380b673c9a38d330a0cfbbb19849cfa</string>
-    <string name="fb_login_protocol_scheme">fb3300078686953331</string>
+    <string name="facebook_app_id">767513698556496</string>
+    <string name="facebook_client_token">e342d9722f2aa0a48a3bbb21c54092dd</string>
+    <string name="fb_login_protocol_scheme">fb767513698556496</string>
 </resources>
