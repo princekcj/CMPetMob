@@ -35,6 +35,7 @@ class HomeAdobeExpressOneScreen extends StatefulWidget {
 
 class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   bool isMenuOpen = false;
+  late OverlayEntry _overlayEntry;
   List<Map<String, dynamic>> leaderboardData = [];
   NativeAd? _nativeAd;
   bool _nativeAdIsLoaded = false;
@@ -70,6 +71,11 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   @override
   void initState() {
     super.initState();
+    _overlayEntry = _createOverlayEntry();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Overlay.of(context)!.insert(_overlayEntry);
+    });
+
     getLatestInstagramPosts().then((value) {
       setState(() {
         possibleInstagramUrls = value;
@@ -150,371 +156,403 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     analytics_utils.logScreenUsageEvent('Home');
 
     // Wait for ads to load before rendering the ListView.builder
+    return Stack(
+      children: [
+        Container(
+          color: Colors.white.withOpacity(0.5), // White semi-transparent background
+        ),
+        Scaffold(
+          resizeToAvoidBottomInset: false, // fluter 2.x
+          endDrawer: CustomDrawer(),
+          appBar: CustomTopAppBar(
+              Enabled: false,
+              onTapArrowLeft: (context) {
+                Navigator.pop(context);
+              },
+              onMenuPressed: toggleMenu
+          ),
+          body: ListView.builder(
+            itemCount: carouselsData.length,
+            itemBuilder: (context, index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 36),
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      height: 200,
+                      enableInfiniteScroll: false,
+                      enlargeCenterPage: true,
+                      viewportFraction: 0.8,
+                    ),
+                    items: carouselsData[index]['items'].map<Widget>((item) {
+                      if (item == 'Ad' ) {
+                        return FutureBuilder<void>(
+                          future: initAds(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Container(
+                                height: 200,
+                                color: Colors.white, // Placeholder color
+                                child: Center(
+                                  child: CircularProgressIndicator(color: Color(0xFF008C8C)), // Loading indicator
+                                ),
+                              );
+                            } else if (snapshot.connectionState == ConnectionState.done) {
+                              // Find the AdWidget corresponding to this 'Ad' item
+                              AdWidget? adWidget = adWidgets.isNotEmpty ? adWidgets.removeAt(0) : null;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false, // fluter 2.x
-      endDrawer: CustomDrawer(),
-      appBar: CustomTopAppBar(
-        Enabled: false,
-        onTapArrowLeft: (context) {
-          Navigator.pop(context);
-        },
-        onMenuPressed: toggleMenu
-      ),
-      body: ListView.builder(
-        itemCount: carouselsData.length,
-        itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 36),
-              CarouselSlider(
-                options: CarouselOptions(
-                  height: 200,
-                  enableInfiniteScroll: false,
-                  enlargeCenterPage: true,
-                  viewportFraction: 0.8,
-                ),
-                items: carouselsData[index]['items'].map<Widget>((item) {
-                  if (item == 'Ad' ) {
-                    return FutureBuilder<void>(
-                      future: initAds(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Container(
-                            height: 200,
-                            color: Colors.white, // Placeholder color
-                            child: Center(
-                              child: CircularProgressIndicator(color: Color(0xFF008C8C)), // Loading indicator
-                            ),
-                          );
-                        } else if (snapshot.connectionState == ConnectionState.done) {
-                          // Find the AdWidget corresponding to this 'Ad' item
-                          AdWidget? adWidget = adWidgets.isNotEmpty ? adWidgets.removeAt(0) : null;
-
-                          // Display the AdMob banner ad if available, otherwise show a placeholder
-                          return adWidget ??
-                              Container(
+                              // Display the AdMob banner ad if available, otherwise show a placeholder
+                              return adWidget ??
+                                  Container(
+                                    height: 200,
+                                    color: Colors.white, // Placeholder color
+                                  );
+                            } else {
+                              return Container(
                                 height: 200,
                                 color: Colors.white, // Placeholder color
                               );
-                        } else {
-                          return Container(
+                            }
+                          },
+                        );
+                      }
+                      else if (item == 'YouTube Recent Video') {
+                        String displayUrl = 'https://www.youtube.com/shorts/0hOWcur29Hc';
+                        // Display YouTube video thumbnail
+                        return FutureBuilder<String>(
+                          future: _getYouTubeThumbnailUrl(displayUrl),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator(color: Color(0xFF008C8C)));
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (snapshot.hasData) {
+                              return InkWell(
+                                onTap: () {
+                                  final Uri ytURL = Uri.parse(displayUrl);
+                                  _launch(ytURL);
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0), // Set the border radius
+                                  child: CachedNetworkImage(
+                                    imageUrl: snapshot.data!,
+                                    cacheManager: CustomCacheManager.instance,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Container(
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey, // Placeholder color
+                                  borderRadius: BorderRadius.circular(8.0), // Set the border radius
+                                ),
+                                child: Center(
+                                  child: CircularProgressIndicator(color: Color(0xFF008C8C)),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      } else if (item == 'Leaderboard'){
+                        // Inside your build method
+                        // Display the leaderboard
+                        return InkWell(
+                          onTap: () {
+                            // Toggle the leaderboard expansion state
+                            // Show the leaderboard in a popup
+                            _showLeaderboardPopup();
+                          },
+                          child: Container(
                             height: 200,
-                            color: Colors.white, // Placeholder color
-                          );
-                        }
-                      },
-                    );
-                  }
-                  else if (item == 'YouTube Recent Video') {
-                    String displayUrl = 'https://www.youtube.com/shorts/0hOWcur29Hc';
-                    // Display YouTube video thumbnail
-                    return FutureBuilder<String>(
-                      future: _getYouTubeThumbnailUrl(displayUrl),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator(color: Color(0xFF008C8C)));
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else if (snapshot.hasData) {
+                            decoration: BoxDecoration(
+                              color: Color(0xFF008C8C), // Customize the background color
+                              borderRadius: BorderRadius.circular(8.0), // Set the border radius
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Leaderboard',
+                                style: TextStyle(color: Colors.white, fontSize: 24),
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (item == 'Blog') {
+                        if (possibleBlogUrls.isNotEmpty) {
+                          WordPressPost? post = getRandomPost(possibleBlogUrls);
+
                           return InkWell(
                             onTap: () {
-                              final Uri ytURL = Uri.parse(displayUrl);
-                              _launch(ytURL);
+                              final Uri postURL = Uri.parse(post!.link);
+                              _launch(postURL);
                             },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0), // Set the border radius
-                              child: CachedNetworkImage(
-                                  imageUrl: snapshot.data!,
-                                cacheManager: CustomCacheManager.instance,
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                    post!.contentSrc,
+                                    cacheManager: CustomCacheManager.instance,
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.white.withOpacity(1.0),
+                                            Colors.white.withOpacity(0.9),
+                                            Colors.white.withOpacity(0.1),
+                                          ],
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 8.0),
+                                      child: Html(
+                                        data: post.title,
+                                        style: {
+                                          'body': Style(
+                                            color: Colors.black,
+                                            // Change the text color as needed
+                                            fontSize: FontSize(24),
+                                          ),
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
                         } else {
                           return Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.grey, // Placeholder color
-                              borderRadius: BorderRadius.circular(8.0), // Set the border radius
-                            ),
                             child: Center(
                               child: CircularProgressIndicator(color: Color(0xFF008C8C)),
                             ),
                           );
                         }
-                      },
-                    );
-                  } else if (item == 'Leaderboard'){
-                    // Inside your build method
-                    // Display the leaderboard
-                    return InkWell(
-                      onTap: () {
-                        // Toggle the leaderboard expansion state
-                        // Show the leaderboard in a popup
-                          _showLeaderboardPopup();
-                      },
-                      child: Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF008C8C), // Customize the background color
-                          borderRadius: BorderRadius.circular(8.0), // Set the border radius
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Leaderboard',
-                            style: TextStyle(color: Colors.white, fontSize: 24),
-                          ),
-                        ),
-                      ),
-                    );
-                  } else if (item == 'Blog') {
-                    if (possibleBlogUrls.isNotEmpty) {
-                      WordPressPost? post = getRandomPost(possibleBlogUrls);
-
-                      return InkWell(
-                        onTap: () {
-                          final Uri postURL = Uri.parse(post!.link);
-                          _launch(postURL);
-                        },
-                        child: Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                  post!.contentSrc,
-                                cacheManager: CustomCacheManager.instance,
+                      } else if (item == 'Feedback Link') {
+                        // 'Feedback Link' logic to open Google Form
+                        return InkWell(
+                          onTap: () {
+                            launchGoogleForm(); // Function to open Google Form
+                          },
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(ImageConstant.feedback),
+                                fit: BoxFit.cover,
                               ),
-                              fit: BoxFit.cover,
+                              borderRadius: BorderRadius.circular(8),
                             ),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.white.withOpacity(1.0),
+                                          Colors.white.withOpacity(0.9),
+                                          Colors.white.withOpacity(0.1),
+                                        ],
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                    child: Html(
+                                      data: '',
+                                      style: {
+                                        'body': Style(
+                                          color: Colors.black, // Change the text color as needed
+                                          fontSize: FontSize(24),
+                                        ),
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else if (item == 'Pet Fact') {
+                        // 'Feedback Link' logic to open Google Form
+                        PetFact Fact = getRandomPetFacts();
+                        return InkWell(
+                          onTap: () {
+                          },
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                  Fact.img,
+                                  cacheManager: CustomCacheManager.instance,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.white.withOpacity(1.0),
+                                          Colors.white.withOpacity(0.9),
+                                          Colors.white.withOpacity(0.1),
+                                        ],
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16.0, vertical: 8.0),
+                                    child: Html(
+                                      data: Fact.fact,
+                                      style: {
+                                        'body': Style(
+                                          color: Colors.black,
+                                          // Change the text color as needed
+                                          fontSize: FontSize(14),
+                                        ),
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }else if (item == 'Instagram') {
+                        InstagramPost? IPost = getRandomInstaPost(possibleInstagramUrls);
+                        return IPost != null
+                            ? InkWell(
+                          onTap: () {
+                            // Handle the tap event
+                          },
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                  IPost.mediaUrl,
+                                  cacheManager: CustomCacheManager.instance,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        )
+                            : Center(
+                          // Show a loading indicator if IPost is null
+                          child: CircularProgressIndicator(color: Color(0xFF008C8C)),
+                        );
+                      } else {
+                        // Display other items
+                        return Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.blueGrey,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.white.withOpacity(1.0),
-                                        Colors.white.withOpacity(0.9),
-                                        Colors.white.withOpacity(0.1),
-                                      ],
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 16.0, vertical: 8.0),
-                                  child: Html(
-                                    data: post.title,
-                                    style: {
-                                      'body': Style(
-                                        color: Colors.black,
-                                        // Change the text color as needed
-                                        fontSize: FontSize(24),
-                                      ),
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Container(
-                        child: Center(
-                          child: CircularProgressIndicator(color: Color(0xFF008C8C)),
-                        ),
-                      );
-                    }
-                  } else if (item == 'Feedback Link') {
-                    // 'Feedback Link' logic to open Google Form
-                    return InkWell(
-                      onTap: () {
-                        launchGoogleForm(); // Function to open Google Form
-                      },
-                      child: Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(ImageConstant.feedback),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.white.withOpacity(1.0),
-                                      Colors.white.withOpacity(0.9),
-                                      Colors.white.withOpacity(0.1),
-                                    ],
-                                  ),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                                child: Html(
-                                  data: '',
-                                  style: {
-                                    'body': Style(
-                                      color: Colors.black, // Change the text color as needed
-                                      fontSize: FontSize(24),
-                                    ),
-                                  },
-                                ),
-                              ),
+                          child: Center(
+                            child: Text(
+                              item,
+                              style: TextStyle(color: Colors.white, fontSize: 24),
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  } else if (item == 'Pet Fact') {
-                    // 'Feedback Link' logic to open Google Form
-                    PetFact Fact = getRandomPetFacts();
-                    return InkWell(
-                      onTap: () {
-                      },
-                      child: Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                                Fact.img,
-                              cacheManager: CustomCacheManager.instance,
-                            ),
-                            fit: BoxFit.cover,
                           ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.white.withOpacity(1.0),
-                                      Colors.white.withOpacity(0.9),
-                                      Colors.white.withOpacity(0.1),
-                                    ],
-                                  ),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 8.0),
-                                child: Html(
-                                  data: Fact.fact,
-                                  style: {
-                                    'body': Style(
-                                      color: Colors.black,
-                                      // Change the text color as needed
-                                      fontSize: FontSize(14),
-                                    ),
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }else if (item == 'Instagram') {
-                    InstagramPost? IPost = getRandomInstaPost(possibleInstagramUrls);
-                    return IPost != null
-                        ? InkWell(
-                      onTap: () {
-                        // Handle the tap event
-                      },
-                      child: Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                              IPost.mediaUrl,
-                              cacheManager: CustomCacheManager.instance,
-                          ),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    )
-                        : Center(
-                      // Show a loading indicator if IPost is null
-                      child: CircularProgressIndicator(color: Color(0xFF008C8C)),
-                    );
-                  } else {
-                    // Display other items
-                    return Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.blueGrey,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          item,
-                          style: TextStyle(color: Colors.white, fontSize: 24),
-                        ),
-                      ),
-                    );
-                  }
-                }).toList(),
-              ),
-              SizedBox(height: 36),
+                        );
+                      }
+                    }).toList(),
+                  ),
+                  SizedBox(height: 36),
+                ],
+              );
+            },
+          ),
+          extendBody: true,
+          floatingActionButton: Container(height: 80.0, width:80.0, child: FittedBox(child: FloatingActionButton(
+            backgroundColor: Color(0xFF008C8C), // Set the background color to blue
+            child: Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: ColorConstant.fromHex('#a3ccff'), width: 2.0),
+              borderRadius:
+              BorderRadius.circular(28.0), // Adjust the border radius as needed
+            ),
+            onPressed: () {
+              // Check if the current route is not already the search route
+
+              if (ModalRoute.of(context)!.settings.name != AppRoutes.barcodeScreen) {
+                Navigator.pushReplacement(
+                  context,
+                  AppRoutes.generateRoute(
+                    RouteSettings(name: AppRoutes.barcodeScreen),
+                  ),
+                );
+              }
+
+            },
+          ),),),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: CustomAppBar(
+            height: 100,
+            actions: [
+              // Additional widgets, if any
             ],
-          );
-        },
-      ),
-      extendBody: true,
-      floatingActionButton: Container(height: 80.0, width:80.0, child: FittedBox(child: FloatingActionButton(
-        backgroundColor: Color(0xFF008C8C), // Set the background color to blue
-        child: Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: ColorConstant.fromHex('#a3ccff'), width: 2.0),
-          borderRadius:
-          BorderRadius.circular(28.0), // Adjust the border radius as needed
-        ),
-        onPressed: () {
-          // Check if the current route is not already the search route
+            onButtonPressed: (index) {
+              // Handle button press based on index
+            },
+          ),
+        )
+      ],
+    );
+  }
 
-          if (ModalRoute.of(context)!.settings.name != AppRoutes.barcodeScreen) {
-            Navigator.pushReplacement(
-              context,
-              AppRoutes.generateRoute(
-                RouteSettings(name: AppRoutes.barcodeScreen),
+  OverlayEntry _createOverlayEntry() {
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).size.height / 2 - 50, // Adjust position as needed
+        left: 20, // Adjust position as needed
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width - 40, // Adjust width as needed
+            height: 100, // Adjust height as needed
+            decoration: BoxDecoration(
+              color: Color(0xFF008C8C),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Center(
+              child: Text(
+                'HomePage Disabled For Beta',
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
-            );
-          }
-
-        },
-      ),),),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: CustomAppBar(
-        height: 100,
-        actions: [
-          // Additional widgets, if any
-        ],
-        onButtonPressed: (index) {
-          // Handle button press based on index
-        },
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -712,5 +750,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     super.dispose();
     _ytExplode.close();
     _nativeAd?.dispose();
+    _overlayEntry.remove();
   }
 }
