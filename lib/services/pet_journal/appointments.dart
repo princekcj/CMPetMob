@@ -61,12 +61,32 @@ Widget buildAppointmentsSection(BuildContext context, List<Appointment> existing
   ),
       ElevatedButton(
         onPressed: () {
-          showAddAppointmentDialog(context, petId ?? '', onAppointmentsChanged); // Show a dialog to add appointments
+          if (petId != null) {
+            showAddAppointmentDialog(context, petId ?? '', onAppointmentsChanged); // Show a dialog to add appointments
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Alert'),
+                  content: Text('You can assign appointments only after pet creation'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('Close'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          }
         },
-        child: Text('Add Appointment', style: TextStyle(color: Colors.white)),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFF008C8C),
-        ),
+          child: Text('Add Appointment', style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF008C8C),
+          )
       ),
     ],
   );
@@ -166,7 +186,7 @@ void showAddAppointmentDialog(BuildContext context, String? petId, void Function
                     date: selectedDate,
                     description: description,
                   );
-                  addAppointment(newAppointment, petId);
+                  addAppointment(context, newAppointment, petId);
                   onAppointmentsChanged(appointments);
 
                   // Create a calendar event for the appointment
@@ -188,11 +208,11 @@ void showAddAppointmentDialog(BuildContext context, String? petId, void Function
   );
 }
 
-void addAppointment(Appointment appointment, String? idOfPet) {
-  appointments.add(appointment);
-
+void addAppointment(BuildContext context, Appointment appointment, String? idOfPet) {
+  print("id of pet $idOfPet");
   if (idOfPet != null) {
-    _petService.updatePetAppt(idOfPet, appointments);
+      appointments.add(appointment);
+      _petService.updatePetAppt(context, idOfPet, appointments);
   }
 }
 

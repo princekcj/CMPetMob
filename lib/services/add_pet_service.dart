@@ -5,6 +5,7 @@ import 'package:cmpets/core/app_export.dart';
 import 'package:cmpets/services/pet_journal/appointments.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -50,11 +51,13 @@ class PetService {
   }
 
   Future<void> updatePetAppt(
+      BuildContext context,
       String petId,
       List<Appointment> appointments,
       ) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     try {
+      if (petId.length >= 1) {
       final petRef = _firestore
           .collection('users')
           .doc(_auth.currentUser?.uid)
@@ -66,16 +69,16 @@ class PetService {
       final List<Map<String, dynamic>> appointmentsJson =
       appointments.map((appointment) => appointment.toJson()).toList();
 
-      await petRef.update({
-        'appointments': FieldValue.arrayUnion(appointmentsJson),
-      });
+        await petRef.update({
+          'appointments': FieldValue.arrayUnion(appointmentsJson),
+        });
+        print('Event Saved');
+      }
     } catch (e) {
       print('No Pet Created Yet: $e');
-    };
-
-    print('Event Saved');
+      print(petId.length);
+    }
   }
-
 
   Future<void> updatePet(
       String petId, // Provide the unique identifier for the pet (document ID)
@@ -151,3 +154,4 @@ class PetService {
     return ImageConstant.charles; // Return a default value or null if needed.
   }
 }
+
