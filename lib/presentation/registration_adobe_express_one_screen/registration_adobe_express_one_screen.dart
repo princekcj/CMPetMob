@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../auth/Auth_provider.dart';
 import '../../auth/google.dart';
 import '../../services/url_launchers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class RegistrationAdobeExpressOneScreen extends StatefulWidget {
   const RegistrationAdobeExpressOneScreen({Key? key}) : super(key: key);
@@ -32,6 +34,21 @@ class _RegistrationAdobeExpressOneScreenState
   bool _agreeToTerms = false;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  bool hasOnboarded = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  void _loadPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      hasOnboarded = prefs.getBool('hasOnboarded') ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +261,16 @@ class _RegistrationAdobeExpressOneScreenState
                           selectedOption ?? '',
                           selectedExpOption ?? '',
                         );
-                        Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
+                        if (!hasOnboarded) {
+                          // Show the onboarding screen
+                          // Once the user completes the onboarding, set the flag to true:
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.setBool('hasOnboarded', true);
+                          Navigator.pushReplacementNamed(context, AppRoutes.onboardingScreen);
+                        } else {
+                          // Skip the onboarding screen
+                          Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
+                        }
                       } catch (e) {
                         print('Registration error: $e');
                         showDialog(

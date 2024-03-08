@@ -48,6 +48,7 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   firebase_crashlytics: ^3.4.9
   firebase_performance: ^0.9.3+8
+  introduction_screen: ^3.1.12
 dev_dependencies:
   envied_generator: ^0.5.1
   flutter_launcher_icons: ^0.12.0

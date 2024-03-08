@@ -176,28 +176,6 @@ class _InitialLoginAdobeExpressOneContainerScreenState
                 Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0), // Add padding to the left and right
-                    child: SizedBox(
-                      width: double.infinity,
-                        child: GestureDetector(
-                          onTap: () async {
-                            UserCredential? userCredential = await signInWithFacebook();
-                            if (userCredential != null) {
-                              Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
-                            }
-                          },
-                          child: Image.asset(
-                            ImageConstant.facebook, // Replace with the path to your Facebook icon image
-                            height: 42,
-                            // You can also specify additional properties like width, alignment, etc.
-                          ),
-                        ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add padding to the left and right
                     child: SizedBox(
                       width: double.infinity,

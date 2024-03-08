@@ -13,8 +13,12 @@ import 'package:cmpets/presentation/ingredient_screen/ingredient_screen.dart';
 import 'package:cmpets/presentation/app_navigation_screen/app_navigation_screen.dart';
 
 import '../auth/Auth_provider.dart';
+import '../presentation/onboarding/onboarding_screen.dart';
 
 class AppRoutes {
+  static const String onboardingScreen =
+      '/onboarding_screen';
+
   static const String foodOverviewAdobeExpressOneScreen =
       '/food_overview_adobe_express_one_screen';
 
@@ -107,6 +111,11 @@ class AppRoutes {
             ? MyAccountAdobeExpress1OneScreen()
             : InitialLoginAdobeExpressOneContainerScreen();
         break;
+      case onboardingScreen:
+        page = isAuthenticated()
+            ? OnboardingScreen()
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
       case registrationAdobeExpressOneScreen:
         page = RegistrationAdobeExpressOneScreen();
         break;
@@ -162,6 +171,9 @@ class AppRoutes {
         : InitialLoginAdobeExpressOneContainerScreen(),
     registrationAdobeExpressOneScreen: (context) =>
         RegistrationAdobeExpressOneScreen(),
+    onboardingScreen: (context) => isAuthenticated()
+        ? OnboardingScreen()
+        : InitialLoginAdobeExpressOneContainerScreen(),
     appNavigationScreen: (context) => AppNavigationScreen()
   };
 

@@ -35,7 +35,6 @@ class HomeAdobeExpressOneScreen extends StatefulWidget {
 
 class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   bool isMenuOpen = false;
-  late OverlayEntry _overlayEntry;
   List<Map<String, dynamic>> leaderboardData = [];
   NativeAd? _nativeAd;
   bool _nativeAdIsLoaded = false;
@@ -71,11 +70,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   @override
   void initState() {
     super.initState();
-    _overlayEntry = _createOverlayEntry();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      Overlay.of(context)!.insert(_overlayEntry);
-    });
-
     getLatestInstagramPosts().then((value) {
       setState(() {
         possibleInstagramUrls = value;
@@ -105,7 +99,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
       });
     });
     _ytExplode = YoutubeExplode();
-    _initGoogleMobileAds();
+
 
     if (Platform.isAndroid) {
       setState(() {
@@ -156,12 +150,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     analytics_utils.logScreenUsageEvent('Home');
 
     // Wait for ads to load before rendering the ListView.builder
-    return Stack(
-      children: [
-        Container(
-          color: Colors.white.withOpacity(0.5), // White semi-transparent background
-        ),
-        Scaffold(
+    return Scaffold(
           resizeToAvoidBottomInset: false, // fluter 2.x
           endDrawer: CustomDrawer(),
           appBar: CustomTopAppBar(
@@ -526,36 +515,9 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
               // Handle button press based on index
             },
           ),
-        )
-      ],
     );
   }
 
-  OverlayEntry _createOverlayEntry() {
-    return OverlayEntry(
-      builder: (context) => Positioned(
-        top: MediaQuery.of(context).size.height / 2 - 50, // Adjust position as needed
-        left: 20, // Adjust position as needed
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width - 40, // Adjust width as needed
-            height: 100, // Adjust height as needed
-            decoration: BoxDecoration(
-              color: Color(0xFF008C8C),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Center(
-              child: Text(
-                'HomePage Disabled For Beta',
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Future<void> initAds() async {
     // Load cached ad if within maxCacheDuration and count matches
@@ -621,12 +583,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
         }
       }
     }
-  }
-
-
-  Future<InitializationStatus> _initGoogleMobileAds() {
-    // TODO: Initialize Google Mobile Ads SDK
-    return MobileAds.instance.initialize();
   }
 
   Future<String> _getYouTubeThumbnailUrl(String videoId) async {
@@ -750,6 +706,5 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     super.dispose();
     _ytExplode.close();
     _nativeAd?.dispose();
-    _overlayEntry.remove();
   }
 }
