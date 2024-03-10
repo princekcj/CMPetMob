@@ -88,24 +88,30 @@ class MyApp extends StatelessWidget {
 
       // Call the function to update trial time flag if needed
       bool trialTimeCompleted = timeTrackingUtils.updateTrialTimeFlagIfNeeded(currentUser);
+      bool showPopup = shouldShowPopup();
+
 
       // If trial time is not completed, show a popup if needed
-      if (!trialTimeCompleted) {
-        // Calculate remaining days in the trial period
-        int remainingDays = calculateRemainingTrialDays(currentUser);
-
-        // Check if popup needs to be shown
-        bool showPopup = shouldShowPopup();
-
-        // If remaining days are less than 10 and the popup has not been shown for the current date, show the popup
-        if (remainingDays < 5 && showPopup) {
-          // Show the popup
-          showTrialPopup(context, remainingDays);
-        }
+      if (trialTimeCompleted && showPopup) {
+        homeWidget = FutureBuilder<int>(
+          future: calculateRemainingTrialDays(currentUser),
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData && snapshot.data! < 7) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showTrialPopup(context, snapshot.data!);
+                });
+              }
+              return BarcodeScanScreen();
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        );
+      } else {
+        // Set the home widget to BarcodeScanScreen for authenticated users
+        homeWidget = BarcodeScanScreen();
       }
-
-      // Set the home widget to BarcodeScanScreen for authenticated users
-      homeWidget = BarcodeScanScreen();
     } else {
       // Set the home widget to InitialLoginAdobeExpressOneContainerScreen for non-authenticated users
       homeWidget = InitialLoginAdobeExpressOneContainerScreen();

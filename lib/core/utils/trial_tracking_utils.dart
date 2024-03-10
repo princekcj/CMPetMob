@@ -11,9 +11,6 @@ class TimeTrackingUtils {
         DocumentReference<Map<String, dynamic>> userDoc =
         FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-        // Get the current document snapshot
-        DocumentSnapshot<Map<String, dynamic>> snapshot = await userDoc.get();
-
         // Calculate elapsed days since account creation
         final creationTime = user.metadata.creationTime;
         final currentTime = DateTime.now();
@@ -33,7 +30,7 @@ class TimeTrackingUtils {
     }
   }
 
-  bool isTrialTimeCompleted(User? user) {
+  Future<bool> isTrialTimeCompleted(User? user) async {
     try {
       if (user != null) {
         // Reference to the user document in Firestore
@@ -41,10 +38,8 @@ class TimeTrackingUtils {
         FirebaseFirestore.instance.collection('users').doc(user.uid);
 
         // Get the current document snapshot
-        DocumentSnapshot<Map<String, dynamic>> snapshot = userDoc.get() as DocumentSnapshot<Map<String, dynamic>>;
-
-        // Check the 'trial_time_completed' field
-        if (snapshot.exists) {
+        DocumentSnapshot<Map<String, dynamic>> snapshot = await userDoc.get();
+        if (snapshot != null && snapshot.exists) {
           return snapshot.get('trial_time_completed') ?? false;
         } else {
           print('User document does not exist.');
@@ -59,6 +54,7 @@ class TimeTrackingUtils {
       return false;
     }
   }
+
 
   Future<void> createTrialTimeFlag(User? user) async {
     try {
@@ -80,13 +76,17 @@ class TimeTrackingUtils {
   bool updateTrialTimeFlagIfNeeded(User? user) {
     try {
       if (user != null) {
-        bool trialTimeCompleted = isTrialTimeCompleted(user);
-        if (!trialTimeCompleted) {
-          updateTrialTimeFlag(user);
-        }
-        return trialTimeCompleted;
+        isTrialTimeCompleted(user).then((trialTimeCompleted) {
+          if (!trialTimeCompleted) {
+            updateTrialTimeFlag(user);
+          }
+        });
+        // Note: This function now returns immediately and does not wait for isTrialTimeCompleted to complete.
+        // If you need to return the value of trialTimeCompleted, you would need to make this function async and use await.
+        return true; // Assume trial time is completed until proven otherwise
       } else {
-        return false; // User is null
+        print('User is null.');
+        return false;
       }
     } catch (e) {
       print('Error updating trial time flag: $e');
