@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
+import '../core/utils/trial_tracking_utils.dart';
+
 
 bool isAuthenticated() {
   final user = FirebaseAuth.instance.currentUser;
@@ -16,6 +18,8 @@ final authProvider = Provider<AuthService>((ref) {
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore db = FirebaseFirestore.instance;
+  final TimeTrackingUtils _timeTrackingUtils = TimeTrackingUtils();
+
 
   // User stream
   Stream<User?> get userStream => _auth.authStateChanges();
@@ -52,6 +56,7 @@ class AuthService {
 
       if (newUser != null) {
         await newUser.updateDisplayName('$forename $surname');
+        await _timeTrackingUtils.createTrialTimeFlag(newUser);
       }
 
       // Create a new user document in Firestore
