@@ -33,6 +33,9 @@ class MyPetInfoScreen extends StatefulWidget {
   final String? feedingInstructions; // Add feedingInstructions field
   final String? moreInfo; // Add moreInfo field
   final List<Appointment>? appointments; // Add the field for appointments
+  final bool? isNeutered;
+  final String? vetName;
+  final String? insuranceProvider;
 
   const MyPetInfoScreen({
     Key? key,
@@ -47,6 +50,9 @@ class MyPetInfoScreen extends StatefulWidget {
     this.feedingInstructions, // Pass feedingInstructions here
     this.moreInfo, // Pass moreInfo here
     this.appointments, // Pass appointments here
+    this.isNeutered,
+    this.vetName,
+    this.insuranceProvider
   }) : super(key: key);
 
   @override
@@ -95,6 +101,9 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
   TextEditingController _feedingInstructionsController =
       TextEditingController();
   TextEditingController _moreInfoController = TextEditingController();
+  TextEditingController _insuranceProviderController = TextEditingController();
+  TextEditingController _vetNameController = TextEditingController();
+  bool _neutered = false;
   String _imagePath = '';
   PetService _petService = PetService();
   String _selectedAnimalType = 'cat';
@@ -106,7 +115,9 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     'Fish',
     'Soy',
     'Corn',
-    'Wheat'
+    'Wheat',
+    'Feather',
+    'Other'
     // Add more allergy options as needed
   ];
 
@@ -125,6 +136,10 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     _weightController.text = widget.petWeight ?? '';
     _feedingInstructionsController.text = widget.feedingInstructions ?? '';
     _moreInfoController.text = widget.moreInfo ?? '';
+    _insuranceProviderController.text = widget.insuranceProvider ?? '';
+    _vetNameController.text = widget.vetName ?? '';
+    _neutered = widget.isNeutered ?? false;
+
     // Initialize the allergies, medications, selectedDate, and other fields as needed.
     allergies = widget.allergies ?? [];
     String im = widget.image ?? '';
@@ -570,6 +585,9 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
         appointmentsData,
         selectedDate,
         _moreInfoController.text,
+        _neutered,
+        _vetNameController.text,
+        _insuranceProviderController.text
       );
 
       Navigator.pop(context);
@@ -599,6 +617,9 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
         // Pass the list of appointments
         selectedDate,
         _moreInfoController.text,
+        _neutered,
+        _vetNameController.text,
+        _insuranceProviderController.text
       );
     }
 
@@ -749,6 +770,21 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                     ),
                     context,
                   ),
+                ),
+                SizedBox(
+                  height: 150, // Adjust the height as needed
+                  child: buildInfoContainer("Vet Name", buildVetNameContainer(), context,
+                      isCentered: true),
+                ),
+                SizedBox(
+                  height: 150, // Adjust the height as needed
+                  child: buildInfoContainer("Insurance Provider", buildInsuranceProviderContainer(), context,
+                      isCentered: true),
+                ),
+                SizedBox(
+                  height: 150, // Adjust the height as needed
+                  child: buildInfoContainer("Is Your Pet Neutered?", buildIsNeuteredDropdown(), context,
+                      isCentered: true),
                 ),
                 buildInfoContainer(
                     "More Information", _moreInfoController, context,
@@ -1231,6 +1267,93 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
 
     return age;
   }
+
+  Widget buildVetNameContainer() {
+    return Container(
+      height: 100,
+      constraints: BoxConstraints(minHeight: 50),
+      padding: EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 100,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _vetNameController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter vet name',
+                      contentPadding: EdgeInsets.symmetric(vertical: 8),
+                    ),
+                    enabled: isEditing || widget.petName == null,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildInsuranceProviderContainer() {
+    return Container(
+      height: 100,
+      constraints: BoxConstraints(minHeight: 50),
+      padding: EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 100,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _insuranceProviderController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter insurance provider',
+                      contentPadding: EdgeInsets.symmetric(vertical: 8),
+                    ),
+                    enabled: isEditing || widget.petName == null,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildIsNeuteredDropdown() {
+    return DropdownButton<bool>(
+      value: _neutered,
+      icon: Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (bool? newValue) {
+        setState(() {
+          _neutered = newValue ?? false;
+        });
+      },
+      items: <bool>[true, false]
+          .map<DropdownMenuItem<bool>>((bool value) {
+        return DropdownMenuItem<bool>(
+          value: value,
+          child: Text(value ? 'Yes' : 'No'),
+        );
+      }).toList(),
+    );
+  }
+
 
   Widget buildMedicationSection() {
     return Column(

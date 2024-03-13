@@ -102,6 +102,10 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                     Timestamp? dateOfBirthTimestamp = doc['dateOfBirth'] as Timestamp?;
                     DateTime? dateOfBirth = dateOfBirthTimestamp != null ? dateOfBirthTimestamp.toDate() : null; // Adjusting for 'dateOfBirth'
                     String moreInfo = doc['moreInfo'];
+                    bool isNeutered = doc['isNeutered'];
+                    String vetName = doc['vetName'];
+                    String insuranceProvider = doc['insuranceProvider'];
+
                     // Convert 'appointments' from Firestore to a list of Appointment objects
                     List<Appointment> appointments = (doc['appointments'] as List<dynamic>)
                         .map((appointmentData) => Appointment.fromJson(appointmentData))
@@ -112,7 +116,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) =>
-                              MyPetInfoScreen(petId: petId, petName: petName, image: image, petWeight: petWeight, petType: petType, allergies: allergies, feedingInstructions: feedingInstructions, medications: medications, selectedDate: dateOfBirth, moreInfo: moreInfo, appointments: appointments),
+                              MyPetInfoScreen(petId: petId, petName: petName, image: image, petWeight: petWeight, petType: petType, allergies: allergies, feedingInstructions: feedingInstructions, medications: medications, selectedDate: dateOfBirth, moreInfo: moreInfo, appointments: appointments, isNeutered: isNeutered, vetName: vetName, insuranceProvider: insuranceProvider),
                         ));
                       },
                       child: buildPetTab(petName, petType, image),

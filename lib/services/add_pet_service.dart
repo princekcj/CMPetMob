@@ -26,29 +26,39 @@ class PetService {
       List<Appointment> appointments,
       DateTime? dateOfBirth,
       String moreInfo,
+      bool isNeutered, // New parameter: Is the pet neutered? (Yes/No)
+      String vetName, // New parameter: Vet name (as a string)
+      String insuranceProvider, // New parameter: Insurance provider (as a string)
       ) async {
     // Add pet data to Firestore
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
+    // Print the appointments list before processing
     print("just before $appointments");
 
+    // Convert the appointments list to JSON format
     final List<Map<String, dynamic>> appointmentsJson =
     appointments.map((appointment) => appointment.toJson()).toList();
     print("just before $appointmentsJson");
 
+    // Add pet data to Firestore collection
     await _firestore.collection('users').doc(_auth.currentUser?.uid).collection('pets').add({
       'name': petName,
       'image': imageUrl,
       'weight': petWeight,
-      'type': petType, // Adding the 'type' field
-      'allergies': allergies, // Adding the 'allergies' field as a list
-      'feedingInstructions': feedingInstructions, // Adding 'feedingInstructions' field as a string
-      'medications': medications, // Adding the 'medications' field as a list
-      'appointments' : appointmentsJson,
-      'dateOfBirth': dateOfBirth != null ? Timestamp.fromDate(dateOfBirth) : null, // Adding 'dateOfBirth' as a timestamp or null
-      'moreInfo': moreInfo, // Adding 'moreInfo' as a string
+      'type': petType,
+      'allergies': allergies,
+      'feedingInstructions': feedingInstructions,
+      'medications': medications,
+      'appointments': appointmentsJson,
+      'dateOfBirth': dateOfBirth != null ? Timestamp.fromDate(dateOfBirth) : null,
+      'moreInfo': moreInfo,
+      'isNeutered': isNeutered, // Store whether the pet is neutered (true/false)
+      'vetName': vetName, // Store the vet's name
+      'insuranceProvider': insuranceProvider, // Store the insurance provider
     });
   }
+
 
   Future<void> updatePetAppt(
       BuildContext context,
@@ -91,6 +101,9 @@ class PetService {
       List<Appointment> appointments,
       DateTime? dateOfBirth,
       String moreInfo,
+      bool isNeutered, // New parameter: Is the pet neutered? (Yes/No)
+      String vetName, // New parameter: Vet name (as a string)
+      String insuranceProvider, // New parameter: Insurance provider (as a string)
       ) async {
     // Update pet data in Firestore
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -115,6 +128,9 @@ class PetService {
             ? Timestamp.fromDate(dateOfBirth)
             : null,
         'moreInfo': moreInfo,
+        'isNeutered': isNeutered, // Store whether the pet is neutered (true/false)
+        'vetName': vetName, // Store the vet's name
+        'insuranceProvider': insuranceProvider, // Store the insurance provider
       });
     } catch (e) {
 
