@@ -37,23 +37,23 @@ class MyPetInfoScreen extends StatefulWidget {
   final String? vetName;
   final String? insuranceProvider;
 
-  const MyPetInfoScreen({
-    Key? key,
-    this.petId,
-    this.petName,
-    this.petWeight,
-    this.petType,
-    this.image,
-    this.allergies, // Pass allergies here
-    this.medications, // Pass medications here
-    this.selectedDate, // Pass selectedDate here
-    this.feedingInstructions, // Pass feedingInstructions here
-    this.moreInfo, // Pass moreInfo here
-    this.appointments, // Pass appointments here
-    this.isNeutered,
-    this.vetName,
-    this.insuranceProvider
-  }) : super(key: key);
+  const MyPetInfoScreen(
+      {Key? key,
+      this.petId,
+      this.petName,
+      this.petWeight,
+      this.petType,
+      this.image,
+      this.allergies, // Pass allergies here
+      this.medications, // Pass medications here
+      this.selectedDate, // Pass selectedDate here
+      this.feedingInstructions, // Pass feedingInstructions here
+      this.moreInfo, // Pass moreInfo here
+      this.appointments, // Pass appointments here
+      this.isNeutered,
+      this.vetName,
+      this.insuranceProvider})
+      : super(key: key);
 
   @override
   MyPetInfoScreenState createState() => MyPetInfoScreenState();
@@ -299,16 +299,24 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
   Future<Uint8List> generatePdf(_petImage) async {
     // Create a PDF document
     final pdf = pw.Document();
-    final ByteData fontData = (await rootBundle.load('assets/font/Pacifico-Regular.ttf')).buffer.asByteData();
+    final ByteData fontData =
+        (await rootBundle.load('assets/font/Pacifico-Regular.ttf'))
+            .buffer
+            .asByteData();
     final pw.Font pacificoFont = pw.Font.ttf(fontData);
+
+    final ByteData logo = await rootBundle.load(ImageConstant.homepagelogo);
+    Uint8List _logo = logo.buffer.asUint8List();
 
     // Convert _petImage to Uint8List
     Uint8List imageData;
     if (_petImage is CachedNetworkImageProvider) {
       final networkImage = _petImage as CachedNetworkImageProvider;
-      final HttpClientRequest request = await HttpClient().getUrl(Uri.parse(networkImage.url));
+      final HttpClientRequest request =
+          await HttpClient().getUrl(Uri.parse(networkImage.url));
       final HttpClientResponse response = await request.close();
-      final List<int> bytes = await consolidateHttpClientResponseBytes(response);
+      final List<int> bytes =
+          await consolidateHttpClientResponseBytes(response);
       imageData = Uint8List.fromList(bytes);
     } else if (_petImage is AssetImage) {
       final assetImage = _petImage as AssetImage;
@@ -321,7 +329,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
 // Use pacificoFont in your text styles
     final pw.TextStyle titleStyle = pw.TextStyle(
       font: pacificoFont,
-      fontSize: 28,
+      fontSize: 40,
       fontWeight: pw.FontWeight.bold,
       color: PdfColor.fromInt(0xFF008C8C),
     );
@@ -338,147 +346,141 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     // Add content to the PDF
     pdf.addPage(
       pw.Page(
-        orientation: pw.PageOrientation.landscape,
+        pageTheme: pw.PageTheme(
+          pageFormat: PdfPageFormat.standard.landscape,
+          orientation: pw.PageOrientation.landscape,
+        ),
         build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                children: [
-                  pw.Text('Pet Profile', style: titleStyle),
-                  // Circular Image
-                  pw.Container(
-                    width: 70, // Set the width of the circular image
-                    height: 70, // Set the height of the circular image
-                    decoration: pw.BoxDecoration(
-                      shape: pw.BoxShape.circle,
-                      border: pw.Border.all(
-                        color: PdfColor.fromInt(0xFF000000), // Black border color
-                        width: 2,
-                      ),
-                    ),
-                    child: pw.ClipOval(
-                      child: pw.Image(pw.MemoryImage(imageData), fit: pw.BoxFit.cover),
-                    ),
-                  ),
-                ],
-              ),
-              pw.SizedBox(height: 8),
-              // Subtitle (Pet Name)
-              pw.Text('Pet Name: ${_nameController.text}',
-                  style: subtitleStyle as pw.TextStyle?),
-              pw.SizedBox(height: 16),
-              // Two containers side by side
-              pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                mainAxisSize: pw.MainAxisSize.max,
-                // Ensure the row takes up the maximum available height
-                children: [
-                  // Left Container
-                  pw.Container(
-                    height: 300, // Set a fixed height for the container
-                    child: pw.Container(
-                      decoration: pw.BoxDecoration(
-                        borderRadius: pw.BorderRadius.circular(10.0),
-                        boxShadow: [
-                          pw.BoxShadow(
-                            color: PdfColor.fromInt(0x33000000),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const PdfPoint(0, 3),
-                          ),
-                        ],
-                        border: pw.Border.all(
-                          color: PdfColor.fromInt(0xFF808080),
-                          width: 0.5,
-                        ),
-                      ),
-                      child: pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text('Age: $age', style: regularStyle),
-                          pw.SizedBox(height: 10),
-                          pw.Text(
-                            'Date of Birth: ${selectedDate != null ? DateFormat('dd-MM-yyyy').format(selectedDate!) : "Not specified"}',
-                            style: regularStyle,
-                          ),
-                          pw.SizedBox(height: 10),
-                          pw.Text(
-                            'Weight: ${_weightController.text} $_selectedWeightUnit',
-                            style: regularStyle,
-                          ),
-                          pw.SizedBox(height: 10),
-                          pw.Text(
-                            'Allergies: ${allergies.join(", ")}',
-                            style: regularStyle,
-                          ),
-                        ],
-                      ),
-                      padding: pw.EdgeInsets.all(10),
-                    ),
-                  ),
-                  // Right Container
-                  pw.Container(
-                    height: 300, // Set a fixed height for the container
-                    child: pw.Container(
-                      decoration: pw.BoxDecoration(
-                        borderRadius: pw.BorderRadius.circular(10.0),
-                        boxShadow: [
-                          pw.BoxShadow(
-                            color: PdfColor.fromInt(0x33000000),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const PdfPoint(0, 3),
-                          ),
-                        ],
-                        border: pw.Border.all(
-                          color: PdfColor.fromInt(0xFF808080),
-                          width: 0.5,
-                        ),
-                      ),
-                      child: pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text('Appointments:', style: regularStyle),
-                          pw.SizedBox(height: 10),
-                          pw.Text(
-                            formatAppointments(widget.appointments?.toList() ?? []),
-                            style: regularStyle,
-                          ),
-                          pw.SizedBox(height: 10),
-                          pw.Text(
-                            'More Information: ${_moreInfoController.text}',
-                            style: regularStyle,
-                          ),
-                        ],
-                      ),
-                      padding: pw.EdgeInsets.all(10),
-                    ),
-                  ),
-                ],
-              ),
-              // Footer
-              pw.Container(
-                margin: pw.EdgeInsets.only(top: 20),
-                padding: pw.EdgeInsets.all(10),
-                decoration: pw.BoxDecoration(
-                  color: PdfColor.fromInt(0xFF008C8C), // Blue background color
-                ),
-                child: pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.end,
+          return pw.FullPage(
+              ignoreMargins: true,
+              child: pw.Container(
+                color: PdfColor.fromInt(0xFFD5E8D7), // Set background color
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
                   children: [
-                    pw.Text(
-                      'Cmpet?',
-                      style: pw.TextStyle(
-                        color: PdfColor.fromInt(0xFFFFFFFF), // White text color
-                      ),
+                    // Row for pet name title
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.start,
+                      children: [
+                        pw.Image(pw.MemoryImage(Uint8List.fromList(_logo)),
+                            height: 100),
+                        pw.Expanded(
+                          child: pw.Center(
+                            child: pw.Text(
+                              '${_nameController.text}',
+                              style: titleStyle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    pw.SizedBox(height: 16),
+                    // Row with pet image and pet information
+                    pw.Row(
+                      children: [
+                        // Left container with pet image
+                        pw.Container(
+                          width: 350,
+                          child: pw.Container(
+                            decoration: pw.BoxDecoration(
+                              borderRadius: pw.BorderRadius.circular(10.0),
+                              color: PdfColor.fromInt(
+                                  0xFFD5E8D7), // Set background color
+                            ),
+                            child: pw.Center(
+                              child: pw.Container(
+                                width: 300,
+                                height: 300,
+                                decoration: pw.BoxDecoration(
+                                  shape: pw.BoxShape.circle,
+                                  border: pw.Border.all(
+                                    color: PdfColor.fromInt(0xFF000000),
+                                    // Black border color
+                                    width: 2,
+                                  ),
+                                ),
+                                child: pw.ClipOval(
+                                  child: pw.Image(pw.MemoryImage(imageData),
+                                      fit: pw.BoxFit.cover),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Spacer between image and information
+                        pw.SizedBox(width: 50),
+                        // Right container with pet information
+                        pw.Container(
+                          width: 400, // Adjust width as needed
+                          decoration: pw.BoxDecoration(
+                            borderRadius: pw.BorderRadius.circular(10.0),
+                            color: PdfColor.fromInt(0xFFFFFFFF),
+                            // White background
+                            border: pw.Border.all(
+                              color: PdfColor.fromInt(0xFF808080),
+                              width: 0.5,
+                            ),
+                          ),
+                          padding: pw.EdgeInsets.all(20),
+                          child: pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              // Age, Date of Birth, Weight, Allergies, Vet Name, Insurance Provider, Neutered, Appointments, More Information
+                              pw.Text('Age: $age', style: regularStyle),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                'Date of Birth: ${selectedDate != null ? DateFormat('dd-MM-yyyy').format(selectedDate!) : "Not specified"}',
+                                style: regularStyle,
+                              ),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                'Weight: ${_weightController.text} $_selectedWeightUnit',
+                                style: regularStyle,
+                              ),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                'Allergies: ${allergies.join(", ")}',
+                                style: regularStyle,
+                              ),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                'Vet Name: ${_vetNameController.text}',
+                                style: regularStyle,
+                              ),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                'Insurance Provider: ${_insuranceProviderController.text}',
+                                style: regularStyle,
+                              ),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                'Is Pet Neutered?: ${_neutered}',
+                                style: regularStyle,
+                              ),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                'Appointments:',
+                                style: regularStyle,
+                              ),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                formatAppointments(
+                                    widget.appointments?.toList() ?? []),
+                                style: regularStyle,
+                              ),
+                              pw.SizedBox(height: 10),
+                              pw.Text(
+                                'More Information: ${_moreInfoController.text}',
+                                style: regularStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-            ],
-          );
+              ));
         },
       ),
     );
@@ -512,7 +514,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     if (imageUrl.isNotEmpty) {
       setState(() {
         _imagePath = imageUrl; // Update _imagePath with the uploaded image URL
-        _petImage = CachedNetworkImageProvider( imageUrl,
+        _petImage = CachedNetworkImageProvider(
+          imageUrl,
         );
       });
     }
@@ -574,21 +577,20 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
 
       // Call the _petService's updatePet method with the updated information
       await _petService.updatePet(
-        PetDocId!,
-        // Replace 'widget.petId' with the actual pet ID
-        _nameController.text,
-        imaging!,
-        _weightController.text,
-        allergies,
-        _feedingInstructionsController.text,
-        medications,
-        appointmentsData,
-        selectedDate,
-        _moreInfoController.text,
-        _neutered,
-        _vetNameController.text,
-        _insuranceProviderController.text
-      );
+          PetDocId!,
+          // Replace 'widget.petId' with the actual pet ID
+          _nameController.text,
+          imaging!,
+          _weightController.text,
+          allergies,
+          _feedingInstructionsController.text,
+          medications,
+          appointmentsData,
+          selectedDate,
+          _moreInfoController.text,
+          _neutered,
+          _vetNameController.text,
+          _insuranceProviderController.text);
 
       Navigator.pop(context);
     }
@@ -599,28 +601,29 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
       // Format appointments as a list of strings
       List<Appointment> appointmentsData = widget.appointments?.toList() ?? [];
 
-      if (widget.appointments != null || widget.appointments != [] || widget.appointments!.isNotEmpty) {
+      if (widget.appointments != null ||
+          widget.appointments != [] ||
+          widget.appointments!.isNotEmpty) {
         appointmentsData = appointments.toList();
       } else {
         // Handle the case where widget.appointments is null
       }
 
       await _petService.addPet(
-        _nameController.text,
-        _imagePath,
-        _weightController.text,
-        selectedAnimalType,
-        allergies,
-        _feedingInstructionsController.text,
-        medications,
-        appointmentsData ?? [],
-        // Pass the list of appointments
-        selectedDate,
-        _moreInfoController.text,
-        _neutered,
-        _vetNameController.text,
-        _insuranceProviderController.text
-      );
+          _nameController.text,
+          _imagePath,
+          _weightController.text,
+          selectedAnimalType,
+          allergies,
+          _feedingInstructionsController.text,
+          medications,
+          appointmentsData ?? [],
+          // Pass the list of appointments
+          selectedDate,
+          _moreInfoController.text,
+          _neutered,
+          _vetNameController.text,
+          _insuranceProviderController.text);
     }
 
     Navigator.pop(context);
@@ -631,7 +634,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     analytics_utils.logScreenUsageEvent('MyPetsScreen');
 
     return Scaffold(
-      resizeToAvoidBottomInset: false, // fluter 2.x
+      resizeToAvoidBottomInset: false,
+      // fluter 2.x
       appBar: top_bar.CustomTopAppBar(
         Enabled: true,
         onTapArrowLeft: (context) {
@@ -645,7 +649,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
             expandedHeight: 200.0,
             floating: true,
             pinned: false,
-            automaticallyImplyLeading: false, // Set this to false to remove the back button
+            automaticallyImplyLeading: false,
+            // Set this to false to remove the back button
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 children: [
@@ -664,7 +669,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                                   child: Image(
                                     image: _petImage,
                                     fit: BoxFit.cover,
-                                    width: 100, // Set the width and height to control the size of the image
+                                    width: 100,
+                                    // Set the width and height to control the size of the image
                                     height: 100,
                                   ),
                                 ),
@@ -761,7 +767,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                       List.of(appointments), // Create a copy of the list
                       isEditing || widget.petName == null,
                       widget.petId,
-                          (List<Appointment> updatedAppointments) {
+                      (List<Appointment> updatedAppointments) {
                         // Update your existing appointments in the parent widget
                         setState(() {
                           appointments.addAll(updatedAppointments);
@@ -773,17 +779,20 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                 ),
                 SizedBox(
                   height: 150, // Adjust the height as needed
-                  child: buildInfoContainer("Vet Name", buildVetNameContainer(), context,
+                  child: buildInfoContainer(
+                      "Vet Name", buildVetNameContainer(), context,
                       isCentered: true),
                 ),
                 SizedBox(
                   height: 150, // Adjust the height as needed
-                  child: buildInfoContainer("Insurance Provider", buildInsuranceProviderContainer(), context,
+                  child: buildInfoContainer("Insurance Provider",
+                      buildInsuranceProviderContainer(), context,
                       isCentered: true),
                 ),
                 SizedBox(
                   height: 150, // Adjust the height as needed
-                  child: buildInfoContainer("Is Your Pet Neutered?", buildIsNeuteredDropdown(), context,
+                  child: buildInfoContainer("Is Your Pet Neutered?",
+                      buildIsNeuteredDropdown(), context,
                       isCentered: true),
                 ),
                 buildInfoContainer(
@@ -813,7 +822,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF008C8C),
                         ),
-                        child: Text("Save", style: TextStyle(color: Colors.white)),
+                        child:
+                            Text("Save", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
@@ -846,28 +856,37 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
           ),
         ],
       ),
-      floatingActionButton: Container(height: 80.0, width:80.0, child: FittedBox(child: FloatingActionButton(
-        backgroundColor: Color(0xFF008C8C), // Set the background color to blue
-        child: Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: ColorConstant.fromHex('#a3ccff'), width: 2.0),
-          borderRadius:
-          BorderRadius.circular(28.0), // Adjust the border radius as needed
+      floatingActionButton: Container(
+        height: 80.0,
+        width: 80.0,
+        child: FittedBox(
+          child: FloatingActionButton(
+            backgroundColor:
+                Color(0xFF008C8C), // Set the background color to blue
+            child:
+                Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                  color: ColorConstant.fromHex('#a3ccff'), width: 2.0),
+              borderRadius: BorderRadius.circular(
+                  28.0), // Adjust the border radius as needed
+            ),
+            onPressed: () {
+              // Check if the current route is not already the search route
+
+              if (ModalRoute.of(context)!.settings.name !=
+                  AppRoutes.barcodeScreen) {
+                Navigator.pushReplacement(
+                  context,
+                  AppRoutes.generateRoute(
+                    RouteSettings(name: AppRoutes.barcodeScreen),
+                  ),
+                );
+              }
+            },
+          ),
         ),
-        onPressed: () {
-          // Check if the current route is not already the search route
-
-          if (ModalRoute.of(context)!.settings.name != AppRoutes.barcodeScreen) {
-            Navigator.pushReplacement(
-              context,
-              AppRoutes.generateRoute(
-                RouteSettings(name: AppRoutes.barcodeScreen),
-              ),
-            );
-          }
-
-        },
-      ),),),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: CustomAppBar(
         height: 100,
@@ -995,8 +1014,9 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                                 contentPadding:
                                     EdgeInsets.symmetric(vertical: 1),
                               ),
-                          maxLength: 10, // Set the maximum length to 10 characters
-                          enabled: isEditing ||
+                              maxLength: 10,
+                              // Set the maximum length to 10 characters
+                              enabled: isEditing ||
                                   widget.petName == null, // Disable the field
                             )
                           : info is Widget
@@ -1331,29 +1351,35 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
   Widget buildIsNeuteredDropdown() {
     return DropdownButton<bool>(
       value: _neutered,
-      icon: Icon(Icons.arrow_downward),
-      iconSize: 24,
+      enableFeedback: isEditing || widget.petName == null,
+      // Enable/disable based on conditions
       elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
+      style: TextStyle(color: Colors.black),
       underline: Container(
         height: 2,
-        color: Colors.deepPurpleAccent,
+        color: Colors.grey,
       ),
       onChanged: (bool? newValue) {
-        setState(() {
-          _neutered = newValue ?? false;
-        });
+        if (isEditing || widget.petName == null) {
+          // Only update the value if enabled
+          setState(() {
+            _neutered = newValue ?? false;
+          });
+        }
       },
-      items: <bool>[true, false]
-          .map<DropdownMenuItem<bool>>((bool value) {
+      items: <bool>[true, false].map<DropdownMenuItem<bool>>((bool value) {
         return DropdownMenuItem<bool>(
           value: value,
-          child: Text(value ? 'Yes' : 'No'),
+          child: Text(
+            value ? 'Yes' : 'No',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         );
       }).toList(),
     );
   }
-
 
   Widget buildMedicationSection() {
     return Column(
