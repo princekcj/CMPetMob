@@ -300,7 +300,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     // Create a PDF document
     final pdf = pw.Document();
     final ByteData fontData =
-        (await rootBundle.load('assets/font/Pacifico-Regular.ttf'))
+        (await rootBundle.load('assets/font/CenturyGothic.ttf'))
             .buffer
             .asByteData();
     final pw.Font pacificoFont = pw.Font.ttf(fontData);
@@ -384,31 +384,35 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                           child: pw.Container(
                             decoration: pw.BoxDecoration(
                               borderRadius: pw.BorderRadius.circular(10.0),
-                              color: PdfColor.fromInt(
-                                  0xFFD5E8D7), // Set background color
+                              color: PdfColor.fromInt(0xFFD5E8D7), // Set background color
                             ),
                             child: pw.Center(
                               child: pw.Container(
-                                width: 300,
-                                height: 300,
+                                width: 600,
+                                height: 400,
                                 decoration: pw.BoxDecoration(
                                   shape: pw.BoxShape.circle,
                                   border: pw.Border.all(
-                                    color: PdfColor.fromInt(0xFF000000),
-                                    // Black border color
+                                    color: PdfColor.fromInt(0xFF000000), // Black border color
                                     width: 2,
                                   ),
                                 ),
                                 child: pw.ClipOval(
-                                  child: pw.Image(pw.MemoryImage(imageData),
-                                      fit: pw.BoxFit.cover),
+                                  child: pw.Container(
+                                    width: 600,
+                                    height: 400,
+                                    child: pw.Image(
+                                      pw.MemoryImage(imageData),
+                                      fit: pw.BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
                         // Spacer between image and information
-                        pw.SizedBox(width: 50),
+                        pw.SizedBox(width: 25),
                         // Right container with pet information
                         pw.Container(
                           width: 400, // Adjust width as needed
@@ -791,7 +795,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                 ),
                 SizedBox(
                   height: 150, // Adjust the height as needed
-                  child: buildInfoContainer("Is Your Pet Neutered?",
+                  child: buildInfoContainer("Pet Neutered?",
                       buildIsNeuteredDropdown(), context,
                       isCentered: true),
                 ),

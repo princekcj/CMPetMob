@@ -37,16 +37,14 @@ class _RegistrationAdobeExpressOneScreenState
   bool hasOnboarded = false;
 
 
-  @override
-  void initState() {
-    super.initState();
-    _loadPreferences();
-  }
 
   void _loadPreferences() async {
+    // Once the user completes the onboarding, set the flag to true:
+    String? _userId = FirebaseAuth.instance.currentUser?.uid;
+    String _preferencesKey = '$_userId';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      hasOnboarded = prefs.getBool('hasOnboarded') ?? false;
+      hasOnboarded = prefs.getBool('$_preferencesKey-Onboarded') ?? false;
     });
   }
 
@@ -261,11 +259,10 @@ class _RegistrationAdobeExpressOneScreenState
                           selectedOption ?? '',
                           selectedExpOption ?? '',
                         );
+                        _loadPreferences();
                         if (!hasOnboarded) {
                           // Show the onboarding screen
                           // Once the user completes the onboarding, set the flag to true:
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.setBool('hasOnboarded', true);
                           Navigator.pushReplacementNamed(context, AppRoutes.onboardingScreen);
                         } else {
                           // Skip the onboarding screen

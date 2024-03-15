@@ -1,6 +1,9 @@
 import 'package:cmpets/core/app_export.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../../routes/app_routes.dart';
 
@@ -36,43 +39,32 @@ class OnboardingScreen extends StatelessWidget {
       body: "Thank you for being here and if you ever need any help we are here!",
       image: Image.asset(ImageConstant.homepagelogo),
     ),
-    PageViewModel(
-      title: "Welcome to CMPet?",
-      body: "WHEN ITEM DOESN’T SCAN…",
-      image: Image.asset(ImageConstant.homepagelogo),
-    ),
-    PageViewModel(
-      title: "It’s not you…or us.",
-      body: "Sometimes barcodes change and national data isn’t updated yet. Don’t worry you can still find your item, just type it in manually.",
-      image: Image.asset(ImageConstant.homepagelogo),
-    ),
-    PageViewModel(
-      title: "Welcome to CMPet?",
-      body: "Simply type name of product in the search bar and when prompted choose the right one",
-      image: Image.asset(ImageConstant.homepagelogo),
-    ),
-    PageViewModel(
-      title: "Welcome to CMPet?",
-      body: "All done!",
-      image: Image.asset(ImageConstant.homepagelogo),
-    ),
     // Add more pages as needed
   ];
 
   @override
   Widget build(BuildContext context) {
+    String? _userId = FirebaseAuth.instance.currentUser?.uid;
+
+
     return IntroductionScreen(
       pages: listPagesViewModel,
       showSkipButton: true,
       skip: const Icon(Icons.skip_next),
       next: const Text("Next"),
       done: const Text("Done", style: TextStyle(fontWeight: FontWeight.w700)),
-      onDone: () {
+      onDone: () async {
         // Handle action when Done button is pressed
+        String _preferencesKey = '$_userId';
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('$_preferencesKey-Onboarded', true);
         Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
       },
-      onSkip: () {
+      onSkip: () async {
         // Handle action when Skip button is pressed
+        String _preferencesKey = '$_userId';
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('$_preferencesKey-Onboarded', true);
         Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
 
       },
