@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:cmpets/widgets/app_bar/topappbar.dart' as top_bar;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
@@ -27,6 +28,7 @@ class BarcodeScanScreen extends StatefulWidget {
 }
 
 class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
+  bool hasHelpShown = false;
   bool isMenuOpen = false;
   bool isLoading = false;
   String snackBarMessage = '';
@@ -40,6 +42,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
   @override
   void initState() {
     super.initState();
+    _loadPreferences();
+
     // Start fetching the latest posts
     _initGoogleMobileAds();
     if (Platform.isAndroid) {
@@ -195,11 +199,18 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
         }
         // You can also show an error message to the user if needed.
 
-        _showProductSearchConfirmation();
+        if (!hasHelpShown) {
+          Navigator.pushReplacement(
+            context,
+            AppRoutes.generateRoute(
+              RouteSettings(name: AppRoutes.itemNotFoundScreen),
+            ),
+          );
+        } else {
+          _showProductSearchConfirmation();
+        }
       }
     } else {
-      print('made itt to else ');
-
       setState(() {
         snackBarMessage = 'Product not found';
         isLoading = false;
@@ -242,10 +253,28 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
       } catch (error) {
         // Handle the error gracefully, e.g., log it
       }
-
-      _showProductSearchConfirmation();
+      if (!hasHelpShown) {
+        Navigator.pushReplacement(
+          context,
+          AppRoutes.generateRoute(
+            RouteSettings(name: AppRoutes.itemNotFoundScreen),
+          ),
+        );
+      } else {
+        _showProductSearchConfirmation();
+      }
 
     }
+  }
+
+  void _loadPreferences() async {
+    // Once the user completes the onboarding, set the flag to true:
+    String? _userId = FirebaseAuth.instance.currentUser?.uid;
+    String _preferencesKey = '$_userId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      hasHelpShown = prefs.getBool('$_preferencesKey-item-not-found') ?? false;
+    });
   }
 
   @override

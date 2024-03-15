@@ -1,0 +1,78 @@
+import 'package:cmpets/core/app_export.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+import '../../routes/app_routes.dart';
+import '../product_text_search/product_text_search.dart';
+
+class ItemNotFoundSlideScreen extends StatelessWidget {
+  final List<PageViewModel> listPagesViewModel = [
+    PageViewModel(
+      title: "It's not our problem!",
+      body: "This barcode has not been assigned to any product in a third party database, sometimes barcodes change and national database needs some time to catch up.",
+      image: Image.asset(ImageConstant.homepagelogo),
+    ),
+    PageViewModel(
+      title: "Welcome to CMPet?",
+      body: "Try typing your product instead (on screen showing typing e.g. Mars Bar). ",
+      image: Image.asset(ImageConstant.homepagelogo),
+    ),
+    PageViewModel(
+      title: "Welcome to CMPet?",
+      body: " Choose your product and enjoy results as usual!",
+      image: Image.asset(ImageConstant.homepagelogo),
+    ),
+    // Add more pages as needed
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    String? _userId = FirebaseAuth.instance.currentUser?.uid;
+
+
+    return IntroductionScreen(
+      pages: listPagesViewModel,
+      showSkipButton: true,
+      skip: const Icon(Icons.skip_next),
+      next: const Text("Next"),
+      done: const Text("Done", style: TextStyle(fontWeight: FontWeight.w700)),
+      onDone: () async {
+        // Handle action when Done button is pressed
+        String _preferencesKey = '$_userId';
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('$_preferencesKey-item-not-found', true);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => productSearchScreen(),
+          ),
+        );
+      },
+      onSkip: () async {
+        // Handle action when Skip button is pressed
+        String _preferencesKey = '$_userId';
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('$_preferencesKey-item-not-found', true);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => productSearchScreen(),
+          ),
+        );
+      },
+      dotsDecorator: DotsDecorator(
+        size: const Size.square(10.0),
+        activeSize: const Size(20.0, 10.0),
+        activeColor: Color(0xFF008C8C),
+        color: Colors.black26,
+        spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+      ),
+    );
+  }
+}

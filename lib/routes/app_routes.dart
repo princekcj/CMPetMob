@@ -13,9 +13,13 @@ import 'package:cmpets/presentation/ingredient_screen/ingredient_screen.dart';
 import 'package:cmpets/presentation/app_navigation_screen/app_navigation_screen.dart';
 
 import '../auth/Auth_provider.dart';
+import '../presentation/item_not_found_slides/item_not_found_screen.dart';
 import '../presentation/onboarding/onboarding_screen.dart';
 
 class AppRoutes {
+  static const String itemNotFoundScreen =
+      '/item_not_found_screen';
+
   static const String onboardingScreen =
       '/onboarding_screen';
 
@@ -116,6 +120,11 @@ class AppRoutes {
             ? OnboardingScreen()
             : InitialLoginAdobeExpressOneContainerScreen();
         break;
+      case itemNotFoundScreen:
+        page = isAuthenticated()
+            ? ItemNotFoundSlideScreen()
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
       case registrationAdobeExpressOneScreen:
         page = RegistrationAdobeExpressOneScreen();
         break;
@@ -173,6 +182,9 @@ class AppRoutes {
         RegistrationAdobeExpressOneScreen(),
     onboardingScreen: (context) => isAuthenticated()
         ? OnboardingScreen()
+        : InitialLoginAdobeExpressOneContainerScreen(),
+    itemNotFoundScreen: (context) => isAuthenticated()
+        ? ItemNotFoundSlideScreen()
         : InitialLoginAdobeExpressOneContainerScreen(),
     appNavigationScreen: (context) => AppNavigationScreen()
   };
