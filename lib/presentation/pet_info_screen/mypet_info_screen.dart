@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:pdf/pdf.dart';
@@ -286,6 +287,20 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
         text: 'Check out my pet info');
   }
 
+  Future<void> requestDownload(String petPdfName, ImageProvider<Object> imgPet) async {
+    final pdfData = await generatePdf(imgPet);
+
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    final tempDir = await documentDirectory;
+    final pdfFile = File('${tempDir.path}/${petPdfName}_pet_profile.pdf');
+
+    await pdfFile.create(recursive: true).then((value) async {
+      value.writeAsBytesSync(pdfData);
+
+      print('Download task ID');
+    });
+  }
+
   String formatAppointments(List<Appointment> appointments) {
     if (appointments.isEmpty) {
       return 'No appointments scheduled';
@@ -339,7 +354,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
       fontWeight: pw.FontWeight.bold,
     );
 
-    final pw.TextStyle regularStyle = pw.TextStyle(fontSize: 24);
+    final pw.TextStyle regularStyle = pw.TextStyle(fontSize: 16);
     // Calculate age based on Date of Birth
     final int age = calculateAge(selectedDate);
 
@@ -380,7 +395,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                       children: [
                         // Left container with pet image
                         pw.Container(
-                          width: 350,
+                          width: 450,
                           child: pw.Container(
                             decoration: pw.BoxDecoration(
                               borderRadius: pw.BorderRadius.circular(10.0),
@@ -388,8 +403,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                             ),
                             child: pw.Center(
                               child: pw.Container(
-                                width: 600,
-                                height: 400,
+                                width: 450,
+                                height: 450,
                                 decoration: pw.BoxDecoration(
                                   shape: pw.BoxShape.circle,
                                   border: pw.Border.all(
@@ -399,7 +414,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                                 ),
                                 child: pw.ClipOval(
                                   child: pw.Container(
-                                    width: 600,
+                                    width: 400,
                                     height: 400,
                                     child: pw.Image(
                                       pw.MemoryImage(imageData),
@@ -724,7 +739,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                       icon: Icon(Icons.open_in_new, size: 30.0),
                       onPressed: () async {
                         try {
-                          await sharePdf(widget.petName ?? 'Pet', _petImage);
+                          _showPopup(context);
                         } catch (e) {
                           print('Error sharing PDF: $e');
                           // Handle the error as needed (e.g., show an error message).
@@ -1294,8 +1309,8 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
 
   Widget buildVetNameContainer() {
     return Container(
-      height: 100,
-      constraints: BoxConstraints(minHeight: 50),
+      height: 150,
+      constraints: BoxConstraints(minHeight: 100),
       padding: EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1382,6 +1397,44 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
           ),
         );
       }).toList(),
+    );
+  }
+
+  void _showPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      Navigator.pop(context); // Close the popup
+                      await sharePdf(widget.petName ?? 'Pet', _petImage);
+                    } catch (e) {
+                      print('Error sharing PDF: $e');
+                      // Handle the error as needed (e.g., show an error message).
+                    }
+                  },
+                  child: Text('Share'),
+                ),
+                SizedBox(width: 15),
+                ElevatedButton(
+                  onPressed: () {
+                    requestDownload(widget.petName ?? 'Pet', _petImage);
+                    Navigator.pop(context); // Close the popup
+                  },
+                  child: Text('Download'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
