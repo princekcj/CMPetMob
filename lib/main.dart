@@ -37,7 +37,6 @@ Future<void> main() async {
       Settings(
           persistenceEnabled: true,
       );
-  await FlutterDownloader.initialize();
   runApp(ProviderScope(child: MyApp()));
 
 // Initialize Firebase Analytics
