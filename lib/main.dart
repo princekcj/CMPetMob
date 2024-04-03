@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cmpets/presentation/barcode_screen/barcode_screen.dart';
 import 'package:cmpets/presentation/home_adobe_express_one_screen/home_adobe_express_one_screen.dart';
