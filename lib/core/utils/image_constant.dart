@@ -16,6 +16,8 @@ class ImageConstant {
 
   static String feedback = 'assets/images/feedback.png';
 
+  static String slide3 = 'assets/images/cmpetslide3.gif';
+
   static String charles = 'assets/images/charles.jpg';
 
   static String cat = 'assets/images/cathead.jpg';

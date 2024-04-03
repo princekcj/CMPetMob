@@ -98,7 +98,32 @@ class MyApp extends StatelessWidget {
           future: calculateRemainingTrialDays(currentUser),
           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data! < 7) {
+              if (snapshot.hasData && snapshot.data! <= 0) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                showTrialEndedPopup(context, snapshot.data!);
+                });
+              } else if (snapshot.hasData && snapshot.data! < 7) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showTrialPopup(context, snapshot.data!);
+                });
+              }
+              return BarcodeScanScreen();
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        );
+      } else if (!trialTimeCompleted && showPopup){
+        // Set the home widget to BarcodeScanScreen for authenticated users
+        homeWidget = FutureBuilder<int>(
+          future: calculateRemainingTrialDays(currentUser),
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData && snapshot.data! <= 0) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showTrialEndedPopup(context, snapshot.data!);
+                });
+              } else if (snapshot.hasData && snapshot.data! < 7) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   showTrialPopup(context, snapshot.data!);
                 });

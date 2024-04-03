@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -77,3 +78,42 @@ void showTrialPopup(BuildContext context, int remainingDays) {
     },
   );
 }
+
+
+void showTrialEndedPopup(BuildContext context, int remainingDays) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Trial Ended'),
+        content: Text('Your trial period has ended. You Must Subscribe For Usage.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              // Fetch the products from the store
+              final IAPConnection = InAppPurchase.instance;
+              const Set<String> _kIds = {'1YR'};
+              final ProductDetailsResponse response = await IAPConnection.queryProductDetails(_kIds);
+
+              if (response.notFoundIDs.isNotEmpty) {
+                // Handle the error of not finding the IDs
+              }
+
+              // Purchase the product
+              final ProductDetails productDetails = response.productDetails.first;
+              final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
+              await IAPConnection.buyNonConsumable(purchaseParam: purchaseParam);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              DateTime currentDate = DateTime.now();
+              prefs.setString('last_shown_date', currentDate.toString().substring(0, 7));
+
+
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
