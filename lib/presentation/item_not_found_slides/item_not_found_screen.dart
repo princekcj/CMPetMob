@@ -15,14 +15,16 @@ class ItemNotFoundSlideScreen extends StatelessWidget {
       body: "Unfortunately, during a products lifecycle, their barcodes can change, and national database isn’t updated. But don’t worry you can still find your item, just use our manual search instead and type what you’re looking for.",
       image: Image.asset(ImageConstant.slide7, height: 450),
       decoration: const PageDecoration(
-        imagePadding: EdgeInsets.only(top: 100.0),
+        imagePadding: EdgeInsets.only(top: 65.0),
       ),
     ),
     PageViewModel(
+      title: "",
       body: "Try typing your product instead (on screen showing typing e.g. Mars Bar). ",
       image: Image.asset(ImageConstant.homepagelogo),
     ),
     PageViewModel(
+      title: "",
       body: " Choose your product and enjoy results as usual!",
       image: Image.asset(ImageConstant.homepagelogo),
     ),
