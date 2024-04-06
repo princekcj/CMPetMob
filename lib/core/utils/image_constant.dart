@@ -22,11 +22,11 @@ class ImageConstant {
 
   static String slide4 = 'assets/images/cmpetslide4.gif';
 
-  static String slide5 = 'assets/images/cmpetslide3.gif';
+  static String slide5 = 'assets/images/cmpetslide5.gif';
 
-  static String slide6 = 'assets/images/cmpetslide3.gif';
+  static String slide6 = 'assets/images/cmpetslide6.gif';
 
-  static String slide7 = 'assets/images/cmpetslide3.gif';
+  static String slide7 = 'assets/images/cmpetslide7.gif';
 
 
   static String charles = 'assets/images/charles.jpg';
