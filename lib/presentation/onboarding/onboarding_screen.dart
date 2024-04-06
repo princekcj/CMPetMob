@@ -23,24 +23,25 @@ class OnboardingScreen extends StatelessWidget {
       ),
     ),
     PageViewModel(
-      title: "Welcome to CMPet?",
       body: "To use the search simply press magnifying glass icon and press scan barcode.",
-      image: Image.asset(ImageConstant.homepagelogo),
+      image: Image.asset(ImageConstant.slide4, height: 450),
+      decoration: const PageDecoration(
+        imagePadding: EdgeInsets.only(top: 100.0),
+      ),
     ),
     PageViewModel(
-      title: "Welcome to CMPet?",
       body: "Looking for a product without a barcode or a single ingredient simply type what you are looking for",
-      image: Image.asset(ImageConstant.homepagelogo),
+      image: Image.asset(ImageConstant.slide5, height: 450),
+      decoration: const PageDecoration(
+        imagePadding: EdgeInsets.only(top: 100.0),
+      ),
     ),
     PageViewModel(
-      title: "Welcome to CMPet?",
-      body: "Looking for a product without a barcode or a single ingredient simply type what you are looking for",
-      image: Image.asset(ImageConstant.homepagelogo),
-    ),
-    PageViewModel(
-      title: "Welcome to CMPet?",
-      body: "Thank you for being here and if you ever need any help we are here!",
-      image: Image.asset(ImageConstant.homepagelogo),
+      body: "It’s as simple as that! To find out more about other features or if you’re ever stuck simply head to Help Centre, and if you require any further assistance, please do not hesitate to reach out to us via email. We’re here to help! 😊",
+      image: Image.asset(ImageConstant.slide6, height: 450),
+      decoration: const PageDecoration(
+        imagePadding: EdgeInsets.only(top: 100.0),
+      ),
     ),
     // Add more pages as needed
   ];

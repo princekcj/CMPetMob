@@ -11,17 +11,18 @@ import '../product_text_search/product_text_search.dart';
 class ItemNotFoundSlideScreen extends StatelessWidget {
   final List<PageViewModel> listPagesViewModel = [
     PageViewModel(
-      title: "It's not our problem!",
-      body: "This barcode has not been assigned to any product in a third party database, sometimes barcodes change and national database needs some time to catch up.",
-      image: Image.asset(ImageConstant.homepagelogo),
+      title: "It’s not you…or Us.",
+      body: "Unfortunately, during a products lifecycle, their barcodes can change, and national database isn’t updated. But don’t worry you can still find your item, just use our manual search instead and type what you’re looking for.",
+      image: Image.asset(ImageConstant.slide7, height: 450),
+      decoration: const PageDecoration(
+        imagePadding: EdgeInsets.only(top: 100.0),
+      ),
     ),
     PageViewModel(
-      title: "Welcome to CMPet?",
       body: "Try typing your product instead (on screen showing typing e.g. Mars Bar). ",
       image: Image.asset(ImageConstant.homepagelogo),
     ),
     PageViewModel(
-      title: "Welcome to CMPet?",
       body: " Choose your product and enjoy results as usual!",
       image: Image.asset(ImageConstant.homepagelogo),
     ),

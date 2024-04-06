@@ -312,10 +312,20 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
       return 'No appointments scheduled';
     }
 
-    return appointments.map((appointment) {
+    // Show only the first two appointments
+    List<String> formattedAppointments = appointments.take(2).map((appointment) {
       return 'Title: ${appointment.type}, Date: ${DateFormat('dd-MM-yyyy').format(appointment.date)}';
-    }).join('\n');
+    }).toList();
+
+    // Check if there are more appointments
+    int additionalAppointments = appointments.length - 2;
+    if (additionalAppointments > 0) {
+      formattedAppointments.add('+$additionalAppointments more');
+    }
+
+    return formattedAppointments.join('\n');
   }
+
 
   Future<Uint8List> generatePdf(_petImage) async {
     // Create a PDF document
@@ -399,6 +409,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                     // Row with pet image and pet information
                     pw.Row(
                       children: [
+                        pw.SizedBox(width: 5),
                         // Left container with pet image
                         pw.Container(
                           width: 450,
@@ -436,10 +447,10 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                         pw.SizedBox(width: 25),
                         // Right container with pet information
                         pw.Container(
-                          width: 400, // Adjust width as needed
+                          width: 325,
                           decoration: pw.BoxDecoration(
-                            borderRadius: pw.BorderRadius.circular(20.0),
-                            color: PdfColor.fromInt(0xFFFFFFFF),
+                            borderRadius: pw.BorderRadius.circular(60.0),
+                            color: PdfColor.fromHex('#F0F0F0'),
                             // White background
                             border: pw.Border.all(
                               color: PdfColor.fromInt(0xFF808080),
@@ -495,12 +506,13 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                               ),
                               pw.SizedBox(height: 10),
                               pw.Text(
-                                'More Information: ${_moreInfoController.text}',
+                                'More Information: ${_moreInfoController.text.substring(0,40)}',
                                 style: regularStyle,
                               ),
                             ],
                           ),
                         ),
+                        pw.SizedBox(width: 5),
                       ],
                     ),
                   ],
@@ -989,7 +1001,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                           ? TextField(
                               controller: info,
                               decoration: InputDecoration(
-                                hintText: 'Extra Information',
+                                hintText: '40 Characters Limit',
                                 contentPadding:
                                     EdgeInsets.symmetric(vertical: 4),
                               ),

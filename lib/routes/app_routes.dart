@@ -11,10 +11,12 @@ import 'package:cmpets/presentation/barcode_screen/barcode_screen.dart';
 import 'package:cmpets/presentation/product_ingredients_screen/product_ingredients_screen.dart';
 import 'package:cmpets/presentation/ingredient_screen/ingredient_screen.dart';
 import 'package:cmpets/presentation/app_navigation_screen/app_navigation_screen.dart';
+import 'package:cmpets/presentation/product_text_search/product_text_search.dart';
 
 import '../auth/Auth_provider.dart';
 import '../presentation/item_not_found_slides/item_not_found_screen.dart';
 import '../presentation/onboarding/onboarding_screen.dart';
+import '../presentation/product_text_search/product_text_search.dart';
 
 class AppRoutes {
   static const String itemNotFoundScreen =
@@ -35,6 +37,8 @@ class AppRoutes {
 
   static const String productScreen = '/product_screen';
 
+  static const String productTextSearchScreen = '/product_search_screen';
+
   static const String ingredientScreen = '/ingredient_screen';
 
 
@@ -52,7 +56,6 @@ class AppRoutes {
       '/registration_adobe_express_one_screen';
 
   static const String appNavigationScreen = '/app_navigation_screen';
-
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
 
@@ -128,6 +131,11 @@ class AppRoutes {
       case registrationAdobeExpressOneScreen:
         page = RegistrationAdobeExpressOneScreen();
         break;
+      case productTextSearchScreen:
+        page = isAuthenticated()
+            ? productSearchScreen()
+            : InitialLoginAdobeExpressOneContainerScreen();
+        break;
       case appNavigationScreen:
         page = AppNavigationScreen();
         break;
@@ -165,6 +173,9 @@ class AppRoutes {
         : InitialLoginAdobeExpressOneContainerScreen(),
     searchScreen: (context) => isAuthenticated()
         ? SearchScreen()
+        : InitialLoginAdobeExpressOneContainerScreen(),
+    productTextSearchScreen: (context) => isAuthenticated()
+        ? productSearchScreen()
         : InitialLoginAdobeExpressOneContainerScreen(),
     productScreen: (context) => isAuthenticated()
         ? IngredientPage(pageTitle: '', ingredientName: '',)

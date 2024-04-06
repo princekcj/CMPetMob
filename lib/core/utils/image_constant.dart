@@ -18,6 +18,15 @@ class ImageConstant {
 
   static String slide3 = 'assets/images/cmpetslide3.gif';
 
+  static String slide4 = 'assets/images/cmpetslide4.gif';
+
+  static String slide5 = 'assets/images/cmpetslide3.gif';
+
+  static String slide6 = 'assets/images/cmpetslide3.gif';
+
+  static String slide7 = 'assets/images/cmpetslide3.gif';
+
+
   static String charles = 'assets/images/charles.jpg';
 
   static String cat = 'assets/images/cathead.jpg';

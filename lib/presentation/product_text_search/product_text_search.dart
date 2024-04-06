@@ -18,12 +18,12 @@ class productSearchScreen extends StatefulWidget {
   const productSearchScreen({Key? key}) : super(key: key);
 
   @override
-  _SearchAdobeExpressOneScreenState createState() =>
-      _SearchAdobeExpressOneScreenState();
+  _SearchAdobeExpressTwoScreenState createState() =>
+      _SearchAdobeExpressTwoScreenState();
 }
 
 
-class _SearchAdobeExpressOneScreenState
+class _SearchAdobeExpressTwoScreenState
     extends State<productSearchScreen> {
 
   List<Map<String, dynamic>> searchResults = [];
