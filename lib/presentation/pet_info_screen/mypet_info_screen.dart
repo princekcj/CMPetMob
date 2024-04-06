@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:open_file/open_file.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/material.dart';
@@ -290,15 +292,19 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
   Future<void> requestDownload(String petPdfName, ImageProvider<Object> imgPet) async {
     final pdfData = await generatePdf(imgPet);
 
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-    final tempDir = await documentDirectory;
-    final pdfFile = File('${tempDir.path}/${petPdfName}_pet_profile.pdf');
+    // Use FilePicker to allow users to choose a directory for saving the PDF
+    final result = await FilePicker.platform.saveFile(
+      fileName: '${petPdfName}_pet_profile.pdf',
+      allowedExtensions: ['pdf'],
+    );
 
-    await pdfFile.create(recursive: true).then((value) async {
-      value.writeAsBytesSync(pdfData);
-
-      print('Download task ID');
-    });
+    if (result != null) {
+      final pdfFile = File(result);
+      await pdfFile.writeAsBytes(pdfData);
+      print('PDF saved at: ${pdfFile.path}');
+    } else {
+      print('User canceled the download.');
+    }
   }
 
   String formatAppointments(List<Appointment> appointments) {
@@ -315,7 +321,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     // Create a PDF document
     final pdf = pw.Document();
     final ByteData fontData =
-        (await rootBundle.load('assets/font/CenturyGothic.ttf'))
+        (await rootBundle.load('assets/font/Pacifico-Regular.ttf'))
             .buffer
             .asByteData();
     final pw.Font pacificoFont = pw.Font.ttf(fontData);
@@ -346,7 +352,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
       font: pacificoFont,
       fontSize: 40,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColor.fromInt(0xFF008C8C),
+      color: PdfColor.fromHex('#000000'),
     );
     final pw.TextStyle subtitleStyle = pw.TextStyle(
       font: pacificoFont,
@@ -432,7 +438,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                         pw.Container(
                           width: 400, // Adjust width as needed
                           decoration: pw.BoxDecoration(
-                            borderRadius: pw.BorderRadius.circular(10.0),
+                            borderRadius: pw.BorderRadius.circular(20.0),
                             color: PdfColor.fromInt(0xFFFFFFFF),
                             // White background
                             border: pw.Border.all(

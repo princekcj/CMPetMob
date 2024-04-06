@@ -17,7 +17,7 @@ class OnboardingScreen extends StatelessWidget {
     PageViewModel(
       title: "Firstly",
       body: "Let's create a pet profile so that all your searches are personalized. Simply click on the pets icon at the bottom right and add a new profile.",
-      image: Image.asset(ImageConstant.slide3, height: 400),
+      image: Image.asset(ImageConstant.slide3, height: 450),
       decoration: const PageDecoration(
         imagePadding: EdgeInsets.only(top: 100.0),
       ),
