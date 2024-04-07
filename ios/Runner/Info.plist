@@ -81,6 +81,8 @@
     <key>FacebookDisplayName</key>
     <string>CMPet? - Test1</string>
     <key>LSApplicationQueriesSchemes</key>
+    <key>UISupportsDocumentBrowser</key>
+    <true/>
     <array>
       <string>fbapi</string>
       <string>fb-messenger-share-api</string>
