@@ -82,11 +82,12 @@ void showTrialPopup(BuildContext context, int remainingDays) {
 
 void showTrialEndedPopup(BuildContext context, int remainingDays) {
   showDialog(
+    barrierDismissible: false, // Prevent dismissing the dialog by tapping outside or pressing the back button
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text('Trial Ended'),
-        content: Text('Your trial period has ended. You Must Subscribe For Usage.'),
+        content: Text('Your trial period has ended. You must subscribe for usage.'),
         actions: <Widget>[
           TextButton(
             onPressed: () async {
@@ -107,7 +108,8 @@ void showTrialEndedPopup(BuildContext context, int remainingDays) {
               DateTime currentDate = DateTime.now();
               prefs.setString('last_shown_date', currentDate.toString().substring(0, 7));
 
-
+              // Close the dialog programmatically after purchase
+              Navigator.of(context).pop();
             },
             child: Text('OK'),
           ),
