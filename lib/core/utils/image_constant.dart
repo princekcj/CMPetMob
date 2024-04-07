@@ -24,9 +24,9 @@ class ImageConstant {
 
   static String slide5 = 'assets/images/cmpetslide5.gif';
 
-  static String slide6 = 'assets/images/cmpetslide6.gif';
+  static String slide6 = 'assets/images/cmpetslide6.jpg';
 
-  static String slide7 = 'assets/images/cmpetslide7.gif';
+  static String slide7 = 'assets/images/cmpetslide7.jpg';
 
 
   static String charles = 'assets/images/charles.jpg';

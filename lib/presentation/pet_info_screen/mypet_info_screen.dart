@@ -276,6 +276,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
   }
 
   Future<void> sharePdf(String petPdfName, ImageProvider<Object> imgPet) async {
+    try {
     final pdfData = await generatePdf(imgPet);
 
     // On mobile platforms, you can use the share_plus package to share the PDF
@@ -287,23 +288,32 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
 
     await Share.shareFiles(['${tempDir.path}/${petPdfName}_pet_profile.pdf'],
         text: 'Check out my pet info');
+    } catch (error) {
+      print("Error generating pdf to share: $error");
+      throw error; // Rethrow the error to handle it in the calling code
+    }
   }
 
   Future<void> requestDownload(String petPdfName, ImageProvider<Object> imgPet) async {
-    final pdfData = await generatePdf(imgPet);
+    try {
+      final pdfData = await generatePdf(imgPet);
 
-    // Use FilePicker to allow users to choose a directory for saving the PDF
-    final result = await FilePicker.platform.saveFile(
-      fileName: '${petPdfName}_pet_profile.pdf',
-      allowedExtensions: ['pdf'],
-    );
+      // Use FilePicker to allow users to choose a directory for saving the PDF
+      final result = await FilePicker.platform.saveFile(
+        fileName: '${petPdfName}_pet_profile.pdf',
+        allowedExtensions: ['pdf'],
+      );
 
-    if (result != null) {
-      final pdfFile = File(result);
-      await pdfFile.writeAsBytes(pdfData);
-      print('PDF saved at: ${pdfFile.path}');
-    } else {
-      print('User canceled the download.');
+      if (result != null) {
+        final pdfFile = File(result);
+        await pdfFile.writeAsBytes(pdfData);
+        print('PDF saved at: ${pdfFile.path}');
+      } else {
+        print('User canceled the download.');
+      }
+    } catch (error) {
+      print("Error requesting download: $error");
+      throw error; // Rethrow the error to handle it in the calling code
     }
   }
 
@@ -506,7 +516,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                               ),
                               pw.SizedBox(height: 10),
                               pw.Text(
-                                'More Information: ${_moreInfoController.text.substring(0,40)}',
+                                'More Information: ${_moreInfoController.text.substring(0, _moreInfoController.text.length > 40 ? 40 : _moreInfoController.text.length)}',
                                 style: regularStyle,
                               ),
                             ],
