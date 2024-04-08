@@ -94,4 +94,29 @@ class TimeTrackingUtils {
     }
   }
 
+  Future<bool> isFullVersionPurchased(User? user) async {
+    try {
+      if (user != null) {
+        // Reference to the user document in Firestore
+        DocumentReference<Map<String, dynamic>> userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+        // Get the current document snapshot
+        DocumentSnapshot<Map<String, dynamic>> snapshot = await userDoc.get();
+        if (snapshot != null && snapshot.exists) {
+          return snapshot.get('purchased_full_version') ?? false;
+        } else {
+          print('User document does not exist.');
+          return false;
+        }
+      } else {
+        print('User is null.');
+        return false;
+      }
+    } catch (e) {
+      print('Error checking purchased flag: $e');
+      return false;
+    }
+  }
+
 }

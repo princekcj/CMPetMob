@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:in_app_purchase/in_app_purchase.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +79,7 @@ void showTrialPopup(BuildContext context, int remainingDays) {
 }
 
 
-void showTrialEndedPopup(BuildContext context, int remainingDays) {
+void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
   showDialog(
     barrierDismissible: false, // Prevent dismissing the dialog by tapping outside or pressing the back button
     context: context,
@@ -108,6 +107,13 @@ void showTrialEndedPopup(BuildContext context, int remainingDays) {
               DateTime currentDate = DateTime.now();
               prefs.setString('last_shown_date', currentDate.toString().substring(0, 7));
 
+              // Reference to the user document in Firestore
+              DocumentReference<Map<String, dynamic>> userDoc =
+              FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+              // Set the initial 'purchased_full_version' field to false
+              await userDoc.set({'purchased_full_version': true});
+
               // Close the dialog programmatically after purchase
               Navigator.of(context).pop();
             },
@@ -118,4 +124,3 @@ void showTrialEndedPopup(BuildContext context, int remainingDays) {
     },
   );
 }
-

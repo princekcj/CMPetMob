@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
@@ -22,7 +23,51 @@ import 'core/utils/trial_util.dart';
 import 'firebase_options.dart';
 import 'package:cmpets/routes/app_routes.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:firebase_analytics/observer.dart';
+
+
+Future<void> deliverProduct(PurchaseDetails purchaseDetails, User user) async {
+  // IMPORTANT!! Always verify purchase details before delivering the product.
+  // Reference to the user document in Firestore
+  DocumentReference<Map<String, dynamic>> userDoc =
+  FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+  // Set the initial 'purchased_full_version' field to false
+  await userDoc.set({'purchased_full_version': true});
+}
+
+Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) {
+  // IMPORTANT!! Always verify a purchase before delivering the product.
+  // For the purpose of an example, we directly return true.
+  return Future<bool>.value(true);
+}
+
+void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
+  purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+    if (purchaseDetails.status == PurchaseStatus.pending) {
+    } else {
+      if (purchaseDetails.status == PurchaseStatus.error) {
+
+      } else if (purchaseDetails.status == PurchaseStatus.purchased ||
+          purchaseDetails.status == PurchaseStatus.restored) {
+        bool valid = await _verifyPurchase(purchaseDetails);
+        if (valid) {
+          deliverProduct(purchaseDetails, currentUser!);
+
+        } else {
+
+        }
+      }
+      if (purchaseDetails.pendingCompletePurchase) {
+        await InAppPurchase.instance
+            .completePurchase(purchaseDetails);
+      }
+    }
+  });
+}
 
 Future<void> main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +101,24 @@ Future<void> main() async {
       debugPrint('Initialization done: ${status.adapterStatuses}');
     },
   );
+
+  // Initialize in-app purchases
+  late StreamSubscription<List<PurchaseDetails>> _subscription;
+  final iapConnection = InAppPurchase.instance;
+
+  final bool available = await iapConnection.isAvailable();
+  if (available) {
+    final purchaseUpdated = iapConnection.purchaseStream;
+    _subscription =
+        purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
+          _listenToPurchaseUpdated(purchaseDetailsList);
+        }, onDone: () {
+
+        }, onError: (Object error) {
+          // handle error here.
+        });
+  }
+
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -98,12 +161,25 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData && snapshot.data! <= 0) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                showTrialEndedPopup(context, snapshot.data!);
+                // Handle the asynchronous nature of isFullVersionPurchased
+                timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
+                  // Rest of your code where you use isPurchased
+                  // Make sure to handle the logic dependent on isPurchased here
+                  if (!isPurchased) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showTrialEndedPopup(context, snapshot.data!, currentUser!);
+                    });
+                  }
                 });
               } else if (snapshot.hasData && snapshot.data! < 7) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  showTrialPopup(context, snapshot.data!);
+                timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
+                  // Rest of your code where you use isPurchased
+                  // Make sure to handle the logic dependent on isPurchased here
+                  if (!isPurchased) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showTrialPopup(context, snapshot.data!);
+                    });
+                  };
                 });
               }
               return BarcodeScanScreen();
@@ -119,12 +195,25 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData && snapshot.data! <= 0) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  showTrialEndedPopup(context, snapshot.data!);
+                // Handle the asynchronous nature of isFullVersionPurchased
+                timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
+                  // Rest of your code where you use isPurchased
+                  // Make sure to handle the logic dependent on isPurchased here
+                  if (!isPurchased) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showTrialEndedPopup(context, snapshot.data!, currentUser!);
+                    });
+                  }
                 });
               } else if (snapshot.hasData && snapshot.data! < 7) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  showTrialPopup(context, snapshot.data!);
+                timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
+                  // Rest of your code where you use isPurchased
+                  // Make sure to handle the logic dependent on isPurchased here
+                  if (!isPurchased) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showTrialPopup(context, snapshot.data!);
+                    });
+                  };
                 });
               }
               return BarcodeScanScreen();
