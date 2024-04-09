@@ -113,7 +113,7 @@ Future<void> main() async {
         purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
           _listenToPurchaseUpdated(purchaseDetailsList);
         }, onDone: () {
-
+          _subscription.cancel();
         }, onError: (Object error) {
           // handle error here.
         });
