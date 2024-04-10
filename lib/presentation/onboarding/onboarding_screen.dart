@@ -32,16 +32,8 @@ class OnboardingScreen extends StatelessWidget {
     ),
     PageViewModel(
       title: "",
-      body: "To use the search simply press magnifying glass icon and press scan barcode.",
-      image: Image.asset(ImageConstant.slide4, height: 650),
-      decoration: const PageDecoration(
-        imagePadding: EdgeInsets.only(top: 65.0),
-      ),
-    ),
-    PageViewModel(
-      title: "",
       body: "Looking for a product without a barcode or a single ingredient simply type what you are looking for",
-      image: Image.asset(ImageConstant.slide5, height: 650),
+      image: Image.asset(ImageConstant.slide4, height: 650),
       decoration: const PageDecoration(
         imagePadding: EdgeInsets.only(top: 65.0),
       ),
