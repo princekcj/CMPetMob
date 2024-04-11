@@ -22,11 +22,17 @@ class ItemNotFoundSlideScreen extends StatelessWidget {
       title: "",
       body: "Try typing your product instead (on screen showing typing e.g. Mars Bar). ",
       image: Image.asset(ImageConstant.slide5),
+      decoration: const PageDecoration(
+        imagePadding: EdgeInsets.only(top: 65.0),
+      ),
     ),
     PageViewModel(
       title: "",
       body: " Choose your product and enjoy results as usual!",
       image: Image.asset(ImageConstant.slide4),
+      decoration: const PageDecoration(
+        imagePadding: EdgeInsets.only(top: 65.0),
+      ),
     ),
     // Add more pages as needed
   ];
