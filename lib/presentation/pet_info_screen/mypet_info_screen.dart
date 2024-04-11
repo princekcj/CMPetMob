@@ -374,9 +374,9 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
       fontWeight: pw.FontWeight.bold,
       color: PdfColor.fromHex('#000000'),
     );
-    final pw.TextStyle subtitleStyle = pw.TextStyle(
+    final pw.TextStyle smallStyle = pw.TextStyle(
       font: pacificoFont,
-      fontSize: 26,
+      fontSize: 8,
       fontWeight: pw.FontWeight.bold,
     );
 
@@ -523,6 +523,15 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                           ),
                         ),
                         pw.SizedBox(width: 5),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                              'www.cmpet.co.uk',
+                              style: smallStyle,
+                            ),
                       ],
                     ),
                   ],
