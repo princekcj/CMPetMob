@@ -155,41 +155,7 @@ class MyApp extends StatelessWidget {
 
 
       // If trial time is not completed, show a popup if needed
-      if (trialTimeCompleted ) {
-        homeWidget = FutureBuilder<int>(
-          future: calculateRemainingTrialDays(currentUser),
-          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                // Handle the asynchronous nature of isFullVersionPurchased
-                timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
-                  // Rest of your code where you use isPurchased
-                  // Make sure to handle the logic dependent on isPurchased here
-                  if (!isPurchased) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showTrialEndedPopup(context, snapshot.data!, currentUser!);
-                    });
-                  }
-                });
-              } else if (snapshot.hasData && snapshot.data! < 7) {
-                timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
-                  // Rest of your code where you use isPurchased
-                  // Make sure to handle the logic dependent on isPurchased here
-                  if (!isPurchased) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showTrialPopup(context, snapshot.data!);
-                    });
-                  };
-                });
-              }
-              return BarcodeScanScreen();
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
-        );
-      } else if (!trialTimeCompleted && showPopup){
-        // Set the home widget to BarcodeScanScreen for authenticated users
+      if (trialTimeCompleted) {
         homeWidget = FutureBuilder<int>(
           future: calculateRemainingTrialDays(currentUser),
           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
@@ -205,7 +171,20 @@ class MyApp extends StatelessWidget {
                     });
                   }
                 });
-              } else if (snapshot.hasData && snapshot.data! < 7) {
+              }
+              return BarcodeScanScreen();
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        );
+      } else if (!trialTimeCompleted && showPopup){
+        // Set the home widget to BarcodeScanScreen for authenticated users
+        homeWidget = FutureBuilder<int>(
+          future: calculateRemainingTrialDays(currentUser),
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData && snapshot.data! < 7) {
                 timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
                   // Rest of your code where you use isPurchased
                   // Make sure to handle the logic dependent on isPurchased here

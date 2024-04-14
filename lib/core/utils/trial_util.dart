@@ -66,7 +66,7 @@ void showTrialPopup(BuildContext context, int remainingDays) {
               // Save current date as last shown date in SharedPreferences
               SharedPreferences prefs = await SharedPreferences.getInstance();
               DateTime currentDate = DateTime.now();
-              prefs.setString('last_shown_date', currentDate.toString().substring(0, 7));
+              prefs.setString('last_shown_date', currentDate.toString());
 
               Navigator.of(context).pop();
             },
