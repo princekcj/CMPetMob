@@ -13,24 +13,29 @@ class ItemNotFoundSlideScreen extends StatelessWidget {
     PageViewModel(
       title: "It’s not you…or Us.",
       body: "Unfortunately, during a products lifecycle, their barcodes can change, and national database isn’t updated. But don’t worry you can still find your item, just use our manual search instead and type what you’re looking for.",
-      image: Image.asset(ImageConstant.slide7, height: 450),
+      image:Center( child:  Image.asset(ImageConstant.slide7, height: 650)),
       decoration: const PageDecoration(
+        bodyAlignment: Alignment.bottomCenter,
         imagePadding: EdgeInsets.only(top: 65.0),
       ),
     ),
     PageViewModel(
       title: "",
       body: "Try typing your product instead (on screen showing typing e.g. Mars Bar). ",
-      image: Image.asset(ImageConstant.slide5),
+      image: Center( child: Image.asset(ImageConstant.slide5, height: 650)),
       decoration: const PageDecoration(
+        imageFlex: 2,
+        bodyAlignment: Alignment.bottomCenter,
         imagePadding: EdgeInsets.only(top: 65.0),
       ),
     ),
     PageViewModel(
       title: "",
       body: " Choose your product and enjoy results as usual!",
-      image: Image.asset(ImageConstant.slide4),
+      image: Center( child: Image.asset(ImageConstant.slide4,  height: 650)),
       decoration: const PageDecoration(
+        imageFlex: 2,
+        bodyAlignment: Alignment.bottomCenter,
         imagePadding: EdgeInsets.only(top: 65.0),
       ),
     ),

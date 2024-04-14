@@ -155,12 +155,12 @@ class MyApp extends StatelessWidget {
 
 
       // If trial time is not completed, show a popup if needed
-      if (trialTimeCompleted && showPopup) {
+      if (trialTimeCompleted ) {
         homeWidget = FutureBuilder<int>(
           future: calculateRemainingTrialDays(currentUser),
           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data! <= 0) {
+              if (snapshot.hasData) {
                 // Handle the asynchronous nature of isFullVersionPurchased
                 timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
                   // Rest of your code where you use isPurchased

@@ -376,11 +376,13 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     );
     final pw.TextStyle smallStyle = pw.TextStyle(
       font: pacificoFont,
-      fontSize: 8,
+      fontSize: 10,
       fontWeight: pw.FontWeight.bold,
     );
 
     final pw.TextStyle regularStyle = pw.TextStyle(fontSize: 16);
+    final pw.TextStyle regularBoldStyle = pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold);
+
     // Calculate age based on Date of Birth
     final int age = calculateAge(selectedDate);
 
@@ -472,41 +474,62 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                             crossAxisAlignment: pw.CrossAxisAlignment.start,
                             children: [
                               // Age, Date of Birth, Weight, Allergies, Vet Name, Insurance Provider, Neutered, Appointments, More Information
-                              pw.Text('Age: $age', style: regularStyle),
+                              pw.Row( children: [
+                                pw.Text('Age :', style: regularBoldStyle),
+                                pw.Text('$age', style: regularStyle),
+                              ]),
                               pw.SizedBox(height: 10),
+                              pw.Row( children: [
+                              pw.Text('Date of Birth :', style: regularBoldStyle),
                               pw.Text(
-                                'Date of Birth: ${selectedDate != null ? DateFormat('dd-MM-yyyy').format(selectedDate!) : "Not specified"}',
+                                '${selectedDate != null ? DateFormat('dd-MM-yyyy').format(selectedDate!) : "Not specified"}',
                                 style: regularStyle,
                               ),
+                               ]),
                               pw.SizedBox(height: 10),
+                              pw.Row( children: [
+                              pw.Text('Weight: ', style: regularBoldStyle),
                               pw.Text(
-                                'Weight: ${_weightController.text} $_selectedWeightUnit',
+                                '${_weightController.text} $_selectedWeightUnit',
                                 style: regularStyle,
                               ),
+                              ]),
                               pw.SizedBox(height: 10),
+                              pw.Row( children: [
+                              pw.Text('Allergies: ', style: regularBoldStyle),
                               pw.Text(
-                                'Allergies: ${allergies.join(", ")}',
+                                '${allergies.join(", ")}',
                                 style: regularStyle,
                               ),
+                              ]),
                               pw.SizedBox(height: 10),
+                              pw.Row( children: [
+                              pw.Text('Vet Name: ', style: regularBoldStyle),
                               pw.Text(
-                                'Vet Name: ${_vetNameController.text}',
+                                '${_vetNameController.text}',
                                 style: regularStyle,
                               ),
+                              ]),
                               pw.SizedBox(height: 10),
+                              pw.Row( children: [
+                              pw.Text('Insurance Provider: ', style: regularBoldStyle),
                               pw.Text(
-                                'Insurance Provider: ${_insuranceProviderController.text}',
+                                ' ${_insuranceProviderController.text}',
                                 style: regularStyle,
                               ),
+                              ]),
                               pw.SizedBox(height: 10),
+                              pw.Row( children: [
+                              pw.Text('Is Pet Neutered?: ', style: regularBoldStyle),
                               pw.Text(
-                                'Is Pet Neutered?: ${_neutered}',
+                                ' ${_neutered}',
                                 style: regularStyle,
                               ),
+                              ]),
                               pw.SizedBox(height: 10),
                               pw.Text(
                                 'Appointments:',
-                                style: regularStyle,
+                                style: regularBoldStyle,
                               ),
                               pw.SizedBox(height: 10),
                               pw.Text(
@@ -516,7 +539,11 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                               ),
                               pw.SizedBox(height: 10),
                               pw.Text(
-                                'More Information: ${_moreInfoController.text.substring(0, _moreInfoController.text.length > 40 ? 40 : _moreInfoController.text.length)}',
+                                'More Information: ',
+                                style: regularBoldStyle,
+                              ),
+                              pw.Text(
+                                '${_moreInfoController.text.substring(0, _moreInfoController.text.length > 40 ? 40 : _moreInfoController.text.length)}',
                                 style: regularStyle,
                               ),
                             ],
@@ -1346,7 +1373,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
 
   Widget buildVetNameContainer() {
     return Container(
-      height: 150,
+      height: 100,
       constraints: BoxConstraints(minHeight: 100),
       padding: EdgeInsets.all(16),
       child: Row(

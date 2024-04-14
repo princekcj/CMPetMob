@@ -50,6 +50,11 @@ class AuthService {
         'surname': surname,
         'selectedOption': selectedOption,
         'selectedExpOption': selectedExpOption,
+        'attributes' :     {
+          "firstName":forename,
+          "lastName": surname,
+          "email":email,
+        }
       };
 
       final User? newUser = userCredential.user;

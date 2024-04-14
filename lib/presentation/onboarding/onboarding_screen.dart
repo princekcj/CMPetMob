@@ -12,37 +12,51 @@ class OnboardingScreen extends StatelessWidget {
     PageViewModel(
       title: "Welcome to CMPet?",
       body: "Let’s find out how to use our app. ",
-      image: Image.asset(ImageConstant.homepagelogo),
+      image: Center(
+        child: Image.asset(ImageConstant.homepagelogo),
+      ),
+    decoration: const PageDecoration(
+    imageFlex: 2,
+    bodyAlignment: Alignment.bottomCenter,
+    imagePadding: EdgeInsets.only(top: 65.0),
+    ),
     ),
     PageViewModel(
       title: "",
       body: "Let's create a pet profile so that all your searches are personalized. Simply click on the pets icon at the bottom right and add a new profile.",
-      image: Image.asset(ImageConstant.slide2, height: 650),
+      image: Center( child: Image.asset(ImageConstant.slide2, height: 650)),
       decoration: const PageDecoration(
+        imageFlex: 2,
+        bodyAlignment: Alignment.bottomCenter,
         imagePadding: EdgeInsets.only(top: 65.0),
       ),
     ),
     PageViewModel(
       title: "",
       body: "Next up, to use the search simply press our magnifying glass icon and press scan barcode.",
-      image: Image.asset(ImageConstant.slide3, height: 650),
+      image: Center( child: Image.asset(ImageConstant.slide3, height: 650)),
       decoration: const PageDecoration(
+        imageFlex: 2,
+        bodyAlignment: Alignment.bottomCenter,
         imagePadding: EdgeInsets.only(top: 65.0),
       ),
     ),
     PageViewModel(
       title: "",
       body: "Looking for a product without a barcode or a single ingredient simply type what you are looking for",
-      image: Image.asset(ImageConstant.slide4, height: 650),
+      image: Center( child: Image.asset(ImageConstant.slide4, height: 650)),
       decoration: const PageDecoration(
+        imageFlex: 2,
+        bodyAlignment: Alignment.bottomCenter,
         imagePadding: EdgeInsets.only(top: 65.0),
       ),
     ),
     PageViewModel(
       title: "",
       body: "It’s as simple as that! To find out more about other features or if you’re ever stuck simply head to Help Centre, and if you require any further assistance, please do not hesitate to reach out to us via email. We’re here to help! 😊",
-      image: Image.asset(ImageConstant.slide6, height: 650),
+      image:Center( child:  Image.asset(ImageConstant.slide6, height: 650)),
       decoration: const PageDecoration(
+        bodyAlignment: Alignment.bottomCenter,
         imagePadding: EdgeInsets.only(top: 65.0),
       ),
     ), // Add more pages as needed
