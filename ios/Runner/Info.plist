@@ -74,6 +74,10 @@
       </array>
       </dict>
     </array>
+    <key>UISupportsDocumentBrowser</key>
+    <true/>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
     <key>FacebookAppID</key>
     <string>767513698556496</string>
     <key>FacebookClientToken</key>
