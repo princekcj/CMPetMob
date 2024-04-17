@@ -117,24 +117,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
 
   List<Map<String, dynamic>> carouselsData = [
     {
-      'label': 'Carousel 1',
-      'items': [
-        'Pet Fact',
-        'Leaderboard',
-        'Ad',
-        'Pet Fact',
-      ],
-    },
-    {
-      'label': 'Carousel 2',
-      'items': [
-        'Blog',
-        'Ad',
-        'Blog',
-        'Blog',
-      ],
-    },
-    {
       'label': 'Carousel 3',
       'items': [
         'Pet Fact',
@@ -160,7 +142,15 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
               },
               onMenuPressed: toggleMenu
           ),
-          body: ListView.builder(
+          body: Column(
+            children: [
+              SizedBox(height: 20), // Adjust the height as needed
+              Image.asset(
+                ImageConstant.homepagelogo,
+                height: 250, // Adjust the height as needed
+              ),
+            Expanded(
+                child: ListView.builder(
             itemCount: carouselsData.length,
             itemBuilder: (context, index) {
               return Column(
@@ -481,6 +471,9 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                 ],
               );
             },
+            )
+            )
+          ]
           ),
           extendBody: true,
           floatingActionButton: Container(height: 80.0, width:80.0, child: FittedBox(child: FloatingActionButton(
