@@ -24,6 +24,8 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../widgets/app_bar/custom_app_drawer.dart';
+
 class MyPetInfoScreen extends StatefulWidget {
   final String? petId;
   final String? petName;
@@ -719,6 +721,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       // fluter 2.x
+      endDrawer: CustomDrawer(),
       appBar: top_bar.CustomTopAppBar(
         Enabled: true,
         onTapArrowLeft: (context) {
