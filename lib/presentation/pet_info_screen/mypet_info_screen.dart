@@ -379,7 +379,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     final pw.TextStyle smallStyle = pw.TextStyle(
       font: pacificoFont,
       fontSize: 10,
-      fontWeight: pw.FontWeight.bold,
+      color: PdfColor.fromHex('#ADD8E6'),
     );
 
     final pw.TextStyle regularStyle = pw.TextStyle(fontSize: 16);
@@ -721,7 +721,6 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       // fluter 2.x
-      endDrawer: CustomDrawer(),
       appBar: top_bar.CustomTopAppBar(
         Enabled: true,
         onTapArrowLeft: (context) {
