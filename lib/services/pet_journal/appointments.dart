@@ -44,7 +44,6 @@ void removeAppointment(int index) {
 
 Widget buildAppointmentsSection(BuildContext context, List<Appointment> existingAppointments, bool isEnabled, String? petId, void Function(List<Appointment>) onAppointmentsChanged) {
   appointments = existingAppointments; // Initialize with existing appointments
-  print("apts in widget is $appointments");
   final nextAppointment = findNextAppointment(appointments);
   return Column(
     children: [

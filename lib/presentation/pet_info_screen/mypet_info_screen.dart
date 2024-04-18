@@ -842,7 +842,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                       "Allergies", buildAllergiesSection(), context),
                 ),
                 SizedBox(
-                  height: 150, // Adjust the height as needed
+                  height: 130, // Adjust the height as needed
                   child: buildInfoContainer(
                     "Appointments",
                     buildAppointmentsSection(

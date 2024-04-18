@@ -145,6 +145,15 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
           body: Column(
             children: [
               SizedBox(height: 20), // Adjust the height as needed
+              Text(
+                'Welcome To The CMPet? App!',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  // Add any additional styling you prefer
+                ),
+              ),
+              SizedBox(height: 20), // Adjust the height as needed
               Image.asset(
                 ImageConstant.homepagelogo,
                 height: 250, // Adjust the height as needed
