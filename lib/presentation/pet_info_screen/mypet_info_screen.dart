@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:open_file/open_file.dart';
@@ -300,15 +301,32 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     try {
       final pdfData = await generatePdf(imgPet);
 
-      // Use FilePicker to allow users to choose a directory for saving the PDF
-      final result = await FilePicker.platform.saveFile(
-        fileName: '${petPdfName}_pet_profile.pdf',
-        allowedExtensions: ['pdf'],
-      );
+      Directory documentDirectory = await getApplicationDocumentsDirectory();
+      final tempDir = await documentDirectory;
+      final pdfFile = File('${tempDir.path}/${petPdfName}_pet_profile.pdf');
+      pdfFile.create();
+      pdfFile.writeAsBytesSync(pdfData);
 
-      if (result != null) {
-        final pdfFile = File(result);
-        await pdfFile.writeAsBytes(pdfData);
+      // Use FilePicker to allow users to choose a directory for saving the PDF
+      if (!await FlutterFileDialog.isPickDirectorySupported()) {
+        print("Picking directory not supported");
+        return;
+      }
+
+      final pickedDirectory = await FlutterFileDialog.pickDirectory();
+
+      if (pickedDirectory != null) {
+        final filePath = await FlutterFileDialog.saveFileToDirectory(
+          directory: pickedDirectory,
+          data: pdfFile.readAsBytesSync(),
+          mimeType: "application/pdf",
+          fileName: "${petPdfName}_pet_profile.pdf",
+          replace: true,
+        );
+      }
+
+      if (pickedDirectory != null) {
+        // await pdfFile.writeAsBytes(pdfData);
         print('PDF saved at: ${pdfFile.path}');
       } else {
         print('User canceled the download.');
