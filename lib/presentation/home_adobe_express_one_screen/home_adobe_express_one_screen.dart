@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:cmpets/widgets/app_bar/custom_app_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -730,15 +731,21 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
 }
 
 Future<PetFact> getRandomPetFacts() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int lastFactChangeTime = prefs.getInt('lastFactChangeTime') ?? 0;
+  String lastFact = prefs.getString('lastFact') ?? '';
+  int now = DateTime.now().millisecondsSinceEpoch;
+
   List<PetFact> possiblePetFacts = await _readJsonFile();
 
-  Timer.periodic(Duration(hours: 24), (Timer timer) {
-    _readJsonFile().then((List<PetFact> petFacts) {
-      possiblePetFacts = petFacts;
-    });
-  });
-
-  return _selectRandomPetFact(possiblePetFacts);
+  if (now - lastFactChangeTime > Duration(hours: 24).inMilliseconds) {
+    PetFact newFact = _selectRandomPetFact(possiblePetFacts);
+    prefs.setInt('lastFactChangeTime', now);
+    prefs.setString('lastFact', newFact.fact);
+    return newFact;
+  } else {
+    return PetFact(fact: lastFact, img: ImageConstant.petblogimg); // return the last fact
+  }
 }
 
 Future<List<PetFact>> _readJsonFile() async {
@@ -747,7 +754,7 @@ Future<List<PetFact>> _readJsonFile() async {
 
   List<dynamic> jsonList = json.decode(jsonString);
   List<PetFact> petFacts =
-      jsonList.map((json) => PetFact.fromJson(json)).toList();
+  jsonList.map((json) => PetFact.fromJson(json)).toList();
 
   return petFacts;
 }
@@ -760,3 +767,5 @@ PetFact _selectRandomPetFact(List<PetFact> petFacts) {
     return PetFact(fact: "No pet facts available", img: "");
   }
 }
+
+
