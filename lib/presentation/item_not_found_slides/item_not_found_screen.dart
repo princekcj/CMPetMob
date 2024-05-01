@@ -15,6 +15,7 @@ class ItemNotFoundSlideScreen extends StatelessWidget {
       body: "Unfortunately, during a products lifecycle, their barcodes can change, and national database isn’t updated. But don’t worry you can still find your item, just use our manual search instead and type what you’re looking for.",
       image:Center( child:  Image.asset(ImageConstant.slide7, height: 650)),
       decoration: const PageDecoration(
+        imageFlex: 2,
         bodyAlignment: Alignment.bottomCenter,
         imagePadding: EdgeInsets.only(top: 65.0),
       ),

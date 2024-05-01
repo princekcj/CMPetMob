@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:cmpets/core/app_export.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as htmlParser;
 import 'package:flutter_insta/flutter_insta.dart';
@@ -23,6 +24,13 @@ class PetFact {
   final String img;
 
   PetFact({required this.fact, required this.img});
+
+  factory PetFact.fromJson(Map<String, dynamic> json) {
+    return PetFact(
+      fact: json['Facts'] ?? "",
+      img: json['Img'] ?? ImageConstant.petblogimg,
+    );
+  }
 }
 
 
