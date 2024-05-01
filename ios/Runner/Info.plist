@@ -83,6 +83,8 @@
     <true/>
     <key>LSSupportsOpeningDocumentsInPlace</key>
     <true/>
+    <key>GIDClientID</key>
+    <string>406099696497-l9gojfp6b3h1cgie1se28a9ol9fmsvvk.apps.googleusercontent.com</string>
     <key>FacebookAppID</key>
     <string>767513698556496</string>
     <key>FacebookClientToken</key>
