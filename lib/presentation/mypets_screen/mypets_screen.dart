@@ -238,15 +238,21 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                 width: 2, // Adjust the border thickness as needed
               ),
             ),
-            child: ClipOval(
+              child: ClipOval(
+                clipBehavior: Clip.hardEdge,
               child: _petImage.startsWith("https")
                   ? CachedNetworkImage(
                   imageUrl: _petImage,
                 cacheManager: CustomCacheManager.instance,
+                fit: BoxFit.fill,
+                width: 100,
+                height: 100,
               )
                   : Image.asset(
                 _petImage, // Replace with your image asset path
                 fit: BoxFit.cover,
+                width: 100,
+                height: 100,
               ),
             ),
           ),

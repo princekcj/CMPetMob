@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 Future<UserCredential?> signInWithGoogle() async {
   try {
     final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: '261791967363-osr139fi1bihvfogns9mfj2rtgu7orqc.apps.googleusercontent.com',
+      clientId: '406099696497-l9gojfp6b3h1cgie1se28a9ol9fmsvvk.apps.googleusercontent.com',
     );
     final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
 

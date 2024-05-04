@@ -734,17 +734,17 @@ Future<PetFact> getRandomPetFacts() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int lastFactChangeTime = prefs.getInt('lastFactChangeTime') ?? 0;
   String lastFact = prefs.getString('lastFact') ?? '';
+
   int now = DateTime.now().millisecondsSinceEpoch;
 
-  List<PetFact> possiblePetFacts = await _readJsonFile();
-
-  if (now - lastFactChangeTime > Duration(hours: 24).inMilliseconds) {
+  if (now - lastFactChangeTime < Duration(hours: 24).inMilliseconds) {
+    return PetFact(fact: lastFact, img: ImageConstant.petblogimg); // Return cached fact
+  } else {
+    List<PetFact> possiblePetFacts = await _readJsonFile();
     PetFact newFact = _selectRandomPetFact(possiblePetFacts);
     prefs.setInt('lastFactChangeTime', now);
     prefs.setString('lastFact', newFact.fact);
     return newFact;
-  } else {
-    return PetFact(fact: lastFact, img: ImageConstant.petblogimg); // return the last fact
   }
 }
 
@@ -764,8 +764,6 @@ PetFact _selectRandomPetFact(List<PetFact> petFacts) {
   if (petFacts.isNotEmpty) {
     return petFacts[random.nextInt(petFacts.length)];
   } else {
-    return PetFact(fact: "No pet facts available", img: "");
+    return PetFact(fact: "No pet facts available", img: ImageConstant.petblogimg);
   }
 }
-
-
