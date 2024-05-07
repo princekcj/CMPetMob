@@ -92,7 +92,7 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
             onPressed: () async {
               // Fetch the products from the store
               final IAPConnection = InAppPurchase.instance;
-              const Set<String> _kIds = {'1YR'};
+              const Set<String> _kIds = {'1yr'};
               final ProductDetailsResponse response = await IAPConnection.queryProductDetails(_kIds);
 
               if (response.notFoundIDs.isNotEmpty) {
@@ -105,7 +105,7 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
               await IAPConnection.buyNonConsumable(purchaseParam: purchaseParam);
               SharedPreferences prefs = await SharedPreferences.getInstance();
               DateTime currentDate = DateTime.now();
-              prefs.setString('last_shown_date', currentDate.toString().substring(0, 7));
+              prefs.setString('last_shown_date', currentDate.toString());
 
               // Reference to the user document in Firestore
               DocumentReference<Map<String, dynamic>> userDoc =
