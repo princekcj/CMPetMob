@@ -18,7 +18,7 @@ Future<int> calculateRemainingTrialDays(User? currentUser) async {
   Timestamp trialStartDateTimestamp = Timestamp.fromDate(trialStartDate!);
 
   // Calculate trial duration in days
-  int trialDuration = 37;
+  int trialDuration = 0;
 
   // Calculate elapsed days since trial start date
   DateTime currentDate = DateTime.now();
