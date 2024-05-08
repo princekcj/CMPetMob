@@ -18,7 +18,7 @@ Future<int> calculateRemainingTrialDays(User? currentUser) async {
   Timestamp trialStartDateTimestamp = Timestamp.fromDate(trialStartDate!);
 
   // Calculate trial duration in days
-  int trialDuration = 37;
+  int trialDuration = 0;
 
   // Calculate elapsed days since trial start date
   DateTime currentDate = DateTime.now();
@@ -100,22 +100,31 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
               }
 
               // Purchase the product
-              final ProductDetails productDetails = response.productDetails.first;
+              final ProductDetails productDetails = response.productDetails.last;
               final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
               await IAPConnection.buyNonConsumable(purchaseParam: purchaseParam);
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              DateTime currentDate = DateTime.now();
-              prefs.setString('last_shown_date', currentDate.toString());
 
-              // Reference to the user document in Firestore
-              DocumentReference<Map<String, dynamic>> userDoc =
-              FirebaseFirestore.instance.collection('users').doc(user.uid);
+              // Listen to the purchase updated stream
+              var purchaseUpdated = IAPConnection.purchaseStream.listen((purchaseDetailsList) {
+                purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+                  if (purchaseDetails.status == PurchaseStatus.purchased) {
+                    // Purchase completed
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    DateTime currentDate = DateTime.now();
+                    prefs.setString('last_shown_date', currentDate.toString());
 
-              // Set the initial 'purchased_full_version' field to false
-              await userDoc.set({'purchased_full_version': true});
+                    // Reference to the user document in Firestore
+                    DocumentReference<Map<String, dynamic>> userDoc =
+                    FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-              // Close the dialog programmatically after purchase
-              Navigator.of(context).pop();
+                    // Set the initial 'purchased_full_version' field to false
+                    await userDoc.set({'purchased_full_version': true});
+
+                    // Close the dialog programmatically after purchase
+                    Navigator.of(context).pop();
+                  }
+                });
+              });
             },
             child: Text('OK'),
           ),
