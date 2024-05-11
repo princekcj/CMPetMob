@@ -182,6 +182,7 @@ class _InitialLoginAdobeExpressOneContainerScreenState
                       width: double.infinity,
                       child: GestureDetector(
                        onTap: () async {
+                            final FirebaseFirestore db = FirebaseFirestore.instance;
                             UserCredential? userCredential = await signInWithGoogle();
                             print("user cred for g is $userCredential");
                             if (userCredential != null) {
