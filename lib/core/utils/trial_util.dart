@@ -109,7 +109,7 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
                 purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
                   if (purchaseDetails.status == PurchaseStatus.purchased) {
                     // Purchase completed
-                    IAPConnection.completePurchase
+                    IAPConnection.completePurchase;
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     DateTime currentDate = DateTime.now();
                     prefs.setString('last_shown_date', currentDate.toString());
