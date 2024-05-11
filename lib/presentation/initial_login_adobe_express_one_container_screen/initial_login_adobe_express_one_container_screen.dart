@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cmpets/routes/app_routes.dart' as routes;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cmpets/core/app_export.dart';
