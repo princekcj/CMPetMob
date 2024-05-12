@@ -126,9 +126,6 @@ Future<void> main() async {
         });
   }
 
-  checkPurchaseStatus();
-
-
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
