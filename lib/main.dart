@@ -44,6 +44,7 @@ Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) {
 
 void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
   User? currentUser = FirebaseAuth.instance.currentUser;
+   bool hasActiveSubscription = false;
 
   purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
     if (purchaseDetails.status == PurchaseStatus.pending) {
