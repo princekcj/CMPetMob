@@ -26,24 +26,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:firebase_analytics/observer.dart';
 
-void checkPurchaseStatus() async {
-  User user = FirebaseAuth.instance.currentUser;
-  DocumentReference<Map<String, dynamic>> userDoc =
-      FirebaseFirestore.instance.collection('users').doc(user.uid);
-
-  final QueryPurchaseDetailsResponse purchaseResponse =
-      await InAppPurchase.instance.queryPastPurchases();
-  final List<PurchaseDetails> purchases = purchaseResponse.pastPurchases;
-
-  bool hasActivePurchase = purchases.any((purchase) =>
-      purchase.status == PurchaseStatus.purchased &&
-      !purchase.billingClientPurchase.isAcknowledged);
-
-  if (!hasActivePurchase) {
-    await userDoc.set({'purchased_full_version': false}, SetOptions(merge: true));
-  }
-}
-
 Future<void> deliverProduct(PurchaseDetails purchaseDetails, User user) async {
   // IMPORTANT!! Always verify purchase details before delivering the product.
   // Reference to the user document in Firestore
@@ -73,7 +55,9 @@ void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
         bool valid = await _verifyPurchase(purchaseDetails);
         if (valid) {
           deliverProduct(purchaseDetails, currentUser!);
-
+          if (purchaseDetails.productID == '1yr') {
+            hasActiveSubscription = true;
+          }
         } else {
 
         }
@@ -84,6 +68,11 @@ void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
       }
     }
   });
+    if (!hasActivePurchase) {
+      DocumentReference<Map<String, dynamic>> userDoc =
+    FirebaseFirestore.instance.collection('users').doc(user.uid);  
+    await userDoc.set({'purchased_full_version': false}, SetOptions(merge: true));
+  }
 }
 
 Future<void> main() async {
