@@ -69,9 +69,9 @@ void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
       }
     }
   });
-    if (!hasActivePurchase) {
+  if (!hasActivePurchase) {
       DocumentReference<Map<String, dynamic>> userDoc =
-    FirebaseFirestore.instance.collection('users').doc(user.uid);  
+    FirebaseFirestore.instance.collection('users').doc(currentUser.uid);  
     await userDoc.set({'purchased_full_version': false}, SetOptions(merge: true));
   }
 }
