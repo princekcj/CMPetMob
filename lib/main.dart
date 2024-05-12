@@ -44,37 +44,38 @@ Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) {
 
 void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
   User? currentUser = FirebaseAuth.instance.currentUser;
-   bool hasActiveSubscription = false;
+  bool hasActiveSubscription = false;
 
-  purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+  purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) {
     if (purchaseDetails.status == PurchaseStatus.pending) {
     } else {
       if (purchaseDetails.status == PurchaseStatus.error) {
 
       } else if (purchaseDetails.status == PurchaseStatus.purchased ||
           purchaseDetails.status == PurchaseStatus.restored) {
-        bool valid = await _verifyPurchase(purchaseDetails);
-        if (valid) {
-          deliverProduct(purchaseDetails, currentUser!);
-          if (purchaseDetails.productID == '1yr') {
-            hasActiveSubscription = true;
-          }
-        } else {
+        _verifyPurchase(purchaseDetails).then((valid) {
+          if (valid) {
+            deliverProduct(purchaseDetails, currentUser!);
+            if (purchaseDetails.productID == '1yr') {
+              hasActiveSubscription = true;
+            }
+          } else {
 
-        }
+          }
+        });
       }
       if (purchaseDetails.pendingCompletePurchase) {
-        await InAppPurchase.instance
-            .completePurchase(purchaseDetails);
+        InAppPurchase.instance.completePurchase(purchaseDetails);
       }
     }
   });
-  if (!hasActivePurchase) {
-      DocumentReference<Map<String, dynamic>> userDoc =
-    FirebaseFirestore.instance.collection('users').doc(currentUser.uid);  
-    await userDoc.set({'purchased_full_version': false}, SetOptions(merge: true));
+  if (!hasActiveSubscription) {
+    DocumentReference<Map<String, dynamic>> userDoc =
+      FirebaseFirestore.instance.collection('users').doc(currentUser.uid);  
+    userDoc.set({'purchased_full_version': false}, SetOptions(merge: true));
   }
 }
+
 
 Future<void> main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
