@@ -370,7 +370,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
         (await rootBundle.load('assets/font/CenturyGothic.ttf'))
             .buffer
             .asByteData();
-    final pw.Font CGFont = pw.Font.ttf(fontData_2)
+    final pw.Font CGFont = pw.Font.ttf(fontData_2);
 
     final ByteData logo = await rootBundle.load(ImageConstant.homepagelogo);
     Uint8List _logo = logo.buffer.asUint8List();
