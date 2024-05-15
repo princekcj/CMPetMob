@@ -372,6 +372,12 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
             .asByteData();
     final pw.Font CGFont = pw.Font.ttf(fontData_2);
 
+       final ByteData fontData_3 =
+        (await rootBundle.load('assets/font/Century-Gothic-Bold.ttf'))
+            .buffer
+            .asByteData();
+    final pw.Font CGBoldFont = pw.Font.ttf(fontData_3);
+
     final ByteData logo = await rootBundle.load(ImageConstant.homepagelogo);
     Uint8List _logo = logo.buffer.asUint8List();
 
@@ -407,7 +413,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     );
 
     final pw.TextStyle regularStyle = pw.TextStyle(fontSize: 16, font: CGFont);
-    final pw.TextStyle regularBoldStyle = pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold, font: CGFont);
+    final pw.TextStyle regularBoldStyle = pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold, font: CGBoldFont);
 
     // Calculate age based on Date of Birth
     final int age = calculateAge(selectedDate);
