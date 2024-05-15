@@ -532,7 +532,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                               pw.Row( children: [
                               pw.Text('Vet Name: ', style: regularBoldStyle),
                               pw.Text(
-                                ${_vetNameController.text.substring(0, _vetNameController.text.length > 15 ? 15 : _vetNameController.text.length)},
+                                '${_vetNameController.text.substring(0, _vetNameController.text.length > 15 ? 15 : _vetNameController.text.length)}',
                                 style: regularStyle,
                               ),
                               ]),
@@ -540,7 +540,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                               pw.Row( children: [
                               pw.Text('Insurance Provider: ', style: regularBoldStyle),
                               pw.Text(
-                                ${_insuranceProviderController.text.substring(0, _insuranceProviderController.text.length > 15 ? 15 : _insuranceProviderController.text.length)},
+                                '${_insuranceProviderController.text.substring(0, _insuranceProviderController.text.length > 15 ? 15 : _insuranceProviderController.text.length)}',
                                 style: regularStyle,
                               ),
                               ]),
