@@ -532,7 +532,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                               pw.Row( children: [
                               pw.Text('Vet Name: ', style: regularBoldStyle),
                               pw.Text(
-                                '${_vetNameController.text}',
+                                ${_vetNameController.text.substring(0, _vetNameController.text.length > 15 ? 15 : _vetNameController.text.length)},
                                 style: regularStyle,
                               ),
                               ]),
@@ -540,7 +540,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                               pw.Row( children: [
                               pw.Text('Insurance Provider: ', style: regularBoldStyle),
                               pw.Text(
-                                ' ${_insuranceProviderController.text}',
+                                ${_insuranceProviderController.text.substring(0, _insuranceProviderController.text.length > 15 ? 15 : _insuranceProviderController.text.length)},
                                 style: regularStyle,
                               ),
                               ]),
@@ -1413,7 +1413,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                   child: TextField(
                     controller: _vetNameController,
                     decoration: InputDecoration(
-                      hintText: 'Enter vet name',
+                      hintText: '20 Char Limit - Enter vet name',
                       contentPadding: EdgeInsets.symmetric(vertical: 8),
                     ),
                     enabled: isEditing || widget.petName == null,
@@ -1443,7 +1443,7 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
                   child: TextField(
                     controller: _insuranceProviderController,
                     decoration: InputDecoration(
-                      hintText: 'Enter insurance provider',
+                      hintText: '20 Char Limit - Enter insurance provider',
                       contentPadding: EdgeInsets.symmetric(vertical: 8),
                     ),
                     enabled: isEditing || widget.petName == null,
