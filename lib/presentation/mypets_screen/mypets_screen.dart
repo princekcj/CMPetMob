@@ -64,13 +64,13 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       endDrawer: CustomDrawer(),
-      appBar: CustomTopAppBar(
-        Enabled: false,
-        onTapArrowLeft: (context) {
-          Navigator.pop(context);
-        },
-        onMenuPressed: toggleMenu,
-      ),
+        appBar: top_bar.CustomTopAppBar(
+          Enabled: false,
+          onTapArrowLeft: (context) {
+            Navigator.pop(context);
+          },
+          onMenuPressed: toggleMenu,
+        ),
       body: Column(
         children: [
           Expanded(
