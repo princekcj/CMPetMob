@@ -224,7 +224,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
       petImage = ImageConstant.hamster;
     }
 
-    return Tab(
+ return Tab(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
