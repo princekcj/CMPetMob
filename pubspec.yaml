@@ -62,7 +62,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path_ios: "assets/images/1024.png"
+  image_path_ios: "assets/images/1024.jpg"
   image_path: "assets/images/LogoFINALCIRCLE.png"
   remove_alpha_ios: true
 flutter:
