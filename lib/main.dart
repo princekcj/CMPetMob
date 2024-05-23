@@ -58,6 +58,8 @@ void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
             deliverProduct(purchaseDetails, currentUser!);
             if (purchaseDetails.productID == '1yr') {
               hasActiveSubscription = true;
+            } else if (purchaseDetails.productID == 'lifetime') {
+              hasActiveSubscription = true;
             }
           } else {
 
