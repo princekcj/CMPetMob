@@ -48,11 +48,11 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
     _initGoogleMobileAds();
     if (Platform.isAndroid) {
       setState(() {
-        adUnitId = "ca-app-pub-6582216210181422/8146573319";
+        adUnitId = "ca-app-pub-3940256099942544/2247696110";
       });
     } else if (Platform.isIOS) {
       setState(() {
-        adUnitId = "ca-app-pub-6582216210181422/5384678606";
+        adUnitId = "ca-app-pub-3940256099942544/3986624511";
       });
     } else {
       throw UnsupportedError("Unsupported platform");
