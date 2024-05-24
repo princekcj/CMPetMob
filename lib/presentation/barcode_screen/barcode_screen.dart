@@ -48,7 +48,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
     _initGoogleMobileAds();
     if (Platform.isAndroid) {
       setState(() {
-        adUnitId = "ca-app-pub-6582216210181422/5402531185";
+        adUnitId = "ca-app-pub-6582216210181422/8146573319";
       });
     } else if (Platform.isIOS) {
       setState(() {
