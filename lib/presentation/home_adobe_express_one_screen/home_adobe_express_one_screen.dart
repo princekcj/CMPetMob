@@ -46,6 +46,8 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   bool isLeaderboardExpanded = false;
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   final Duration maxCacheDuration = Duration(hours: 4);
+  bool hasRunOnce = false;
+
 
   /// Keep track of load time so we don't show an expired ad.
   DateTime? _appOpenLoadTime;
@@ -731,6 +733,8 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
 }
 
 Future<PetFact> getRandomPetFacts() async {
+  if (!hasRunOnce) {
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int lastFactChangeTime = prefs.getInt('lastFactChangeTime') ?? 0;
   String lastFact = prefs.getString('lastFact') ?? '';
@@ -738,14 +742,17 @@ Future<PetFact> getRandomPetFacts() async {
   int now = DateTime.now().millisecondsSinceEpoch;
 
   if (now - lastFactChangeTime < Duration(hours: 24).inMilliseconds) {
+	hasRunOnce = true;	
     return PetFact(fact: lastFact, img: ImageConstant.petblogimg); // Return cached fact
   } else {
     List<PetFact> possiblePetFacts = await _readJsonFile();
     PetFact newFact = _selectRandomPetFact(possiblePetFacts);
     prefs.setInt('lastFactChangeTime', now);
     prefs.setString('lastFact', newFact.fact);
+    hasRunOnce = true;
     return newFact;
   }
+}
 }
 
 Future<List<PetFact>> _readJsonFile() async {
