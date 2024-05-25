@@ -732,32 +732,29 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   }
 }
 
+
 Future<PetFact> getRandomPetFacts() async {
   if (!hasRunOnce) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int lastFactChangeTime = prefs.getInt('lastFactChangeTime') ?? 0;
+    String lastFact = prefs.getString('lastFact') ?? '';
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  int lastFactChangeTime = prefs.getInt('lastFactChangeTime') ?? 0;
-  String lastFact = prefs.getString('lastFact') ?? '';
+    int now = DateTime.now().millisecondsSinceEpoch;
 
-  int now = DateTime.now().millisecondsSinceEpoch;
-
-  if (now - lastFactChangeTime < Duration(hours: 24).inMilliseconds) {
-	setState(() {
-	hasRunOnce = true;
-	   });		   
-    return PetFact(fact: lastFact, img: ImageConstant.petblogimg); // Return cached fact
-  } else {
-    List<PetFact> possiblePetFacts = await _readJsonFile();
-    PetFact newFact = _selectRandomPetFact(possiblePetFacts);
-    prefs.setInt('lastFactChangeTime', now);
-    prefs.setString('lastFact', newFact.fact);
-   setState(() {
-	hasRunOnce = true;
-	   });
-    return newFact;
+    if (now - lastFactChangeTime < Duration(hours: 24).inMilliseconds) {
+      hasRunOnce = true;
+      return PetFact(fact: lastFact, img: ImageConstant.petblogimg); // Return cached fact
+    } else {
+      List<PetFact> possiblePetFacts = await _readJsonFile();
+      PetFact newFact = _selectRandomPetFact(possiblePetFacts);
+      prefs.setInt('lastFactChangeTime', now);
+      prefs.setString('lastFact', newFact.fact);
+      hasRunOnce = true;
+      return newFact;
+    }
   }
 }
-}
+
 
 Future<List<PetFact>> _readJsonFile() async {
   String jsonString = await rootBundle.loadString(
