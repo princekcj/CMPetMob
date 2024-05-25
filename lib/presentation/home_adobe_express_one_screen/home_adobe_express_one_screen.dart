@@ -742,14 +742,18 @@ Future<PetFact> getRandomPetFacts() async {
   int now = DateTime.now().millisecondsSinceEpoch;
 
   if (now - lastFactChangeTime < Duration(hours: 24).inMilliseconds) {
-	hasRunOnce = true;	
+	setState(() {
+	hasRunOnce = true;
+	   })		   
     return PetFact(fact: lastFact, img: ImageConstant.petblogimg); // Return cached fact
   } else {
     List<PetFact> possiblePetFacts = await _readJsonFile();
     PetFact newFact = _selectRandomPetFact(possiblePetFacts);
     prefs.setInt('lastFactChangeTime', now);
     prefs.setString('lastFact', newFact.fact);
-    hasRunOnce = true;
+   setState(() {
+	hasRunOnce = true;
+	   })
     return newFact;
   }
 }
