@@ -157,264 +157,145 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
         ),
         Expanded(
             child: ListView.builder(
-          itemCount: carouselsData.length,
-          itemBuilder: (context, index) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 36),
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 200,
-                    enableInfiniteScroll: false,
-                    enlargeCenterPage: true,
-                    viewportFraction: 0.8,
-                  ),
-                  items: carouselsData[index]['items'].map<Widget>((item) {
-                    if (item == 'Ad') {
-                      return FutureBuilder<void>(
-                        future: initAds(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Container(
-                              height: 200,
-                              color: Colors.white, // Placeholder color
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                    color:
+              itemCount: carouselsData.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height: 36),
+                    CarouselSlider(
+                      options: CarouselOptions(
+                        height: 200,
+                        enableInfiniteScroll: false,
+                        enlargeCenterPage: true,
+                        viewportFraction: 0.8,
+                      ),
+                      items: carouselsData[index]['items'].map<Widget>((item) {
+                        if (item == 'Ad') {
+                          return FutureBuilder<void>(
+                            future: initAds(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Container(
+                                  height: 200,
+                                  color: Colors.white, // Placeholder color
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                        color:
                                         Color(0xFF008C8C)), // Loading indicator
-                              ),
-                            );
-                          } else if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            // Find the AdWidget corresponding to this 'Ad' item
-                            AdWidget? adWidget = adWidgets.isNotEmpty
-                                ? adWidgets.removeAt(0)
-                                : null;
+                                  ),
+                                );
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                // Find the AdWidget corresponding to this 'Ad' item
+                                AdWidget? adWidget = adWidgets.isNotEmpty
+                                    ? adWidgets.removeAt(0)
+                                    : null;
 
-                            // Display the AdMob banner ad if available, otherwise show a placeholder
-                            return adWidget ??
-                                Container(
+                                // Display the AdMob banner ad if available, otherwise show a placeholder
+                                return adWidget ??
+                                    Container(
+                                      height: 200,
+                                      color: Colors.white, // Placeholder color
+                                    );
+                              } else {
+                                return Container(
                                   height: 200,
                                   color: Colors.white, // Placeholder color
                                 );
-                          } else {
-                            return Container(
-                              height: 200,
-                              color: Colors.white, // Placeholder color
-                            );
-                          }
-                        },
-                      );
-                    } else if (item == 'YouTube Recent Video') {
-                      String displayUrl =
-                          'https://www.youtube.com/shorts/0hOWcur29Hc';
-                      // Display YouTube video thumbnail
-                      return FutureBuilder<String>(
-                        future: _getYouTubeThumbnailUrl(displayUrl),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(
-                                child: CircularProgressIndicator(
-                                    color: Color(0xFF008C8C)));
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else if (snapshot.hasData) {
-                            return InkWell(
-                              onTap: () {
-                                final Uri ytURL = Uri.parse(displayUrl);
-                                _launch(ytURL);
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                    8.0), // Set the border radius
-                                child: CachedNetworkImage(
-                                  imageUrl: snapshot.data!,
-                                  cacheManager: CustomCacheManager.instance,
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Container(
+                              }
+                            },
+                          );
+                        } else if (item == 'YouTube Recent Video') {
+                          String displayUrl =
+                              'https://www.youtube.com/shorts/0hOWcur29Hc';
+                          // Display YouTube video thumbnail
+                          return FutureBuilder<String>(
+                            future: _getYouTubeThumbnailUrl(displayUrl),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                        color: Color(0xFF008C8C)));
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else if (snapshot.hasData) {
+                                return InkWell(
+                                  onTap: () {
+                                    final Uri ytURL = Uri.parse(displayUrl);
+                                    _launch(ytURL);
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        8.0), // Set the border radius
+                                    child: CachedNetworkImage(
+                                      imageUrl: snapshot.data!,
+                                      cacheManager: CustomCacheManager.instance,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Container(
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey, // Placeholder color
+                                    borderRadius: BorderRadius.circular(
+                                        8.0), // Set the border radius
+                                  ),
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                        color: Color(0xFF008C8C)),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        } else if (item == 'Leaderboard') {
+                          // Inside your build method
+                          // Display the leaderboard
+                          return InkWell(
+                            onTap: () {
+                              // Toggle the leaderboard expansion state
+                              // Show the leaderboard in a popup
+                              _showLeaderboardPopup();
+                            },
+                            child: Container(
                               height: 200,
                               decoration: BoxDecoration(
-                                color: Colors.grey, // Placeholder color
+                                color: Color(0xFF008C8C),
+                                // Customize the background color
                                 borderRadius: BorderRadius.circular(
                                     8.0), // Set the border radius
                               ),
                               child: Center(
-                                child: CircularProgressIndicator(
-                                    color: Color(0xFF008C8C)),
-                              ),
-                            );
-                          }
-                        },
-                      );
-                    } else if (item == 'Leaderboard') {
-                      // Inside your build method
-                      // Display the leaderboard
-                      return InkWell(
-                        onTap: () {
-                          // Toggle the leaderboard expansion state
-                          // Show the leaderboard in a popup
-                          _showLeaderboardPopup();
-                        },
-                        child: Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF008C8C),
-                            // Customize the background color
-                            borderRadius: BorderRadius.circular(
-                                8.0), // Set the border radius
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Leaderboard',
-                              style:
+                                child: Text(
+                                  'Leaderboard',
+                                  style:
                                   TextStyle(color: Colors.white, fontSize: 24),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    } else if (item == 'Blog') {
-                      if (possibleBlogUrls.isNotEmpty) {
-                        WordPressPost? post = getRandomPost(possibleBlogUrls);
+                          );
+                        } else if (item == 'Blog') {
+                          if (possibleBlogUrls.isNotEmpty) {
+                            WordPressPost? post = getRandomPost(
+                                possibleBlogUrls);
 
-                        return InkWell(
-                          onTap: () {
-                            final Uri postURL = Uri.parse(post!.link);
-                            _launch(postURL);
-                          },
-                          child: Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: CachedNetworkImageProvider(
-                                  post!.contentSrc,
-                                  cacheManager: CustomCacheManager.instance,
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.white.withOpacity(1.0),
-                                          Colors.white.withOpacity(0.9),
-                                          Colors.white.withOpacity(0.1),
-                                        ],
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 16.0, vertical: 8.0),
-                                    child: Html(
-                                      data: post.title,
-                                      style: {
-                                        'body': Style(
-                                          color: Colors.black,
-                                          // Change the text color as needed
-                                          fontSize: FontSize(24),
-                                        ),
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Container(
-                          child: Center(
-                            child: CircularProgressIndicator(
-                                color: Color(0xFF008C8C)),
-                          ),
-                        );
-                      }
-                    } else if (item == 'Feedback Link') {
-                      // 'Feedback Link' logic to open Google Form
-                      return InkWell(
-                        onTap: () {
-                          launchGoogleForm(); // Function to open Google Form
-                        },
-                        child: Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(ImageConstant.feedback),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.white.withOpacity(1.0),
-                                        Colors.white.withOpacity(0.9),
-                                        Colors.white.withOpacity(0.1),
-                                      ],
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 16.0, vertical: 8.0),
-                                  child: Html(
-                                    data: '',
-                                    style: {
-                                      'body': Style(
-                                        color: Colors.black,
-                                        // Change the text color as needed
-                                        fontSize: FontSize(24),
-                                      ),
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    } else if (item == 'Pet Fact') {
-                      // 'Feedback Link' logic to open Google Form
-                      return FutureBuilder<PetFact>(
-                        future: getRandomPetFacts(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator(); // or some other loading indicator
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            PetFact fact = snapshot.data!;
                             return InkWell(
                               onTap: () {
-                                // Do something on tap
+                                final Uri postURL = Uri.parse(post!.link);
+                                _launch(postURL);
                               },
                               child: Container(
                                 height: 200,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage(fact.img),
+                                    image: CachedNetworkImageProvider(
+                                      post!.contentSrc,
+                                      cacheManager: CustomCacheManager.instance,
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                                   borderRadius: BorderRadius.circular(8),
@@ -438,15 +319,16 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                                           ),
                                         ),
                                         padding: EdgeInsets.symmetric(
-                                          horizontal: 16.0,
-                                          vertical: 8.0,
-                                        ),
-                                        child: Text(
-                                          fact.fact,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                          ),
+                                            horizontal: 16.0, vertical: 8.0),
+                                        child: Html(
+                                          data: post.title,
+                                          style: {
+                                            'body': Style(
+                                              color: Colors.black,
+                                              // Change the text color as needed
+                                              fontSize: FontSize(24),
+                                            ),
+                                          },
                                         ),
                                       ),
                                     ),
@@ -454,59 +336,179 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                                 ),
                               ),
                             );
-                          }
-                        },
-                      );
-                    } else if (item == 'Instagram') {
-                      InstagramPost? IPost =
-                          getRandomInstaPost(possibleInstagramUrls);
-                      return IPost != null
-                          ? InkWell(
-                              onTap: () {
-                                // Handle the tap event
-                              },
-                              child: Container(
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: CachedNetworkImageProvider(
-                                      IPost.mediaUrl,
-                                      cacheManager: CustomCacheManager.instance,
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                          } else {
+                            return Container(
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                    color: Color(0xFF008C8C)),
                               ),
-                            )
-                          : Center(
-                              // Show a loading indicator if IPost is null
-                              child: CircularProgressIndicator(
-                                  color: Color(0xFF008C8C)),
                             );
-                    } else {
-                      // Display other items
-                      return Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.blueGrey,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Text(
-                            item,
-                            style: TextStyle(color: Colors.white, fontSize: 24),
-                          ),
-                        ),
-                      );
-                    }
-                  }).toList(),
-                ),
-                SizedBox(height: 36),
-              ],
-            );
-          },
-        ))
+                          }
+                        } else if (item == 'Feedback Link') {
+                          // 'Feedback Link' logic to open Google Form
+                          return InkWell(
+                            onTap: () {
+                              launchGoogleForm(); // Function to open Google Form
+                            },
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(ImageConstant.feedback),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.white.withOpacity(1.0),
+                                            Colors.white.withOpacity(0.9),
+                                            Colors.white.withOpacity(0.1),
+                                          ],
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 8.0),
+                                      child: Html(
+                                        data: '',
+                                        style: {
+                                          'body': Style(
+                                            color: Colors.black,
+                                            // Change the text color as needed
+                                            fontSize: FontSize(24),
+                                          ),
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else if (item == 'Pet Fact') {
+                          // 'Feedback Link' logic to open Google Form
+                          return FutureBuilder<PetFact>(
+                            future: getRandomPetFacts(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator(); // or some other loading indicator
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                PetFact fact = snapshot.data!;
+                                return InkWell(
+                                  onTap: () {
+                                    // Do something on tap
+                                  },
+                                  child: Container(
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(fact.img),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          top: 0,
+                                          left: 0,
+                                          right: 0,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Colors.white.withOpacity(1.0),
+                                                  Colors.white.withOpacity(0.9),
+                                                  Colors.white.withOpacity(0.1),
+                                                ],
+                                              ),
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 16.0,
+                                              vertical: 8.0,
+                                            ),
+                                            child: Text(
+                                              fact.fact,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        } else if (item == 'Instagram') {
+                          InstagramPost? IPost =
+                          getRandomInstaPost(possibleInstagramUrls);
+                          return IPost != null
+                              ? InkWell(
+                            onTap: () {
+                              // Handle the tap event
+                            },
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                    IPost.mediaUrl,
+                                    cacheManager: CustomCacheManager.instance,
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          )
+                              : Center(
+                            // Show a loading indicator if IPost is null
+                            child: CircularProgressIndicator(
+                                color: Color(0xFF008C8C)),
+                          );
+                        } else {
+                          // Display other items
+                          return Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                item,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 24),
+                              ),
+                            ),
+                          );
+                        }
+                      }).toList(),
+                    ),
+                    SizedBox(height: 36),
+                  ],
+                );
+              },
+            ))
       ]),
       extendBody: true,
       floatingActionButton: Container(
@@ -515,9 +517,9 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
         child: FittedBox(
           child: FloatingActionButton(
             backgroundColor:
-                Color(0xFF008C8C), // Set the background color to blue
+            Color(0xFF008C8C), // Set the background color to blue
             child:
-                Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
+            Image.asset(ImageConstant.searchbutton, width: 40, height: 40),
             shape: RoundedRectangleBorder(
               side: BorderSide(
                   color: ColorConstant.fromHex('#a3ccff'), width: 2.0),
@@ -527,7 +529,10 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
             onPressed: () {
               // Check if the current route is not already the search route
 
-              if (ModalRoute.of(context)!.settings.name !=
+              if (ModalRoute
+                  .of(context)!
+                  .settings
+                  .name !=
                   AppRoutes.barcodeScreen) {
                 Navigator.pushReplacement(
                   context,
@@ -609,7 +614,8 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                   backgroundColor: Colors.white70,
                 ),
               ),
-            )..load();
+            )
+              ..load();
 
             AdWidget adWidget = AdWidget(ad: nativeAd);
             adWidgets.add(adWidget);
@@ -673,7 +679,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
                     headingRowHeight: 40,
                     horizontalMargin: 0,
                     rows:
-                        List<DataRow>.generate(leaderboardData.length, (index) {
+                    List<DataRow>.generate(leaderboardData.length, (index) {
                       int rank = index + 1;
                       var leader = leaderboardData[index];
 
@@ -730,7 +736,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     _ytExplode.close();
     _nativeAd?.dispose();
   }
-}
 
 
   Future<PetFact> getRandomPetFacts() async {
@@ -739,13 +744,16 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
       int lastFactChangeTime = prefs.getInt('lastFactChangeTime') ?? 0;
       String lastFact = prefs.getString('lastFact') ?? '';
 
-      int now = DateTime.now().millisecondsSinceEpoch;
+      int now = DateTime
+          .now()
+          .millisecondsSinceEpoch;
 
       if (now - lastFactChangeTime < Duration(hours: 24).inMilliseconds) {
         setState(() {
           hasRunOnce = true;
         });
-        return PetFact(fact: lastFact, img: ImageConstant.petblogimg); // Return cached fact
+        return PetFact(fact: lastFact,
+            img: ImageConstant.petblogimg); // Return cached fact
       } else {
         List<PetFact> possiblePetFacts = await _readJsonFile();
         PetFact newFact = _selectRandomPetFact(possiblePetFacts);
@@ -760,7 +768,7 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
     // Add a default return statement to avoid null return
     return PetFact(fact: 'Default fact', img: ImageConstant.petblogimg);
   }
-
+}
 
 Future<List<PetFact>> _readJsonFile() async {
   String jsonString = await rootBundle.loadString(
