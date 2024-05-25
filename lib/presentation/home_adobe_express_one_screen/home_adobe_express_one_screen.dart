@@ -739,8 +739,8 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
 
 
   Future<PetFact> getRandomPetFacts() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!hasRunOnce) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       int lastFactChangeTime = prefs.getInt('lastFactChangeTime') ?? 0;
       String lastFact = prefs.getString('lastFact') ?? '';
 
@@ -766,7 +766,8 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
       }
     }
     // Add a default return statement to avoid null return
-    return PetFact(fact: 'Default fact', img: ImageConstant.petblogimg);
+    String lastFact = prefs.getString('lastFact') ?? '';
+    return PetFact(fact: lastFact, img: ImageConstant.petblogimg);
   }
 }
 
