@@ -52,7 +52,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
       });
     } else if (Platform.isIOS) {
       setState(() {
-        adUnitId = "ca-app-pub-3940256099942544/3986624511";
+        adUnitId = "ca-app-pub-6582216210181422/5384678606";
       });
     } else {
       throw UnsupportedError("Unsupported platform");
