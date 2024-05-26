@@ -60,6 +60,8 @@ void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
               hasActiveSubscription = true;
             } else if (purchaseDetails.productID == 'lifetime') {
               hasActiveSubscription = true;
+            } else if (purchaseDetails.productID == 'annual') {
+              hasActiveSubscription = true;
             }
           } else {
 
