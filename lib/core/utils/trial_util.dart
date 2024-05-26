@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -90,42 +91,56 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
         actions: <Widget>[
           TextButton(
             onPressed: () async {
-              // Fetch the products from the store
-              final IAPConnection = InAppPurchase.instance;
-              const Set<String> _kIds = {'annual'};
-              final ProductDetailsResponse response = await IAPConnection.queryProductDetails(_kIds);
+              if (Platform.isAndroid) {
+                // Fetch the products from the store
+                final IAPConnection = InAppPurchase.instance;
+                const Set<String> _kIds = {'annual'};
+                final ProductDetailsResponse response = await IAPConnection
+                    .queryProductDetails(_kIds);
 
-              if (response.notFoundIDs.isNotEmpty) {
-                // Handle the error of not finding the IDs
-              }
+                if (response.notFoundIDs.isNotEmpty) {
+                  // Handle the error of not finding the IDs
+                }
 
-              // Purchase the product
-              final ProductDetails productDetails = response.productDetails.last;
-              final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
-              await IAPConnection.buyNonConsumable(purchaseParam: purchaseParam);
+                // Purchase the product
+                final ProductDetails productDetails = response.productDetails
+                    .last;
+                final PurchaseParam purchaseParam = PurchaseParam(
+                    productDetails: productDetails);
+                await IAPConnection.buyNonConsumable(
+                    purchaseParam: purchaseParam);
 
-              // Listen to the purchase updated stream
-              var purchaseUpdated = IAPConnection.purchaseStream.listen((purchaseDetailsList) {
-                purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
-                  if (purchaseDetails.status == PurchaseStatus.purchased) {
-                    // Purchase completed
-                    IAPConnection.completePurchase;
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    DateTime currentDate = DateTime.now();
-                    prefs.setString('last_shown_date', currentDate.toString());
+                // Listen to the purchase updated stream
+                var purchaseUpdated = IAPConnection.purchaseStream.listen((
+                    purchaseDetailsList) {
+                  purchaseDetailsList.forEach((
+                      PurchaseDetails purchaseDetails) async {
+                    if (purchaseDetails.status == PurchaseStatus.purchased) {
+                      // Purchase completed
+                      IAPConnection.completePurchase;
+                      SharedPreferences prefs = await SharedPreferences
+                          .getInstance();
+                      DateTime currentDate = DateTime.now();
+                      prefs.setString(
+                          'last_shown_date', currentDate.toString());
 
-                    // Reference to the user document in Firestore
-                    DocumentReference<Map<String, dynamic>> userDoc =
-                    FirebaseFirestore.instance.collection('users').doc(user.uid);
+                      // Reference to the user document in Firestore
+                      DocumentReference<Map<String, dynamic>> userDoc =
+                      FirebaseFirestore.instance.collection('users').doc(
+                          user.uid);
 
-                    // Set the initial 'purchased_full_version' field to false
-                    await userDoc.set({'purchased_full_version': true});
+                      // Set the initial 'purchased_full_version' field to false
+                      await userDoc.set({'purchased_full_version': true});
 
-                    // Close the dialog programmatically after purchase
-                    Navigator.of(context).pop();
-                  }
+                      // Close the dialog programmatically after purchase
+                      Navigator.of(context).pop();
+                    }
+                  });
                 });
-              });
+              } else if (Platform.isIOS) {
+                // Close the dialog programmatically after purchase
+                Navigator.of(context).pop();
+              }
             },
             child: Text('OK'),
           ),
