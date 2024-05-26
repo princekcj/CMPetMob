@@ -100,7 +100,7 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
               }
 
               // Purchase the product
-              final ProductDetails productDetails = response.productDetails.last;
+              final ProductDetails productDetails = response.productDetails.first;
               final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
               await IAPConnection.buyNonConsumable(purchaseParam: purchaseParam);
 
