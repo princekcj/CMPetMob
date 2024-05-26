@@ -92,7 +92,7 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
             onPressed: () async {
               // Fetch the products from the store
               final IAPConnection = InAppPurchase.instance;
-              const Set<String> _kIds = {'1yr'};
+              const Set<String> _kIds = {'annual'};
               final ProductDetailsResponse response = await IAPConnection.queryProductDetails(_kIds);
 
               if (response.notFoundIDs.isNotEmpty) {
@@ -100,7 +100,7 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
               }
 
               // Purchase the product
-              final ProductDetails productDetails = response.productDetails.first;
+              final ProductDetails productDetails = response.productDetails.last;
               final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
               await IAPConnection.buyNonConsumable(purchaseParam: purchaseParam);
 
