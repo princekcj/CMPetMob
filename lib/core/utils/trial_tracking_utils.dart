@@ -17,7 +17,7 @@ class TimeTrackingUtils {
         final elapsedDays = currentTime.difference(creationTime!).inDays;
 
         // Update the 'trial_time_completed' field
-        if (elapsedDays >= 7) {
+        if (elapsedDays >= 0) {
           await userDoc.update({'trial_time_completed': true});
           print('User has completed the trial period.');
         } else {
