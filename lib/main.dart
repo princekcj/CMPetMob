@@ -100,14 +100,12 @@ Future<void> main() async {
   analytics.logAppOpen();
 
   // thing to add
-  List<String> testDeviceIds = ['33BE2250B43518CCDA7DE426D04EE231'];
   await MobileAds.instance.initialize().then(
     (InitializationStatus status) {
       MobileAds.instance.updateRequestConfiguration(
         RequestConfiguration(
           tagForChildDirectedTreatment:
               TagForChildDirectedTreatment.unspecified,
-          testDeviceIds: testDeviceIds,
         ),
       );
       debugPrint('Initialization done: ${status.adapterStatuses}');
@@ -195,7 +193,7 @@ class MyApp extends StatelessWidget {
           future: calculateRemainingTrialDays(currentUser),
           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data! < 8) {
+              if (snapshot.hasData && snapshot.data! < 7) {
                 timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
                   // Rest of your code where you use isPurchased
                   // Make sure to handle the logic dependent on isPurchased here
