@@ -91,6 +91,7 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
         actions: <Widget>[
           TextButton(
             onPressed: () async {
+              if (Platform.isAndroid) {
                 // Fetch the products from the store
                 final IAPConnection = InAppPurchase.instance;
                 const Set<String> _kIds = {'annual'};
@@ -136,6 +137,10 @@ void showTrialEndedPopup(BuildContext context, int remainingDays, User user) {
                     }
                   });
                 });
+              } else if (Platform.isIOS) {
+                // Close the dialog programmatically after purchase
+                Navigator.of(context).pop();
+              }
             },
             child: Text('OK'),
           ),
