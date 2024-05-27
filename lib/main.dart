@@ -189,7 +189,7 @@ class MyApp extends StatelessWidget {
             }
           },
         );
-      } else if (!trialTimeCompleted && showPopup){
+      } else if (!trialTimeCompleted){
         // Set the home widget to BarcodeScanScreen for authenticated users
         homeWidget = FutureBuilder<int>(
           future: calculateRemainingTrialDays(currentUser),
