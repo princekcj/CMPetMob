@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>261791967363-tk06au2j0rt33l1lqr77nc7nade3ur8p.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.261791967363-tk06au2j0rt33l1lqr77nc7nade3ur8p</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>261791967363-22dbtn121ubouav0jervnjb4omlf496n.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBZiv3mnbKYiPrikdG1OOwZPcMBzRK4c5o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>261791967363</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.cmpets.cmpets</string>
+	<key>PROJECT_ID</key>
+	<string>cmpet-65cfd</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cmpet-65cfd.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:261791967363:ios:1d53c88e4bfd0ef15bd3b6</string>
+	<key>DATABASE_URL</key>
+	<string>https://cmpet-65cfd-default-rtdb.europe-west1.firebasedatabase.app</string>
+	<key>ADMOB_APP_ID</key>
+	<string>ca-app-pub-6582216210181422~9860882454</string>
+</dict>
+</plist>
