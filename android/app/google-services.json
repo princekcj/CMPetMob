@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "261791967363-22dbtn121ubouav0jervnjb4omlf496n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cmpets.app",
+            "certificate_hash": "d8eb5ae5ea89a6877f3bfe6e25b8ed3e9f23cbef"
+          }
+        },
+        {
+          "client_id": "261791967363-ic1kl5anf0apj7tio4pm9106irnkt4am.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cmpets.app",
+            "certificate_hash": "8b8bcbc54e333e999ae483f14eda434e604cb87f"
+          }
+        },
+        {
           "client_id": "261791967363-jr1et351m60g99qce57cf1jb09k318r0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -56,7 +72,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-6582216210181422~5602035254"
     }
   ],
   "configuration_version": "1"
