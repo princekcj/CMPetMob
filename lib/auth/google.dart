@@ -2,9 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 Future<UserCredential?> signInWithGoogle() async {
+const List<String> scopes = <String>[
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly',
+];
+  
   try {
     final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: '261791967363-osr139fi1bihvfogns9mfj2rtgu7orqc.apps.googleusercontent.com',
+        scopes: scopes,
     );
     final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
 
