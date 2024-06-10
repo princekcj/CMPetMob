@@ -170,60 +170,6 @@ class _InitialLoginAdobeExpressOneContainerScreenState
               ],
             ),
             SizedBox(height: 20),
-            // Adjust the spacing as needed
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly space the buttons
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add padding to the left and right
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: GestureDetector(
-                       onTap: () async {
-                            final FirebaseFirestore db = FirebaseFirestore.instance;
-                            UserCredential? userCredential = await signInWithGoogle();
-                            print("user cred for g is $userCredential");
-                            if (userCredential != null) {
-                              final User? user = userCredential.user;
-                              if (user != null) {
-                                final DocumentReference docRef = db.collection('users').doc(user.uid);
-                          
-                                // Check if user document exists
-                                final DocumentSnapshot docSnap = await docRef.get();
-                          
-                                if (!docSnap.exists) {
-                                  // If the user document doesn't exist, create it
-                                  final userCreds = <String, dynamic>{
-                                    'email': user.email,
-                                    'forename': user.displayName,
-                                    'surname': '',  // Update this as needed
-                                    'attributes': {
-                                      'firstName': user.displayName,
-                                      'lastName': '',  // Update this as needed
-                                      'email': user.email,
-                                    },
-                                  };
-                          
-                                  await docRef.set(userCreds);
-                                }
-                                Navigator.pushReplacementNamed(context, AppRoutes.barcodeScreen);
-                              }
-                            }
-                          },
-                        child: Image.asset(
-                          ImageConstant.google, // Replace with the path to your Facebook icon image
-                          height: 36,
-                          // You can also specify additional properties like width, alignment, etc.
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
