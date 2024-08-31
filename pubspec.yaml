@@ -21,7 +21,7 @@ dependencies:
   intl: ^0.18.0
   image_picker: ^0.8.4  # Add the latest version
   permission_handler: ^11.0.1
-  carousel_slider: ^4.0.0
+  carousel_slider_plus: ^6.0.0
   flutter_barcode_scanner: ^2.0.0  # Use the version that is compatible with your Flutter version
   social_media_buttons: ^1.0.0
   share_plus: ^2.0.1
