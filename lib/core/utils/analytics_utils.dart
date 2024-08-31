@@ -9,7 +9,7 @@ FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 void logSearchEvent() {
   analytics.logEvent(
     name: 'search_event',
-    parameters: <String, dynamic>{},
+    parameters: <String, Object>{},  // Cast to Map<String, Object>
   );
 }
 
@@ -18,7 +18,7 @@ void logScanEvent(User? userId) {
   updateScanCount(userId);
   analytics.logEvent(
     name: 'scan_event',
-    parameters: <String, dynamic>{
+    parameters: <String, Object>{
       'user_id': userId!.uid
     },
   );
@@ -28,7 +28,7 @@ void logScanEvent(User? userId) {
 void logScreenUsageEvent(String screenName) {
   analytics.logEvent(
     name: 'screen_usage_event',
-    parameters: <String, dynamic>{
+    parameters: <String, Object>{
       'screen_name': screenName,
     },
   );
