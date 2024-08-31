@@ -16,7 +16,7 @@ import 'package:cmpets/core/app_export.dart';
 import 'package:cmpets/widgets/app_bar/topappbar.dart' as top_bar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:pdf/pdf.dart';
