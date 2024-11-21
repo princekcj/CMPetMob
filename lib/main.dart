@@ -156,82 +156,29 @@ class MyApp extends StatelessWidget {
     // Variable to hold the home widget
     Widget homeWidget;
 
-    if (userAuthenticated) {
-      // Get the current user
-      User? currentUser = FirebaseAuth.instance.currentUser;
-
-      // Call the function to update trial time flag if needed
-      bool trialTimeCompleted = timeTrackingUtils.updateTrialTimeFlagIfNeeded(currentUser);
-      bool showPopup = shouldShowPopup();
-
-
-      // If trial time is not completed, show a popup if needed
-      if (trialTimeCompleted) {
-        homeWidget = FutureBuilder<int>(
-          future: calculateRemainingTrialDays(currentUser),
-          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data! <= 0) {
-                // Handle the asynchronous nature of isFullVersionPurchased
-                timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
-                  // Rest of your code where you use isPurchased
-                  // Make sure to handle the logic dependent on isPurchased here
-                  if (!isPurchased) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showTrialEndedPopup(context, snapshot.data!, currentUser!);
-                    });
-                  }
-                });
-              }
-              return BarcodeScanScreen();
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
-        );
-      } else if (!trialTimeCompleted){
-        // Set the home widget to BarcodeScanScreen for authenticated users
-        homeWidget = FutureBuilder<int>(
-          future: calculateRemainingTrialDays(currentUser),
-          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data! < 7) {
-                timeTrackingUtils.isFullVersionPurchased(currentUser).then((bool isPurchased) {
-                  // Rest of your code where you use isPurchased
-                  // Make sure to handle the logic dependent on isPurchased here
-                  if (!isPurchased) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showTrialPopup(context, snapshot.data!);
-                    });
-                  };
-                });
-              }
-              return BarcodeScanScreen();
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
-        );
-      } else {
+       if (userAuthenticated) {
+        // Get the current user
+        User? currentUser = FirebaseAuth.instance.currentUser;
+      
         // Set the home widget to BarcodeScanScreen for authenticated users
         homeWidget = BarcodeScanScreen();
+      } else {
+        // Set the home widget to InitialLoginAdobeExpressOneContainerScreen for non-authenticated users
+        homeWidget = InitialLoginAdobeExpressOneContainerScreen();
       }
-    } else {
-      // Set the home widget to InitialLoginAdobeExpressOneContainerScreen for non-authenticated users
-      homeWidget = InitialLoginAdobeExpressOneContainerScreen();
+      
+  
+      // Return MaterialApp with the home widget
+      return MaterialApp(
+        home: homeWidget,
+        theme: ThemeData(
+          // Your theme data here...
+        ),
+        title: 'cmpets',
+        debugShowCheckedModeBanner: false,
+        initialRoute: AppRoutes.initialLoginAdobeExpressOneContainerScreen,
+        onGenerateRoute: AppRoutes.generateRoute,
+        routes: AppRoutes.routes,
+      );
     }
-
-    // Return MaterialApp with the home widget
-    return MaterialApp(
-      home: homeWidget,
-      theme: ThemeData(
-        // Your theme data here...
-      ),
-      title: 'cmpets',
-      debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.initialLoginAdobeExpressOneContainerScreen,
-      onGenerateRoute: AppRoutes.generateRoute,
-      routes: AppRoutes.routes,
-    );
   }
-}
