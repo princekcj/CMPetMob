@@ -45,7 +45,7 @@ dependencies:
   firestore_cache: ^2.14.2
   flutter_insta: ^1.0.1
   add_2_calendar: ^3.0.1
-  flutter_native_timezone: ^2.0.0
+  flutter_timezone: ^3.0.1
   firebase_crashlytics: ^4.1.0
   firebase_performance: ^0.10.0+5
   introduction_screen: ^3.1.12
