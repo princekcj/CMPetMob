@@ -5,7 +5,7 @@ import 'package:device_calendar/device_calendar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:developer';
 import 'package:device_calendar/device_calendar.dart' as calendarapione;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:add_2_calendar/add_2_calendar.dart' as calendarapitwo;
