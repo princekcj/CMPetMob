@@ -50,19 +50,19 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-    <string>Camera permission is required for barcode scanning.</string>
-    <key>NSCalendarsUsageDescription</key>
-    <string>Access most functions for calendar viewing and editing.</string>
-    <key>NSCalendarsFullAccessUsageDescription</key>
-    <string>Calendar full access</string>
-    <key>NSRemindersUsageDescription</key>
-    <string>reminders</string>
-    <key>NSContactsUsageDescription</key>
-    <string>Access contacts for event attendee editing.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>This app requires access to the photo library.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>This app requires access to the microphone.</string>
+<string>Camera access is required to scan barcodes on pet food products and verify their safety.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Photo library access is needed to allow users to upload and manage images of their pets.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Microphone access is required for voice notes and commands related to pet profiles and food safety checks.</string>
+<key>NSCalendarsUsageDescription</key>
+<string>Calendar access is required to schedule reminders for pet care, including feeding times, vet visits, and grooming sessions.</string>
+<key>NSCalendarsFullAccessUsageDescription</key>
+<string>Full calendar access enables seamless creation and editing of pet-related events and appointments.</string>
+<key>NSRemindersUsageDescription</key>
+<string>Access to reminders is needed to create alerts for pet food checks, medication times, and other essential pet care tasks.</string>
+<key>NSContactsUsageDescription</key>
+<string>Contacts access allows users to manage and share pet care schedules or invite event attendees, such as friends or pet care providers.</string>
     <key>GADNativeAdValidatorEnabled</key>
     <false/>
     <key>CFBundleURLTypes</key>
