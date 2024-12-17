@@ -24,7 +24,7 @@ dependencies:
   carousel_slider_plus: ^6.0.0
   flutter_barcode_scanner: ^2.0.0  # Use the version that is compatible with your Flutter version
   social_media_buttons: ^1.0.0
-  share_plus: ^7.2.1
+  share_plus: ^2.1.1
   cloud_firestore: ^5.3.0
   firebase_storage: ^12.2.0
   pdf: ^3.10.4
