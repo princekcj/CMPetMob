@@ -99,7 +99,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
         possibleBlogUrls = posts;
       });
     });
-    _ytExplode = YoutubeExplode();
 
     if (Platform.isAndroid) {
       setState(() {
