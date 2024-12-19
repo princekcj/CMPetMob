@@ -39,7 +39,6 @@ dependencies:
   firebase_messaging: ^15.1.0
   google_mobile_ads: ^5.1.0
   lucide_icons: ^0.257.0
-  youtube_explode_dart: ^2.3.6
   flutter_html: ^3.0.0-beta.2
   google_fonts: ^4.0.4
   firestore_cache: ^2.14.2
