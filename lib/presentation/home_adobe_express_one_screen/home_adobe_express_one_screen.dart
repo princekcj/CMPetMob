@@ -551,7 +551,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   @override
   void dispose() {
     super.dispose();
-    _ytExplode.close();
     _nativeAd?.dispose();
   }
 
