@@ -14,7 +14,7 @@ dependencies:
   timezone: ^0.9.2  # Add this line
   firebase_core: ^3.4.0
   flutterfire_cli: ^0.2.7
-  flutter_svg: ^2.0.16
+  flutter_svg: ^2.0.9
   envied: ^0.5.1
   flutter_svg_provider: ^1.0.3
   firebase_auth: ^5.2.0
