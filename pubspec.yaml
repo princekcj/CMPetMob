@@ -54,6 +54,8 @@ dependencies:
   open_file: ^3.3.2
   file_picker: ^8.0.0+1
   flutter_file_dialog: ^3.0.2
+dependency_overrides: 
+    http: ^0.13.4
 dev_dependencies:
   envied_generator: ^0.5.1
   flutter_launcher_icons: ^0.12.0
