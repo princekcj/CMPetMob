@@ -21,7 +21,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:pdf/pdf.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import '../../auth/Auth_provider.dart';
 import '../../core/utils/cache_manager.dart';
 import '../../core/utils/retrieve_wordpress_post.dart';
@@ -42,7 +41,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
   List<Map<String, dynamic>> leaderboardData = [];
   NativeAd? _nativeAd;
   bool _nativeAdIsLoaded = false;
-  late YoutubeExplode _ytExplode;
   bool isLeaderboardExpanded = false;
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   final Duration maxCacheDuration = Duration(hours: 4);
@@ -449,11 +447,6 @@ class _HomeAdobeExpressOneScreenState extends State<HomeAdobeExpressOneScreen> {
         }
       }
     }
-  }
-
-  Future<String> _getYouTubeThumbnailUrl(String videoId) async {
-    var video = await _ytExplode.videos.get(videoId);
-    return video.thumbnails.maxResUrl;
   }
 
   void _launch(Uri videoUrl) async {
