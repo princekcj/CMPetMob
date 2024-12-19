@@ -278,24 +278,28 @@ class MyPetInfoScreenState extends State<MyPetInfoScreen> {
     );
   }
 
-  Future<void> sharePdf(String petPdfName, ImageProvider<Object> imgPet) async {
-    try {
+  
+
+Future<void> sharePdf(String petPdfName, ImageProvider<Object> imgPet) async {
+  try {
     final pdfData = await generatePdf(imgPet);
 
     // On mobile platforms, you can use the share_plus package to share the PDF
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     final tempDir = await documentDirectory;
     final pdfFile = File('${tempDir.path}/${petPdfName}_pet_profile.pdf');
-    pdfFile.create();
+    pdfFile.createSync();
     pdfFile.writeAsBytesSync(pdfData);
 
-    await Share.shareFiles(['${tempDir.path}/${petPdfName}_pet_profile.pdf'],
-        text: 'Check out my pet info');
-    } catch (error) {
-      print("Error generating pdf to share: $error");
-      throw error; // Rethrow the error to handle it in the calling code
-    }
+    await Share.shareXFiles(
+      [XFile(pdfFile.path)],
+      text: 'Check out my pet info',
+    );
+  } catch (error) {
+    print("Error generating pdf to share: $error");
+    throw error; // Rethrow the error to handle it in the calling code
   }
+}
 
   Future<void> requestDownload(String petPdfName, ImageProvider<Object> imgPet) async {
     try {
