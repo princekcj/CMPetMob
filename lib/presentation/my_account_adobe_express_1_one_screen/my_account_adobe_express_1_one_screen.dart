@@ -72,6 +72,8 @@ class _MyAccountAdobeExpress1OneScreenState
   @override
   Widget build(BuildContext context) {
     analytics_utils.logScreenUsageEvent('Search_ingredient');
+    UrlLauncherUtils urlLauncherUtils = UrlLauncherUtils();
+
     return Scaffold(
       resizeToAvoidBottomInset: false, // fluter 2.x
       endDrawer: CustomDrawer(),
