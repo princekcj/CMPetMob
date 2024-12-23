@@ -217,7 +217,15 @@ class _MyAccountAdobeExpress1OneScreenState
                     fontSize: 10,
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 10), // Add extra space
+              TextButton( onPressed: () { 
+                // Handle account deletion request // Add your account deletion logic here 
+              }, 
+                         child: Text( 'Request Account Deletion', style: TextStyle( color: Colors.red, fontSize: 10, 
+                                                                          ), 
+                            ), 
+                        )
             ],
           ),
         ),
