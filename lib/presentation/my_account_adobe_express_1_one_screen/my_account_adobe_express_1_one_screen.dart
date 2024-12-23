@@ -220,7 +220,8 @@ class _MyAccountAdobeExpress1OneScreenState
               ),
               SizedBox(height: 10), // Add extra space
               TextButton( onPressed: () { 
-                // Handle account deletion request // Add your account deletion logic here 
+                 final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk');
+                    urlLauncherUtils.launchInBrowser(helpCenterURL); 
               }, 
                          child: Text( 'Request Account Deletion', style: TextStyle( color: Colors.red, fontSize: 10, 
                                                                           ), 
