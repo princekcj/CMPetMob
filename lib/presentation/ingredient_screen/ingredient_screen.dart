@@ -163,52 +163,26 @@ class _IngredientPageState extends State<IngredientPage> {
     }
   }
 
-  String _getImageBasedOnTitles(String petType, String petValue) {
-    if (petType == 'dog') {
-      if (petValue == '1') {
-        return ImageConstant.yellowpaw;
-      } else if (petValue == '2') {
-        return ImageConstant.greenpaw;
-      }
-    } else if (petType == 'cat') {
-      if (petValue == '1') {
-        return ImageConstant.yellowpaw;
-      } else if (petValue == '2') {
-        return ImageConstant.greenpaw;
-      }
-    } else if (petType == 'parrot') {
-      if (petValue == '1') {
-        return ImageConstant.yellowpaw;
-      } else if (petValue == '2') {
-        return ImageConstant.greenpaw;
-      }
-    } else if (petType == 'rabbit') {
-      if (petValue == '1') {
-        return ImageConstant.yellowpaw;
-      } else if (petValue == '2') {
-        return ImageConstant.greenpaw;
-      }
-    } else if (petType == 'bearded_dragon') {
-      if (petValue == '1') {
-        return ImageConstant.yellowpaw;
-      } else if (petValue == '2') {
-        return ImageConstant.greenpaw;
-      }
-    } else if (petType == 'guinea_pig') {
-      if (petValue == '1') {
-        return ImageConstant.yellowpaw;
-      } else if (petValue == '2') {
-        return ImageConstant.greenpaw;
-      }
-    } else if (petType == 'hamster') {
-      if (petValue == '1') {
-        return ImageConstant.yellowpaw;
-      } else if (petValue == '2') {
-        return ImageConstant.greenpaw;
-      }
-    }
-    return ImageConstant.redpaw; // Default value for other cases
+ String _getImageBasedOnTitles(String petType, String petValue) {
+  if (petValue == null || petValue.isEmpty) {
+    return ImageConstant.yellowpaw; // Default to yellow paw for null or empty petValue
   }
+
+  if (petType == 'dog' ||
+      petType == 'cat' ||
+      petType == 'parrot' ||
+      petType == 'rabbit' ||
+      petType == 'bearded_dragon' ||
+      petType == 'guinea_pig' ||
+      petType == 'hamster') {
+    if (petValue == '1') {
+      return ImageConstant.yellowpaw;
+    } else if (petValue == '2') {
+      return ImageConstant.greenpaw;
+    }
+  }
+  return ImageConstant.redpaw; // Default value for other cases
+}
 
   @override
   void initState() {
