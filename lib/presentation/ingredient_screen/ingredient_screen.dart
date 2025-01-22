@@ -346,7 +346,7 @@ class _IngredientPageState extends State<IngredientPage> {
                             child: Text(
                           (ingredientDescription == null ||
                                   ingredientDescription == '')
-                              ? Title
+                              ? 'ingredient data is missing for this pet type'
                               : ingredientDescription,
                         )),
                       ),
