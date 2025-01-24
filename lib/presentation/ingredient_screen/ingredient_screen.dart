@@ -364,7 +364,11 @@ class _IngredientPageState extends State<IngredientPage> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
                       // Adjust the horizontal padding as needed
-                      child: Text(description ?? 'Full Info Text'),
+                      child:  Text(
+                                    (description == null || description.isEmpty) 
+                                      ? 'ingredient data is missing for this pet type' 
+                                      : description,
+                                  ),
                     ),
                   ),
                 ),
