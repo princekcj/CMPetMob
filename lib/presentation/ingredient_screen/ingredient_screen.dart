@@ -179,6 +179,8 @@ class _IngredientPageState extends State<IngredientPage> {
       return ImageConstant.yellowpaw;
     } else if (petValue == '2') {
       return ImageConstant.greenpaw;
+    } else if (petValue == '0') {
+      return ImageConstant.redpaw;
     }
   }
   return ImageConstant.redpaw; // Default value for other cases
