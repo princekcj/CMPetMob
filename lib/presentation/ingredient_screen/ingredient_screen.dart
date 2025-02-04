@@ -165,7 +165,7 @@ class _IngredientPageState extends State<IngredientPage> {
 
  String _getImageBasedOnTitles(String petType, String petValue) {
   if (petValue == null || petValue.isEmpty) {
-    return ImageConstant.yellowpaw; // Default to yellow paw for null or empty petValue
+    return ImageConstant.redpaw; // Default to yellow paw for null or empty petValue
   }
 
   if (petType == 'dog' ||
