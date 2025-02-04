@@ -130,6 +130,7 @@ void checkAnimals() {
       'color': ImageConstant.yellowpaw,
       'petType': 'parrot',
     });
+  }
 
 
       // Replace 'userId' and 'petType' with actual values
