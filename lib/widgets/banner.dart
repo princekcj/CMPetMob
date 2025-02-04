@@ -68,124 +68,69 @@ class _AnimalBannerPageState extends State<AnimalBannerPage> {
       // dogValues, catValues, parrotValues, rabbitValues, beardedDragonValues, guineaPigValues, hamsterValues
 
      // Check which lists have a 0 in them and create a Map for each one
-    if (dogValues.isEmpty || dogValues.contains("0")) {
-      animalsList.add({
-        'color': ImageConstant.redpaw,
-        'petType': 'dog',
-      });
-    } else if (!dogValues.contains("0") && dogValues.length == widget.ingredients.length) {
-      animalsList.add({
-        'color': ImageConstant.greenpaw,
-        'petType': 'dog',
-      });
-    } else {
-      animalsList.add({
-        'color': ImageConstant.yellowpaw,
-        'petType': 'dog',
-      });
-    }
-    
-    if (catValues.isEmpty || catValues.contains("0")) {
-      animalsList.add({
-        'color': ImageConstant.redpaw,
-        'petType': 'cat',
-      });
-    } else if (!catValues.contains("0") && catValues.length == widget.ingredients.length) {
-      animalsList.add({
-        'color': ImageConstant.greenpaw,
-        'petType': 'cat',
-      });
-    } else {
-      animalsList.add({
-        'color': ImageConstant.yellowpaw,
-        'petType': 'cat',
-      });
-    }
-    
-    if (parrotValues.isEmpty || parrotValues.contains("0")) {
-      animalsList.add({
-        'color': ImageConstant.redpaw,
-        'petType': 'parrot',
-      });
-    } else if (!parrotValues.contains("0") && parrotValues.length == widget.ingredients.length) {
-      animalsList.add({
-        'color': ImageConstant.greenpaw,
-        'petType': 'parrot',
-      });
-    } else {
-      animalsList.add({
-        'color': ImageConstant.yellowpaw,
-        'petType': 'parrot',
-      });
-    }
-    
-    if (rabbitValues.isEmpty || rabbitValues.contains("0")) {
-      animalsList.add({
-        'color': ImageConstant.redpaw,
-        'petType': 'rabbit',
-      });
-    } else if (!rabbitValues.contains("0") && rabbitValues.length == widget.ingredients.length) {
-      animalsList.add({
-        'color': ImageConstant.greenpaw,
-        'petType': 'rabbit',
-      });
-    } else {
-      animalsList.add({
-        'color': ImageConstant.yellowpaw,
-        'petType': 'rabbit',
-      });
-    }
-    
-    if (beardedDragonValues.isEmpty || beardedDragonValues.contains("0")) {
-      animalsList.add({
-        'color': ImageConstant.redpaw,
-        'petType': 'bearded_dragon',
-      });
-    } else if (!beardedDragonValues.contains("0") && beardedDragonValues.length == widget.ingredients.length) {
-      animalsList.add({
-        'color': ImageConstant.greenpaw,
-        'petType': 'bearded_dragon',
-      });
-    } else {
-      animalsList.add({
-        'color': ImageConstant.yellowpaw,
-        'petType': 'bearded_dragon',
-      });
-    }
-    
-    if (guineaPigValues.isEmpty || guineaPigValues.contains("0")) {
-      animalsList.add({
-        'color': ImageConstant.redpaw,
-        'petType': 'guinea_pig',
-      });
-    } else if (!guineaPigValues.contains("0") && guineaPigValues.length == widget.ingredients.length) {
-      animalsList.add({
-        'color': ImageConstant.greenpaw,
-        'petType': 'guinea_pig',
-      });
-    } else {
-      animalsList.add({
-        'color': ImageConstant.yellowpaw,
-        'petType': 'guinea_pig',
-      });
-    }
-    
-    if (hamsterValues.isEmpty || hamsterValues.contains("0")) {
-      animalsList.add({
-        'color': ImageConstant.redpaw,
-        'petType': 'hamster',
-      });
-    } else if (!hamsterValues.contains("0") && hamsterValues.length == widget.ingredients.length) {
-      animalsList.add({
-        'color': ImageConstant.greenpaw,
-        'petType': 'hamster',
-      });
-    } else {
-      animalsList.add({
-        'color': ImageConstant.yellowpaw,
-        'petType': 'hamster',
-      });
-    }
+void checkAnimals() {
+  List<Map<String, dynamic>> animalsList = [];
+  
+  if (dogValues.isEmpty || dogValues.contains("0")) {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'dog',
+    });
+  } else if (!dogValues.contains("0") && dogValues.length == widget.ingredients.length) {
+    animalsList.add({
+      'color': ImageConstant.greenpaw,
+      'petType': 'dog',
+    });
+  } else if (!dogValues.contains("0") && dogValues.contains("1") && dogValues.contains("2")) {
+    animalsList.add({
+      'color': ImageConstant.yellowpaw,
+      'petType': 'dog',
+    });
+  } else {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'dog',
+    });
+  }
+  
+  if (catValues.isEmpty || catValues.contains("0")) {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'cat',
+    });
+  } else if (!catValues.contains("0") && catValues.length == widget.ingredients.length) {
+    animalsList.add({
+      'color': ImageConstant.greenpaw,
+      'petType': 'cat',
+    });
+  } else if (!catValues.contains("0") && catValues.contains("1") && catValues.contains("2")) {
+    animalsList.add({
+      'color': ImageConstant.yellowpaw,
+      'petType': 'cat',
+    });
+  } else {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'cat',
+    });
+  }
+  
+  if (parrotValues.isEmpty || parrotValues.contains("0")) {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'parrot',
+    });
+  } else if (!parrotValues.contains("0") && parrotValues.length == widget.ingredients.length) {
+    animalsList.add({
+      'color': ImageConstant.greenpaw,
+      'petType': 'parrot',
+    });
+  } else if (!parrotValues.contains("0") && parrotValues.contains("1") && parrotValues.contains("2")) {
+    animalsList.add({
+      'color': ImageConstant.yellowpaw,
+      'petType': 'parrot',
+    });
+
 
       // Replace 'userId' and 'petType' with actual values
       final userId = _currentUser?.uid;
