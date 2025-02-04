@@ -69,7 +69,7 @@ class _AnimalBannerPageState extends State<AnimalBannerPage> {
 
      // Check which lists have a 0 in them and create a Map for each one
   
-  if (dogValues.isEmpty || dogValues.contains("0")) {
+ if (dogValues.isEmpty || dogValues.contains("0")) {
     animalsList.add({
       'color': ImageConstant.redpaw,
       'petType': 'dog',
@@ -128,7 +128,101 @@ class _AnimalBannerPageState extends State<AnimalBannerPage> {
       'color': ImageConstant.yellowpaw,
       'petType': 'parrot',
     });
+  } else {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'parrot',
+    });
   }
+  
+  if (rabbitValues.isEmpty || rabbitValues.contains("0")) {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'rabbit',
+    });
+  } else if (!rabbitValues.contains("0") && rabbitValues.length == widget.ingredients.length) {
+    animalsList.add({
+      'color': ImageConstant.greenpaw,
+      'petType': 'rabbit',
+    });
+  } else if (!rabbitValues.contains("0") && rabbitValues.contains("1") && rabbitValues.contains("2")) {
+    animalsList.add({
+      'color': ImageConstant.yellowpaw,
+      'petType': 'rabbit',
+    });
+  } else {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'rabbit',
+    });
+  }
+  
+  if (beardedDragonValues.isEmpty || beardedDragonValues.contains("0")) {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'bearded_dragon',
+    });
+  } else if (!beardedDragonValues.contains("0") && beardedDragonValues.length == widget.ingredients.length) {
+    animalsList.add({
+      'color': ImageConstant.greenpaw,
+      'petType': 'bearded_dragon',
+    });
+  } else if (!beardedDragonValues.contains("0") && beardedDragonValues.contains("1") && beardedDragonValues.contains("2")) {
+    animalsList.add({
+      'color': ImageConstant.yellowpaw,
+      'petType': 'bearded_dragon',
+    });
+  } else {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'bearded_dragon',
+    });
+  }
+  
+  if (guineaPigValues.isEmpty || guineaPigValues.contains("0")) {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'guinea_pig',
+    });
+  } else if (!guineaPigValues.contains("0") && guineaPigValues.length == widget.ingredients.length) {
+    animalsList.add({
+      'color': ImageConstant.greenpaw,
+      'petType': 'guinea_pig',
+    });
+  } else if (!guineaPigValues.contains("0") && guineaPigValues.contains("1") && guineaPigValues.contains("2")) {
+    animalsList.add({
+      'color': ImageConstant.yellowpaw,
+      'petType': 'guinea_pig',
+    });
+  } else {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'guinea_pig',
+    });
+  }
+  
+  if (hamsterValues.isEmpty || hamsterValues.contains("0")) {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'hamster',
+    });
+  } else if (!hamsterValues.contains("0") && hamsterValues.length == widget.ingredients.length) {
+    animalsList.add({
+      'color': ImageConstant.greenpaw,
+      'petType': 'hamster',
+    });
+  } else if (!hamsterValues.contains("0") && hamsterValues.contains("1") && hamsterValues.contains("2")) {
+    animalsList.add({
+      'color': ImageConstant.yellowpaw,
+      'petType': 'hamster',
+    });
+  } else {
+    animalsList.add({
+      'color': ImageConstant.redpaw,
+      'petType': 'hamster',
+    });
+  }
+  
 
 
       // Replace 'userId' and 'petType' with actual values
