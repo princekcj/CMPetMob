@@ -68,8 +68,6 @@ class _AnimalBannerPageState extends State<AnimalBannerPage> {
       // dogValues, catValues, parrotValues, rabbitValues, beardedDragonValues, guineaPigValues, hamsterValues
 
      // Check which lists have a 0 in them and create a Map for each one
-void checkAnimals() {
-  List<Map<String, dynamic>> animalsList = [];
   
   if (dogValues.isEmpty || dogValues.contains("0")) {
     animalsList.add({
