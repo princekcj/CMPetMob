@@ -112,8 +112,10 @@ class AuthService {
         await signOut();
 
         // Navigate to a different screen or show a message
-        Navigator.of(context).pushReplacementNamed('/login'); // Adjust the route as needed
-      } catch (e) {
+        AppRoutes.generateRoute(
+                    RouteSettings(name: AppRoutes.myPetsScreen),
+                  ),
+        } catch (e) {
         print('Error deleting account: $e');
         // Handle the error, e.g., show a message to the user
         ScaffoldMessenger.of(context).showSnackBar(
