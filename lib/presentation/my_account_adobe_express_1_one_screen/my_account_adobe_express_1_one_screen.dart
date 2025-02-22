@@ -227,7 +227,8 @@ class _MyAccountAdobeExpress1OneScreenState
               SizedBox(height: 10), // Add extra space
               TextButton( onPressed: () { 
                  final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk/index.php/help-centre/');
-                    urlLauncherUtils.launchInBrowser(helpCenterURL); 
+                    urlLauncherUtils.launchInBrowser(helpCenterURL);
+                deleteAccount();
               }, 
                          child: Text( 'Request Account Deletion', style: TextStyle( color: Colors.red, fontSize: 10, 
                                                                           ), 
