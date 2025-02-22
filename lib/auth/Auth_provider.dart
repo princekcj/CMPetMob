@@ -93,6 +93,42 @@ class AuthService {
     }
   }
 
+   // Delete account
+  Future<void> deleteAccount(BuildContext context) async {
+    final user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        // Delete user data from Firestore
+        final userDocs = await db.collection('users').where('email', isEqualTo: user.email).get();
+        for (final doc in userDocs.docs) {
+          await doc.reference.delete();
+        }
+
+        // Delete user from Firebase Authentication
+        await user.delete();
+
+        // Sign out the user
+        await signOut();
+
+        // Navigate to a different screen or show a message
+        Navigator.of(context).pushReplacementNamed('/login'); // Adjust the route as needed
+      } catch (e) {
+        print('Error deleting account: $e');
+        // Handle the error, e.g., show a message to the user
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting account: $e')),
+        );
+      }
+    } else {
+      // Handle the case where there is no authenticated user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No authenticated user found')),
+      );
+    }
+  }
+}
+
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
