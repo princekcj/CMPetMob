@@ -113,7 +113,7 @@ class AuthService {
 
         // Navigate to a different screen or show a message
         AppRoutes.generateRoute(
-                    RouteSettings(name: AppRoutes.myPetsScreen),
+                    RouteSettings(name: AppRoutes.initialLoginAdobeExpressOneContainerScreen),
                   ),
         } catch (e) {
         print('Error deleting account: $e');
