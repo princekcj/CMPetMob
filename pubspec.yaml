@@ -17,7 +17,7 @@ dependencies:
   flutter_svg: ^2.0.9
   envied: ^0.5.1
   flutter_svg_provider: ^1.0.3
-  firebase_auth: ^5.2.0
+  firebase_auth: ^5.5.0
   intl: ^0.18.0
   image_picker: ^0.8.4  # Add the latest version
   permission_handler: ^11.0.1
