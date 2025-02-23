@@ -226,7 +226,7 @@ class _MyAccountAdobeExpress1OneScreenState
               ),
               SizedBox(height: 10), // Add extra space
               TextButton( onPressed: () { 
-                  authService.deleteAccount();
+                  authService.deleteAccount(context);
                  final Uri helpCenterURL = Uri.parse('https://cmpet.co.uk/index.php/help-centre/');
                     urlLauncherUtils.launchInBrowser(helpCenterURL);
               }, 
