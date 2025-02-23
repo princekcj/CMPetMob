@@ -129,7 +129,7 @@ class AuthService {
       );
     }
   }
-}
+
 
   Future<void> sendPasswordResetEmail(String email) async {
     try {
